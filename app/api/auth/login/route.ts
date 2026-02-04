@@ -27,17 +27,20 @@ export const POST = apiHandler(async (req: NextRequest) => {
     );
   }
 
+  const returnedData = {
+    _id: foundUser._id.toString(),
+    email: foundUser.email,
+    fname: foundUser.fname,
+    admin: foundUser.admin,
+    membership: foundUser.membership,
+  };
+
   await createSession({
-    userData: {
-      _id: foundUser._id.toString(),
-      email: foundUser.email,
-      fname: foundUser.fname,
-      admin: foundUser.admin,
-      membership: foundUser.membership,
-    },
+    userData: returnedData,
   });
+
   return NextResponse.json(
-    { message: "Login successful", user: foundUser },
+    { message: "Login successful", user: returnedData },
     { status: 200 },
   );
 });
