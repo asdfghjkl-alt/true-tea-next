@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavLink from "./NavLink";
 import Image from "next/image";
 import Dropdown from "./Dropdown";
@@ -24,6 +24,16 @@ export const linkBaseClass =
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
@@ -42,7 +52,7 @@ export default function Navbar() {
 
   return (
     <header
-      className="sticky top-0 z-50 w-full bg-primary font-normal text-teal-50 shadow-lg shadow-black/30"
+      className={`sticky top-0 z-50 w-full bg-primary font-normal text-teal-50 shadow-lg shadow-black/30 transition-all duration-300 ${isScrolled ? "py-0" : ""}`}
       role="banner"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 p-2">
@@ -51,13 +61,16 @@ export default function Navbar() {
           className="flex items-center no-underline"
           onClick={closeMenu}
         >
-          <Image
-            src="/logo-true-tea-origin.jpeg"
-            alt="True Tea"
-            height={128}
-            width={128}
-            className="mr-2"
-          />
+          <div
+            className={`relative transition-all duration-300 ease-in-out mr-2 ${isScrolled ? "h-10 w-10" : "h-32 w-32"}`}
+          >
+            <Image
+              src="/logo-true-tea-origin.jpeg"
+              alt="True Tea"
+              fill
+              className="object-contain"
+            />
+          </div>
           <div className="ps-1 leading-snug">
             <h2>True Tea</h2>
             <div className="text-xs font-light tracking-[0.3em] text-teal-100 uppercase">
@@ -172,7 +185,9 @@ export default function Navbar() {
         }`}
       >
         <div className="flex items-center justify-between border-b border-emerald-600 p-4">
-          <span className="text-xl font-bold text-white">Menu</span>
+          <span className="text-xl italic text-teal-100">
+            Back To The Foundation To Enjoy
+          </span>
           <button
             onClick={closeMenu}
             className="rounded-md p-1 text-teal-100 hover:bg-emerald-700 hover:text-white"

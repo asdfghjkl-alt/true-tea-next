@@ -54,6 +54,6 @@ const userSchema = new mongoose.Schema<IUser>({
   emailTokenExpires: Date,
 });
 
-const User = models.User || mongoose.model("User", userSchema);
+const User = models.User || mongoose.model<IUser>("User", userSchema);
 
 export default User;
