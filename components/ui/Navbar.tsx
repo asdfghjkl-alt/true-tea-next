@@ -21,7 +21,13 @@ const adminLinks = [
 export const linkBaseClass =
   "tracking-wide px-5 py-2 rounded-xl text-teal-50 hover:bg-emerald-600 transition-colors";
 
-export default function Navbar() {
+import { ICategory } from "@/database/category.model";
+
+interface NavbarProps {
+  categories?: ICategory[];
+}
+
+export default function Navbar({ categories = [] }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -50,6 +56,11 @@ export default function Navbar() {
       Logout
     </button>,
   ];
+
+  const categoryLinks = categories.map((cat) => ({
+    href: `/products?category=${cat.name}`,
+    label: `${cat.name} (${cat.nameCN})`,
+  }));
 
   return (
     <>
@@ -107,6 +118,12 @@ export default function Navbar() {
                     {link.label}
                   </NavLink>
                 ))}
+
+                <Dropdown
+                  id="desktop-categories-menu"
+                  title="Categories"
+                  links={categoryLinks}
+                />
 
                 {user ? (
                   <>
@@ -230,6 +247,15 @@ export default function Navbar() {
                 {link.label}
               </NavLink>
             ))}
+
+            <Dropdown
+              id="mobile-categories-menu"
+              title="Categories"
+              links={categoryLinks}
+              fullWidth
+              onItemClick={closeMenu}
+            />
+
             {user ? (
               <>
                 <Dropdown

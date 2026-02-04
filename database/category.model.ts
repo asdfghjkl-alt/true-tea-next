@@ -8,6 +8,7 @@ export interface ICategory {
   catID: number;
   active: boolean;
   image: string;
+  description: string;
   p1: string;
   p2: string;
   p3: string;
@@ -26,6 +27,7 @@ const categorySchema = new Schema<ICategory>({
   image: String,
   catID: Number,
   active: Boolean,
+  description: String,
   p1: String,
   p2: String,
   p3: String,
