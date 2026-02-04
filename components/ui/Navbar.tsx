@@ -28,12 +28,12 @@ export default function Navbar() {
   const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const userElements = [
     <button
       key="logout"
-      // onClick={() => signOut()}
+      onClick={() => logout()}
       className="block w-full text-left text-sm font-bold text-teal-50 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
     >
       Logout

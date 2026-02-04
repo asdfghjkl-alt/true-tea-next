@@ -17,6 +17,7 @@ interface AuthContextType {
   user: SessionPayload["userData"] | null;
   login: (data: LoginFormData) => Promise<void>;
   setUser: (user: SessionPayload["userData"] | null) => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -64,8 +65,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const logout = async () => {
+    try {
+      const res = await api.post("/auth/logout");
+      setUser(null);
+      toast.success(res.data.message);
+      router.push("/auth/login");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Logout failed");
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, login, isLoading }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
