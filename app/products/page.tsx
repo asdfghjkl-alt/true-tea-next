@@ -82,25 +82,33 @@ export default async function ProductsPage({
                       <span className="block font-semibold text-gray-600">
                         Water
                       </span>
-                      <span className="text-gray-800">{category.recWater}</span>
+                      <span className="text-gray-800">
+                        {category.recWater || "No indication given"}
+                      </span>
                     </div>
                     <div>
                       <span className="block font-semibold text-gray-600">
                         Temperature
                       </span>
-                      <span className="text-gray-800">{category.recTemp}</span>
+                      <span className="text-gray-800">
+                        {category.recTemp || "No indication given"}
+                      </span>
                     </div>
                     <div>
                       <span className="block font-semibold text-gray-600">
                         Time
                       </span>
-                      <span className="text-gray-800">{category.recTime}</span>
+                      <span className="text-gray-800">
+                        {category.recTime || "No indication given"}
+                      </span>
                     </div>
                     <div>
                       <span className="block font-semibold text-gray-600">
                         Brewing Times
                       </span>
-                      <span className="text-gray-800">{category.recTimes}</span>
+                      <span className="text-gray-800">
+                        {category.recTimes || "No indication given"}
+                      </span>
                     </div>
                   </div>
                 </div>
