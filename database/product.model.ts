@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { models, Schema } from "mongoose";
 
-export interface IProduct {
-  _id: any;
+interface IProductBase {
+  _id: string;
   name: string;
+  slug?: string;
   nameCN: string;
   seqNr: number;
-  categoryId: string;
   image: string;
   images: string[];
   price: number;
@@ -20,11 +20,20 @@ export interface IProduct {
   note: string;
 }
 
-const productSchema = new mongoose.Schema({
+export interface IProductDB extends IProductBase {
+  categoryId: Schema.Types.ObjectId;
+}
+
+export interface IProduct extends IProductBase {
+  categoryId: string;
+}
+
+const productSchema = new Schema<IProductDB>({
   name: { type: String, required: true },
+  slug: { type: String, unique: true, sparse: true },
   nameCN: String,
   seqNr: Number,
-  categoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
+  categoryId: { type: Schema.Types.ObjectId, ref: "Category" },
   year: String,
   price: Number,
   discount: Number,
@@ -39,5 +48,6 @@ const productSchema = new mongoose.Schema({
   note: String,
 });
 
-const ProductModel = mongoose.model<IProduct>("Product", productSchema);
-export default ProductModel;
+const Product =
+  models.Product || mongoose.model<IProductDB>("Product", productSchema);
+export default Product;
