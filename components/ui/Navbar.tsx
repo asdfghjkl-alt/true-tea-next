@@ -159,14 +159,14 @@ export default function Navbar({ categories = [] }: NavbarProps) {
               <div className="flex items-center gap-2 lg:hidden">
                 <button
                   type="button"
-                  className="flex h-10 w-11 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
+                  className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
                   aria-label="Toggle navigation menu"
                   aria-expanded={isMenuOpen}
                   onClick={toggleMenu}
                 >
                   <span className="sr-only">Menu</span>
                   <svg
-                    className="h-8 w-8"
+                    className="h-9 w-9"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -212,11 +212,11 @@ export default function Navbar({ categories = [] }: NavbarProps) {
             </span>
             <button
               onClick={closeMenu}
-              className="rounded-md p-1 text-teal-100 hover:bg-emerald-700 hover:text-white"
+              className="rounded-md p-2 text-teal-100 hover:bg-emerald-700 hover:text-white"
               aria-label="Close menu"
             >
               <svg
-                className="h-6 w-6"
+                className="h-8 w-8"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

@@ -51,19 +51,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <span className="text-lg font-medium text-gray-500">
                   Region
                 </span>
-                <span className="text-xl font-semibold text-gray-800">
+                <span className="text-xl font-semibold text-gray-800 text-right">
                   {product.region}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-gray-100 pb-4">
                 <span className="text-lg font-medium text-gray-500">Year</span>
-                <span className="text-xl font-semibold text-gray-800">
+                <span className="text-xl font-semibold text-gray-800 text-right">
                   {product.year}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-gray-100 pb-4">
                 <span className="text-lg font-medium text-gray-500">Price</span>
-                <span className="text-2xl font-bold text-emerald-600">
+                <span className="text-2xl font-bold text-emerald-600 text-right">
                   ${product.price} / {product.unit}
                 </span>
               </div>
