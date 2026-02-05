@@ -89,6 +89,14 @@ export default function Login() {
               Create an True Tea Account
             </Link>
           </p>
+          <p className="mt-1">
+            <Link
+              href="/auth/resend-verification"
+              className="text-sm text-gray-500 hover:text-gray-700 hover:underline"
+            >
+              Resend Verification Email
+            </Link>
+          </p>
         </form>
       </div>
     </div>

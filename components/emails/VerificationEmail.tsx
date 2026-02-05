@@ -1,0 +1,99 @@
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Img,
+  Link,
+  Preview,
+  Section,
+  Text,
+  Tailwind,
+} from "@react-email/components";
+
+interface VerificationEmailProps {
+  confirmLink: string;
+  fname: string;
+}
+
+export const VerificationEmail = ({
+  confirmLink,
+  fname,
+}: VerificationEmailProps) => {
+  const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
+  const webDomain = process.env.WEBDOMAIN || "www.true-tea.com.au";
+  const webLogo = process.env.WEBLOGO || "/logo-true-tea-origin.jpeg";
+
+  return (
+    <Html>
+      <Head />
+      <Preview>Verify your email for True Tea</Preview>
+      <Tailwind>
+        <Body className="bg-white font-sans">
+          <Container className="mx-auto py-5 pb-12">
+            <Section>
+              <Img
+                src={`${webLink}${webLogo}`}
+                width={128}
+                height={128}
+                alt="True Tea Logo"
+                className="mx-auto"
+              />
+            </Section>
+            <Heading className="my-10 text-center text-2xl font-bold">
+              Verify your email address
+            </Heading>
+            <Text className="text-base leading-6 text-gray-800">
+              Dear {fname},
+            </Text>
+            <Text className="text-base leading-6 text-gray-800">
+              Thank you for registering with True Tea!
+            </Text>
+            <Text className="text-base leading-6 text-gray-800">
+              To activate your account, please click on the following link (or
+              paste it into your browser) to complete the account activation
+              process within one hour of receiving it:
+            </Text>
+            <Section className="my-5 text-center">
+              <Link
+                className="block rounded bg-emerald-600 px-5 py-3 text-center text-base text-white no-underline"
+                href={confirmLink}
+              >
+                Verify Email
+              </Link>
+            </Section>
+            <Text className="text-base leading-6 text-gray-800">
+              Or copy and paste this URL into your browser:{" "}
+              <Link href={confirmLink} className="text-emerald-600 underline">
+                {confirmLink}
+              </Link>
+            </Text>
+            <Text className="text-base leading-6 text-gray-800">
+              If you did not register, please reply to this email to request
+              removal of this registration.
+            </Text>
+            <Text className="text-base leading-6 text-gray-800">
+              Best regards,
+              <br />
+              Operation Support
+            </Text>
+            <Section className="mt-5 border-t border-gray-200 pt-5">
+              <Text className="text-xs text-gray-500 leading-5">
+                <b>Valleyview Enterprises Pty. Ltd.</b>
+                <br />
+                ABN: 49168458580
+                <br />
+                <Link href={webLink} className="text-[#5f51e8] underline">
+                  {webDomain}
+                </Link>
+              </Text>
+            </Section>
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  );
+};
+
+export default VerificationEmail;

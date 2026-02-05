@@ -1,3 +1,4 @@
+import { AgeRange } from "@/types/auth";
 import mongoose, { models } from "mongoose";
 
 export interface IUser {
@@ -5,7 +6,7 @@ export interface IUser {
   fname: string;
   lname: string;
   gender: string;
-  age: string;
+  age: AgeRange;
   email: string;
   password: string;
   admin: boolean;
@@ -30,7 +31,10 @@ const userSchema = new mongoose.Schema<IUser>({
   fname: String,
   lname: String,
   gender: String,
-  age: String,
+  age: {
+    type: String,
+    enum: Object.values(AgeRange),
+  },
   email: { type: String, required: true, unique: true },
   password: {
     type: String,
