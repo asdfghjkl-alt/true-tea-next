@@ -9,25 +9,35 @@ import Category from "@/database/category.model";
 import { apiHandler } from "@/lib/api-handler";
 
 export const POST = apiHandler(async (req: Request) => {
+  // Attempts to get the user session
   const session = await getSession();
 
+  // Returns generic 404 error if no session is found
   if (!session || !session.userData?._id) {
     return NextResponse.json({ message: "Not found" }, { status: 404 });
   }
 
   await connectToDatabase();
+
+  /*
+   For extra security, the user is found on making requests,
+   rather than relying on session data
+  */
   const user = await User.findById(session.userData._id);
 
+  // Returns generic 404 error if no user is found or user is not an admin
   if (!user || !user.admin) {
     return NextResponse.json({ message: "Not found" }, { status: 404 });
   }
 
+  // Extracts fields and files from the request (multipart form data)
   const formData = await req.formData();
 
-  // Extract fields and files
+  // Extracts fields and files
   const body: Record<string, any> = {};
   const images: File[] = [];
 
+  // Extracts JSON body and images separately from the request form data
   formData.forEach((value, key) => {
     if (key === "images") {
       if (value instanceof File) {
@@ -38,10 +48,12 @@ export const POST = apiHandler(async (req: Request) => {
     }
   });
 
-  // Validate request body
+  // Validates the request body with the schema
   const { error, value } = productSchema.validate(body, {
     abortEarly: false,
   });
+
+  // Returns error if validation fails
   if (error) {
     return NextResponse.json(
       { message: "Validation error", details: error.details },
@@ -49,7 +61,7 @@ export const POST = apiHandler(async (req: Request) => {
     );
   }
 
-  // Validate images
+  // Validates that at least one valid image is provided
   const imageFiles = images.filter((file) => file.type.startsWith("image/"));
   if (imageFiles.length === 0) {
     return NextResponse.json(
@@ -58,6 +70,7 @@ export const POST = apiHandler(async (req: Request) => {
     );
   }
 
+  // Validates that all provided files are images
   if (imageFiles.length !== images.length) {
     return NextResponse.json(
       { message: "All files must be images" },
@@ -65,7 +78,7 @@ export const POST = apiHandler(async (req: Request) => {
     );
   }
 
-  // Validate category
+  // Validates that category is actually stored in the database
   let categoryId;
   if (value.category) {
     const categoryDoc = await Category.findOne({ name: value.category });
@@ -91,7 +104,7 @@ export const POST = apiHandler(async (req: Request) => {
   });
 
   return NextResponse.json(
-    { message: "Product created successfully", product: newProduct },
+    { message: "Product created successfully!", product: newProduct },
     { status: 201 },
   );
 });

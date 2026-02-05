@@ -12,6 +12,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
 
   const handleImageChange = (newIndex: number) => {
     if (newIndex === currentIndex) return;
+    // Constructs fade out and fade in effect
     setIsFading(true);
     setTimeout(() => {
       setCurrentIndex(newIndex);
@@ -20,11 +21,13 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
   };
 
   const prevImage = () => {
+    // Constructs previous image index
     const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
     handleImageChange(newIndex);
   };
 
   const nextImage = () => {
+    // Constructs next image index
     const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
     handleImageChange(newIndex);
   };
@@ -44,6 +47,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
     <div className="flex flex-col gap-4">
       <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 shadow-md">
         <div className="relative h-full w-full">
+          {/* Image display */}
           <Image
             src={images[currentIndex]}
             alt={`Product Image ${currentIndex + 1}`}
@@ -56,6 +60,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
 
         {images.length > 1 && (
           <>
+            {/* Previous image button */}
             <button
               onClick={prevImage}
               className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 text-emerald-800 shadow-lg transition-transform hover:scale-110 hover:bg-white active:scale-95"
@@ -76,6 +81,8 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
                 />
               </svg>
             </button>
+
+            {/* Next image button */}
             <button
               onClick={nextImage}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 text-emerald-800 shadow-lg transition-transform hover:scale-110 hover:bg-white active:scale-95"
@@ -102,6 +109,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
 
       {images.length > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-2">
+          {/* Image thumbnails */}
           {images.map((image, index) => (
             <button
               key={index}

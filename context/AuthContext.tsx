@@ -7,7 +7,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { LoginFormData } from "@/types/auth";
+import { LoginFormData, RegisterFormData } from "@/types/auth";
 import api from "@/lib/axios";
 import { SessionPayload } from "@/lib/session";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextType {
   user: SessionPayload["userData"] | null;
   login: (data: LoginFormData) => Promise<void>;
+  register: (data: RegisterFormData) => Promise<any>;
   setUser: (user: SessionPayload["userData"] | null) => void;
   logout: () => Promise<void>;
   isLoading: boolean;
@@ -68,6 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
+      // Posts logout to user
       const res = await api.post("/auth/logout");
       setUser(null);
       toast.success(res.data.message);
@@ -77,8 +79,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const register = async (data: RegisterFormData) => {
+    try {
+      // Posts to registration route
+      await api.post("/auth/register", data);
+      toast.success("Registration successful!");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Registration failed");
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ user, setUser, login, register, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

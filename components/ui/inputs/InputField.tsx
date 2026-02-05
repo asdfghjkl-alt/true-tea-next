@@ -29,9 +29,12 @@ export default function InputField<T extends FieldValues>({
   return (
     <div className={className}>
       <div className="text-left">
+        {/* Input field label */}
         <label className="font-medium" htmlFor={name}>
           {label}
         </label>
+
+        {/* Input field */}
         <input
           id={name}
           type={type}
@@ -41,6 +44,8 @@ export default function InputField<T extends FieldValues>({
           max={max}
         />
       </div>
+
+      {/* Error message */}
       <div className="text-red-500">
         {error && <span>{error.message}</span>}
       </div>

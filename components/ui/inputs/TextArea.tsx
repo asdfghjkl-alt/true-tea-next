@@ -25,9 +25,12 @@ export default function TextArea<T extends FieldValues>({
   return (
     <div className={className}>
       <div className="text-left">
+        {/* Text area label */}
         <label className="font-medium" htmlFor={name}>
           {label}
         </label>
+
+        {/* Text area */}
         <textarea
           placeholder={placeholder}
           rows={rows}
@@ -35,6 +38,8 @@ export default function TextArea<T extends FieldValues>({
           {...register(name)}
         ></textarea>
       </div>
+
+      {/* Error message */}
       <div className="mb-1 text-red-500">
         {error && <span>{error.message}</span>}
       </div>

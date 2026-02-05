@@ -11,6 +11,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
 
   const foundUser = await User.findOne({ email });
 
+  // Returns generic error on no user found or user not activated
   if (!foundUser || !foundUser.activated) {
     return NextResponse.json(
       { message: "Either email or password is incorrect" },
@@ -20,6 +21,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
 
   const isPasswordValid = await bcrypt.compare(password, foundUser.password);
 
+  // Returns generic error on invalid password
   if (!isPasswordValid) {
     return NextResponse.json(
       { message: "Either email or password is incorrect" },
@@ -27,7 +29,8 @@ export const POST = apiHandler(async (req: NextRequest) => {
     );
   }
 
-  const returnedData = {
+  // Creates user data object to be stored in session
+  const userData = {
     _id: foundUser._id.toString(),
     email: foundUser.email,
     fname: foundUser.fname,
@@ -36,11 +39,11 @@ export const POST = apiHandler(async (req: NextRequest) => {
   };
 
   await createSession({
-    userData: returnedData,
+    userData: userData,
   });
 
   return NextResponse.json(
-    { message: "Login successful", user: returnedData },
+    { message: "Login successful", user: userData },
     { status: 200 },
   );
 });

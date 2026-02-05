@@ -9,6 +9,7 @@ import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import Image from "next/image";
 
+// Login form schema
 const loginSchema = Joi.object({
   email: Joi.string().required().email().messages({
     "string.empty": "Email cannot be blank",
@@ -49,6 +50,7 @@ export default function Login() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-12">
       <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-md">
+        {/* Logo */}
         <Image
           src="/logo-true-tea-origin.jpeg"
           alt="True Tea Logo"
@@ -56,8 +58,11 @@ export default function Login() {
           height={120}
           className="mb-2 mx-auto"
         />
+        {/* Heading */}
         <h3>Login to True Tea</h3>
+
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          {/* Email field */}
           <InputField
             name="email"
             placeholder="Email"
@@ -65,6 +70,8 @@ export default function Login() {
             register={register}
             error={errors.email}
           />
+
+          {/* Password field */}
           <InputField
             name="password"
             placeholder="Password"
@@ -73,6 +80,8 @@ export default function Login() {
             register={register}
             error={errors.password}
           />
+
+          {/* Login button */}
           <button
             type="submit"
             disabled={isLoggingIn}
@@ -80,6 +89,8 @@ export default function Login() {
           >
             {isLoggingIn ? "Logging in..." : "Login"}
           </button>
+
+          {/* Link to register page */}
           <p className="mt-2">
             Do not have an True Tea Account?{" "}
             <Link
@@ -89,6 +100,8 @@ export default function Login() {
               Create an True Tea Account
             </Link>
           </p>
+
+          {/* Link to resend verification email page */}
           <p className="mt-1">
             <Link
               href="/auth/resend-verification"

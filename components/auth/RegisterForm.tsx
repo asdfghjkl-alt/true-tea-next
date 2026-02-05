@@ -7,11 +7,12 @@ import { AgeRange, RegisterFormData } from "@/types/auth";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import Image from "next/image";
-import axios from "axios";
 import { toast } from "react-hot-toast";
 import EmailSentSuccess from "@/components/auth/EmailSentSuccess";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RegisterForm() {
+  const { register: registerUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -39,19 +40,15 @@ export default function RegisterForm() {
     setIsSubmitting(true);
     setSuccessMessage(null);
     try {
-      const response = await axios.post("/api/auth/register", data);
-      if (response.status === 201) {
-        setSuccessMessage(
-          "Registration successful! Please check your email (including spam) to verify your account.",
-        );
-        toast.success("Registration successful!");
-        reset();
-      }
+      await registerUser(data);
+      setSuccessMessage(
+        "Registration successful! Please check your email (including spam) to verify your account.",
+      );
+      reset();
     } catch (error: any) {
-      console.error(error);
-      const msg = error.response?.data?.message || "Registration failed";
-      toast.error(msg);
+      // Error is already handled by the auth context
     } finally {
+      // Stop loading
       setIsSubmitting(false);
     }
   }
@@ -63,6 +60,7 @@ export default function RegisterForm() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-12">
       <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-md">
+        {/* Logo */}
         <Image
           src="/logo-true-tea-origin.jpeg"
           alt="True Tea Logo"
@@ -70,8 +68,13 @@ export default function RegisterForm() {
           height={120}
           className="mb-2 mx-auto"
         />
-        <h3>Create an Account</h3>
+
+        {/* Create an Account heading */}
+        <h3 className="mb-4">Create an Account</h3>
+
+        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          {/* First Name and Last Name */}
           <div className="flex gap-2">
             <InputField
               name="fname"
@@ -88,6 +91,8 @@ export default function RegisterForm() {
               error={errors.lname}
             />
           </div>
+
+          {/* Email */}
           <InputField
             name="email"
             placeholder="Email"
@@ -95,46 +100,55 @@ export default function RegisterForm() {
             register={register}
             error={errors.email}
           />
+
+          {/* Phone Number */}
+          <InputField
+            name="phone"
+            placeholder="Mobile Number"
+            label="Mobile Number"
+            register={register}
+            error={errors.phone}
+          />
+
+          {/* Age and Postcode side-by-side */}
           <div className="flex gap-2">
-            <InputField
-              name="phone"
-              placeholder="Mobile Number"
-              label="Mobile Number"
-              register={register}
-              error={errors.phone}
-            />
-          </div>
-          {/* Age Range Select */}
-          <div className="mb-4">
-            <div className="text-left">
-              <label className="font-medium" htmlFor="age">
-                Age Range
-              </label>
-              <select
-                id="age"
-                {...register("age")}
-                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-              >
-                <option value="">Select Age Range</option>
-                {Object.values(AgeRange).map((age) => (
-                  <option key={age} value={age}>
-                    {age}
-                  </option>
-                ))}
-              </select>
+            {/* Age Range Select */}
+            <div className="w-1/2 mb-4">
+              <div className="text-left">
+                <label className="font-medium" htmlFor="age">
+                  Age Range
+                </label>
+                <select
+                  id="age"
+                  {...register("age")}
+                  className="my-1 w-full rounded-xl border-2 border-solid border-gray-400 bg-white p-3 text-lg"
+                >
+                  <option value="">Select Age Range</option>
+                  {Object.values(AgeRange).map((age) => (
+                    <option key={age} value={age}>
+                      {age}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="text-red-500">
+                {errors.age && <span>{errors.age.message}</span>}
+              </div>
             </div>
-            <div className="text-red-500">
-              {errors.age && <span>{errors.age.message}</span>}
+
+            {/* Postcode */}
+            <div className="w-1/2">
+              <InputField
+                name="postcode"
+                placeholder="Postcode"
+                label="Postcode"
+                register={register}
+                error={errors.postcode}
+              />
             </div>
           </div>
 
-          <InputField
-            name="postcode"
-            placeholder="Postcode"
-            label="Postcode"
-            register={register}
-            error={errors.postcode}
-          />
+          {/* Password and confirm password fields */}
           <InputField
             name="password"
             placeholder="Password"
@@ -151,6 +165,8 @@ export default function RegisterForm() {
             register={register}
             error={errors.confirmPassword}
           />
+
+          {/* Submit button */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -158,6 +174,8 @@ export default function RegisterForm() {
           >
             {isSubmitting ? "Creating Account..." : "Register"}
           </button>
+
+          {/* Login link */}
           <p className="mt-4">
             Already have an account?{" "}
             <Link

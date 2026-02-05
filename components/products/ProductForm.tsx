@@ -31,7 +31,10 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { ProductFormData } from "@/database/product.model";
 
-// Pure presentation component for the image card
+/* 
+  Pure presentation component for the image card
+  Uses memo to prevent constant image refreshes
+*/
 const ImageCard = memo(
   forwardRef<
     HTMLDivElement,
@@ -67,6 +70,7 @@ const ImageCard = memo(
           isOverlay ? "shadow-xl ring-2 ring-emerald-500 scale-105 z-50" : ""
         }`}
       >
+        {/* Image preview */}
         {preview && (
           <Image
             src={preview}
@@ -76,6 +80,8 @@ const ImageCard = memo(
             draggable={false}
           />
         )}
+
+        {/* Remove button */}
         {!isOverlay && onRemove && (
           <button
             type="button"
@@ -169,6 +175,7 @@ export default function ProductForm({
   const [images, setImages] = useState<{ id: string; file: File }[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
 
+  // Setup sensors for dnd-kit
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -176,18 +183,21 @@ export default function ProductForm({
     }),
   );
 
+  // Handles file selection
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files).map((file) => ({
         id: uuidv4(),
         file,
       }));
+      // Adds new files to the images state
       setImages((prev) => [...prev, ...newFiles]);
-      // Reset input value to allow selecting same files again if needed
+      // Resets input value to allow selecting same files again if needed
       e.target.value = "";
     }
   };
 
+  // Handles drag end event on image
   const handleDragEnd = (event: DragEndEvent) => {
     setActiveId(null);
     const { active, over } = event;
@@ -201,31 +211,35 @@ export default function ProductForm({
     }
   };
 
+  // Handles remove image event
   const handleRemoveImage = (id: string) => {
     setImages((prev) => prev.filter((item) => item.id !== id));
   };
 
+  // Handles form submission
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
+      // Appends data from form to new FormData
       Object.keys(data).forEach((key) => {
         formData.append(key, data[key]);
       });
-      // Append images in the correct order
+      // Appends images in the correct order
       images.forEach((item) => {
         formData.append("images", item.file);
       });
 
-      await api.post("/products", formData, {
+      // Posts the form data to the API
+      const res = await api.post("/products", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Product created successfully!");
+      // Shows success message
+      toast.success(res.data.message || "Product created successfully!");
       reset();
       setImages([]);
     } catch (error: any) {
-      console.error(error);
       const msg = error.response?.data?.message || "Failed to create product";
       toast.error(msg);
     } finally {
@@ -235,14 +249,18 @@ export default function ProductForm({
 
   return (
     <div className="w-full max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      {/* Header */}
       <h3 className="mb-6 text-center text-2xl font-semibold">
         Add New Product
       </h3>
+
+      {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit, (e) => console.log("Form Errors:", e))}
         className="space-y-4"
         noValidate
       >
+        {/* Name and Chinese Name */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <InputField
             name="name"
@@ -282,6 +300,7 @@ export default function ProductForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {/* Price */}
           <InputField
             name="price"
             label="Price"
@@ -291,6 +310,8 @@ export default function ProductForm({
             error={errors.price}
             min={0}
           />
+
+          {/* Stock */}
           <InputField
             name="stock"
             label="Stock"
@@ -300,6 +321,8 @@ export default function ProductForm({
             error={errors.stock}
             min={0}
           />
+
+          {/* Unit quantity of product sold */}
           <InputField
             name="unit"
             label="Unit"
@@ -310,6 +333,7 @@ export default function ProductForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Discount applied */}
           <InputField
             name="discount"
             label="Discount (%)"
@@ -320,6 +344,8 @@ export default function ProductForm({
             min={0}
             max={100}
           />
+
+          {/* Sequence number for product display */}
           <InputField
             name="seqNr"
             label="Sequence Number"
@@ -331,6 +357,7 @@ export default function ProductForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Product includes GST */}
           <div className="flex items-center gap-2 mt-8">
             <input
               type="checkbox"
@@ -340,6 +367,8 @@ export default function ProductForm({
             />
             <label htmlFor="includeGST">Include GST</label>
           </div>
+
+          {/* Product is on shelf */}
           <div className="flex items-center gap-2 mt-8">
             <input
               type="checkbox"
@@ -352,6 +381,7 @@ export default function ProductForm({
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Origin Region */}
           <InputField
             name="region"
             label="Region"
@@ -359,6 +389,8 @@ export default function ProductForm({
             register={register}
             error={errors.region}
           />
+
+          {/* Harvest Year */}
           <InputField
             name="year"
             label="Year"
@@ -368,6 +400,7 @@ export default function ProductForm({
           />
         </div>
 
+        {/* Additional notes */}
         <TextArea
           name="note"
           label="Note"
@@ -377,9 +410,11 @@ export default function ProductForm({
           rows={4}
         />
 
+        {/* Images */}
         <div>
           <label className="block font-medium mb-2">Images</label>
 
+          {/* Image upload */}
           <div className="mb-4">
             <label
               htmlFor="image-upload"
@@ -402,6 +437,7 @@ export default function ProductForm({
             )}
           </div>
 
+          {/* Display images that are added (draggable to reorder) */}
           {images.length > 0 && (
             <div className="rounded-lg border border-gray-200 p-4">
               <DndContext
@@ -439,6 +475,7 @@ export default function ProductForm({
           )}
         </div>
 
+        {/* Submit button */}
         <button
           type="submit"
           disabled={isSubmitting}

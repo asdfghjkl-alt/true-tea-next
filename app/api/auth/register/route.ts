@@ -9,6 +9,7 @@ import { apiHandler } from "@/lib/api-handler";
 
 export const POST = apiHandler(async (req: Request) => {
   const body = await req.json();
+  // Validates the user's registration information with the schema
   const { error, value } = registerSchema.validate(body);
 
   if (error) {
@@ -22,7 +23,7 @@ export const POST = apiHandler(async (req: Request) => {
 
   await connectToDatabase();
 
-  // Check if user exists
+  // Check if user already exists with the corresponding email
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     return NextResponse.json(
@@ -31,10 +32,10 @@ export const POST = apiHandler(async (req: Request) => {
     );
   }
 
-  // Hash password
+  // Hashes passwords with 12 levels of salting
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  // Generate token
+  // Generates a verification token for the user
   const { token, expires } = generateVerificationToken();
 
   // Create user with new fields
@@ -53,9 +54,10 @@ export const POST = apiHandler(async (req: Request) => {
     emailTokenExpires: expires,
   });
 
-  // Send email
+  // Sends verification email to the user
   const emailSent = await sendVerificationEmail(email, fname, token);
 
+  // Sends 201 on successful user creation but alerts user that email failed to be sent
   if (!emailSent) {
     return NextResponse.json(
       {
@@ -66,6 +68,7 @@ export const POST = apiHandler(async (req: Request) => {
     );
   }
 
+  // Returns on successful registration
   return NextResponse.json(
     {
       message:

@@ -20,6 +20,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <Link href={`/products/${product.slug}`} className="block h-full">
       <div className="flex h-full flex-col gap-2 rounded-lg bg-white p-4 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl">
         <div className="relative aspect-square w-full overflow-hidden rounded-md bg-gray-100">
+          {/* Display image */}
           <Image
             src={imageSrc}
             alt={product.name}
@@ -27,14 +28,21 @@ const ProductCard = ({ product }: ProductCardProps) => {
             className="object-cover"
           />
         </div>
+
         <div className="flex flex-col gap-1">
+          {/* Display price and unit */}
           <div className="text-lg font-bold text-emerald-600">
             ${product.price} / {product.unit}
           </div>
+
+          {/* Display product name */}
           <div>
+            {/* Product name in English */}
             <h3 className="text-base font-semibold text-gray-800">
               {product.name}
             </h3>
+
+            {/* Product name in Chinese */}
             <p className="text-sm text-gray-500">{product.nameCN}</p>
           </div>
         </div>

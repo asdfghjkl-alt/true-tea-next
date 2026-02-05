@@ -1,18 +1,22 @@
 import { cloudinary } from "./cloudinary";
 import { IImage } from "@/database/product.model";
 
+// Uploads an array of files to Cloudinary and returns the uploaded image data
 export async function uploadImages(files: File[]): Promise<IImage[]> {
   const uploadPromises = files.map(async (file) => {
+    // Converts the file to a buffer for upload
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
+    // Returns a promise that resolves with the uploaded image data
     return new Promise<IImage>((resolve, reject) => {
+      // Uses Cloudinary's upload_stream to upload the file
       cloudinary.uploader
         .upload_stream(
           {
             resource_type: "image",
-            folder: "True Tea",
-            transformation: [{ quality: "auto", fetch_format: "auto" }],
+            folder: "True Tea", // Specifies the folder in Cloudinary
+            transformation: [{ quality: "auto", fetch_format: "auto" }], // Optimizes image quality and format
           },
           (error, result) => {
             if (error) {
@@ -23,6 +27,7 @@ export async function uploadImages(files: File[]): Promise<IImage[]> {
               reject(new Error("Upload failed"));
               return;
             }
+            // Resolves with the image URL, filename, and size
             resolve({
               url: result.secure_url,
               filename: result.public_id,
@@ -34,5 +39,6 @@ export async function uploadImages(files: File[]): Promise<IImage[]> {
     });
   });
 
+  // Waits for all uploads to complete
   return Promise.all(uploadPromises);
 }

@@ -6,7 +6,7 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 
-function VerifyEmailContent() {
+export default function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
@@ -16,6 +16,7 @@ function VerifyEmailContent() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    // If no token is provided, return error message
     if (!token) {
       setStatus("error");
       setMessage("Invalid verification link.");
@@ -24,9 +25,11 @@ function VerifyEmailContent() {
 
     const verify = async () => {
       try {
+        // Verifies the token by calling API to find the user with the token
         await axios.get(`/api/auth/verify?token=${token}`);
         setStatus("success");
       } catch (error: any) {
+        // If verification fails, set error status and message
         setStatus("error");
         setMessage(error.response?.data?.message || "Verification failed.");
       }
@@ -37,7 +40,9 @@ function VerifyEmailContent() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-12">
+      {/* Verification Card */}
       <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center shadow-lg">
+        {/* Logo */}
         <Image
           src="/logo-true-tea-origin.jpeg"
           alt="True Tea Logo"
@@ -45,20 +50,26 @@ function VerifyEmailContent() {
           height={72}
           className="mb-4 mx-auto"
         />
+
+        {/* Loading Status */}
         {status === "loading" && (
           <p className="text-gray-600">Verifying your email...</p>
         )}
+
+        {/* Success Status */}
         {status === "success" && (
           <div>
             <h3 className="text-2xl font-bold mb-4 text-green-600">
               Verified!
             </h3>
             <p className="mb-6">Your email has been verified successfully.</p>
-            <Link href="/auth/login" className="btn btn-primary w-full">
+            <Link href="/auth/login" className="btn btn-submit w-full">
               Proceed to Login
             </Link>
           </div>
         )}
+
+        {/* Error Status */}
         {status === "error" && (
           <div>
             <h3 className="text-2xl font-bold mb-4 text-red-600">
@@ -75,19 +86,5 @@ function VerifyEmailContent() {
         )}
       </div>
     </div>
-  );
-}
-
-export default function VerifyEmailPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center">
-          Loading...
-        </div>
-      }
-    >
-      <VerifyEmailContent />
-    </Suspense>
   );
 }

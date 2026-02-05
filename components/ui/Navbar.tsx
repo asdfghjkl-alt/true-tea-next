@@ -70,11 +70,13 @@ export default function Navbar({ categories = [] }: NavbarProps) {
         role="banner"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 p-2">
+          {/* Logo and home link */}
           <NavLink
             href="/"
             className="flex items-center no-underline"
             onClick={closeMenu}
           >
+            {/* Logo */}
             <div
               className={`relative transition-all duration-300 ease-in-out mr-2 ${isScrolled ? "h-12 w-12" : "h-32 w-32"}`}
             >
@@ -85,6 +87,8 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                 className="object-contain"
               />
             </div>
+
+            {/* Brand name and year created */}
             <div className="ps-1 leading-snug">
               <h2>True Tea</h2>
               <div className="text-xs font-light tracking-[0.3em] text-teal-100 uppercase">
@@ -94,19 +98,20 @@ export default function Navbar({ categories = [] }: NavbarProps) {
           </NavLink>
 
           <div className="flex flex-col items-end gap-1">
-            {/* Row 1: Slogan */}
+            {/* Slogan */}
             <div
               className={`hidden italic tracking-widest text-teal-100 transition-all duration-300 lg:block ${isScrolled ? "text-xs" : "text-base"}`}
             >
               Back To The Foundation To Enjoy
             </div>
 
-            {/* Row 2: Navigation */}
+            {/* Navigation */}
             <div className="flex items-center gap-3">
               <nav
                 className="hidden items-center gap-3 lg:flex"
                 aria-label="Primary"
               >
+                {/* Navigation links (All Users) */}
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.href}
@@ -119,12 +124,14 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                   </NavLink>
                 ))}
 
+                {/* Categories dropdown */}
                 <Dropdown
                   id="desktop-categories-menu"
                   title="Categories"
                   links={categoryLinks}
                 />
 
+                {/* User-specific links */}
                 {user ? (
                   <>
                     <Dropdown
@@ -142,21 +149,25 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                     )}
                   </>
                 ) : (
-                  unauthLinks.map((link) => (
-                    <NavLink
-                      key={link.href}
-                      href={link.href}
-                      className={({ isActive }) =>
-                        `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
-                      }
-                    >
-                      {link.label}
-                    </NavLink>
-                  ))
+                  <>
+                    {/* Unauthenticated user links */}
+                    {unauthLinks.map((link) => (
+                      <NavLink
+                        key={link.href}
+                        href={link.href}
+                        className={({ isActive }) =>
+                          `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    ))}
+                  </>
                 )}
               </nav>
 
               <div className="flex items-center gap-2 lg:hidden">
+                {/* Mobile menu button */}
                 <button
                   type="button"
                   className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
@@ -201,15 +212,21 @@ export default function Navbar({ categories = [] }: NavbarProps) {
           />
         )}
 
+        {/* Mobile navigation sidebar */}
         <div
           className={`fixed inset-y-0 right-0 z-50 w-96 transform bg-primary shadow-xl transition-transform duration-300 ease-in-out lg:hidden ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
+          role="navigation"
+          aria-label="Mobile navigation"
         >
+          {/* Mobile navigation header */}
           <div className="flex items-center justify-between border-b border-emerald-600 p-4">
             <span className="text-xl italic text-teal-100">
               Back To The Foundation To Enjoy
             </span>
+
+            {/* Close menu button */}
             <button
               onClick={closeMenu}
               className="rounded-md p-2 text-teal-100 hover:bg-emerald-700 hover:text-white"
@@ -231,10 +248,12 @@ export default function Navbar({ categories = [] }: NavbarProps) {
             </button>
           </div>
 
+          {/* Mobile navigation links */}
           <nav
             className="flex flex-col gap-2 p-4 text-base font-semibold tracking-wide"
             aria-label="Mobile"
           >
+            {/* Navigation links */}
             {navLinks.map((link) => (
               <NavLink
                 key={link.href}
@@ -248,6 +267,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
               </NavLink>
             ))}
 
+            {/* Categories dropdown */}
             <Dropdown
               id="mobile-categories-menu"
               title="Categories"
@@ -258,6 +278,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
 
             {user ? (
               <>
+                {/* User authenticated links dropdown */}
                 <Dropdown
                   id="mobile-user-menu"
                   elements={userElements}
@@ -277,18 +298,21 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                 )}
               </>
             ) : (
-              unauthLinks.map((link) => (
-                <NavLink
-                  key={link.href}
-                  href={link.href}
-                  className={({ isActive }) =>
-                    `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
-                  }
-                  onClick={closeMenu}
-                >
-                  {link.label}
-                </NavLink>
-              ))
+              <>
+                {/* Unauthenticated user links */}
+                {unauthLinks.map((link) => (
+                  <NavLink
+                    key={link.href}
+                    href={link.href}
+                    className={({ isActive }) =>
+                      `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                    }
+                    onClick={closeMenu}
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+              </>
             )}
           </nav>
         </div>

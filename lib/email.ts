@@ -20,6 +20,7 @@ export const sendVerificationEmail = async (
   const confirmLink = `${APP_URL}/verify-email?token=${token}`;
 
   try {
+    // Sends verification email to user with react component of VerificationEmail
     await resend.emails.send({
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,

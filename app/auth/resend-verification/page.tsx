@@ -11,6 +11,7 @@ import Link from "next/link";
 import InputField from "@/components/ui/inputs/InputField";
 import EmailSentSuccess from "@/components/auth/EmailSentSuccess";
 
+// Validation schema for the resend verification form
 const resendSchema = Joi.object({
   email: Joi.string()
     .required()
@@ -21,6 +22,7 @@ const resendSchema = Joi.object({
     }),
 });
 
+// Interface for the resend verification form data
 interface ResendFormData {
   email: string;
 }
@@ -66,6 +68,7 @@ export default function ResendVerificationPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-12">
       <div className="w-full max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-md">
+        {/* Logo */}
         <Image
           src="/logo-true-tea-origin.jpeg"
           alt="True Tea Logo"
@@ -73,12 +76,18 @@ export default function ResendVerificationPage() {
           height={120}
           className="mb-2 mx-auto"
         />
+
+        {/* Title */}
         <h3 className="mb-4 text-xl font-bold">Resend Verification Email</h3>
+
+        {/* Description */}
         <p className="mb-6 text-gray-600 text-sm">
           Enter your email address and we&apos;ll send you a link to verify your
           account.
         </p>
+
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          {/* Email input field */}
           <InputField
             name="email"
             placeholder="Email"
@@ -86,6 +95,8 @@ export default function ResendVerificationPage() {
             register={register}
             error={errors.email}
           />
+
+          {/* Submit button */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -93,6 +104,8 @@ export default function ResendVerificationPage() {
           >
             {isSubmitting ? "Sending..." : "Send Verification Link"}
           </button>
+
+          {/* Back to login link */}
           <p className="mt-4 text-sm">
             <Link
               href="/auth/login"

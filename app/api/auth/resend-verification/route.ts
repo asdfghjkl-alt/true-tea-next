@@ -12,6 +12,7 @@ const resendSchema = Joi.object({
 
 export const POST = apiHandler(async (req: Request) => {
   const body = await req.json();
+  // Validates the user's resend information with the schema
   const { error, value } = resendSchema.validate(body);
 
   if (error) {
@@ -25,16 +26,11 @@ export const POST = apiHandler(async (req: Request) => {
 
   await connectToDatabase();
 
+  // Finds user with the corresponding email
   const user = await User.findOne({ email });
 
-  // Security: Do not reveal if user exists or not, but handle "already activated" gracefully if possible,
-  // or just return success to avoid enumeration.
-  // However, to be helpful to the user, we will return a generic success message.
-  // If the user is already activated, we won't send an email (or could send a "you are already verified" email).
-  // For simplicity here, if user exists and is NOT activated, we resend.
-
   if (!user) {
-    // Return success to avoid user enumeration
+    // Returns generic success message to avoid user enumeration
     return NextResponse.json(
       {
         message:
@@ -45,9 +41,7 @@ export const POST = apiHandler(async (req: Request) => {
   }
 
   if (user.activated) {
-    // If already activated, we might want to inform them or just say sent.
-    // Let's stick to the generic message for security, OR slightly helpful if acceptable.
-    // Given the context of a small app, let's return the same generic message but do nothing.
+    // If already activated, returns generic success message to avoid user enumeration
     return NextResponse.json(
       {
         message:
@@ -57,24 +51,27 @@ export const POST = apiHandler(async (req: Request) => {
     );
   }
 
-  // Generate new token
+  // Generates a new verification token for the user
   const { token, expires } = generateVerificationToken();
 
   user.emailToken = token;
   user.emailTokenExpires = expires;
   await user.save();
 
+  // Sends verification email to the user
   const emailSent = await sendVerificationEmail(email, user.fname, token);
 
+  // Sends error response on failure to send a verification email
   if (!emailSent) {
     return NextResponse.json(
       {
         message: "Failed to send verification email. Please try again later.",
       },
-      { status: 500 }, // Internal error if email service fails
+      { status: 500 },
     );
   }
 
+  // Returns on successful resend
   return NextResponse.json(
     {
       message:

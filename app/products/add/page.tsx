@@ -8,11 +8,14 @@ import Category from "@/database/category.model";
 export default async function AddProductPage() {
   const session = await getSession();
 
+  // Redirects user to homepage if not logged in or not admin
   if (!session || !session.userData?._id || !session.userData.admin) {
     return notFound();
   }
 
   await connectToDatabase();
+
+  // Retrieves all categories and sorts them by name
   const categories = await Category.find({}).sort({ name: 1 }).lean();
   const categoryNames = categories.map((c) => c.name);
 
