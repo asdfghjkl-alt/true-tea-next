@@ -16,6 +16,10 @@ export const productSchema = Joi.object({
     "any.required": "Price is required",
     "number.base": "Price must be a number",
   }),
+  category: Joi.string().required().label("Category").messages({
+    "string.empty": "Category is required",
+    "any.required": "Category is required",
+  }),
   discount: Joi.number()
     .min(0)
     .max(100)

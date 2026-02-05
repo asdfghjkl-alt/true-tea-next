@@ -74,6 +74,20 @@ const productSchema = new Schema<IProductDB>({
   note: String,
 });
 
+productSchema.pre("save", async function () {
+  // Generates slug if name modified or slug doesn't exist
+  if (this.isModified("name") || !this.slug) {
+    const slugName = this.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+
+    // Uses last 6 chars of the objectID to guarantee uniqueness
+    const suffix = this._id.toString().substring(18);
+    this.slug = `${slugName}-${suffix}`;
+  }
+});
+
 const Product =
   models.Product || mongoose.model<IProductDB>("Product", productSchema);
 export default Product;

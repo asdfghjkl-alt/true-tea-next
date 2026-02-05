@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "true-tea.com.au",
         pathname: "/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
     ],
   },
 };

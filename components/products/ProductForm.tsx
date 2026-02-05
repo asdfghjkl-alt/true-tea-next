@@ -134,7 +134,11 @@ const SortableImage = memo(function SortableImage({
   );
 });
 
-export default function ProductForm() {
+export default function ProductForm({
+  categories = [],
+}: {
+  categories?: string[];
+}) {
   const {
     register,
     handleSubmit,
@@ -145,6 +149,7 @@ export default function ProductForm() {
     defaultValues: {
       name: "",
       nameCN: "",
+      category: "",
       seqNr: 0,
       price: 0,
       discount: 0,
@@ -253,6 +258,27 @@ export default function ProductForm() {
             register={register}
             error={errors.nameCN}
           />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Category Select */}
+          <div className="text-left">
+            <label className="font-medium mb-1 block">Category</label>
+            <select
+              {...register("category")}
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            >
+              <option value="">Select a Category</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+            <div className="text-red-500 h-5 text-sm mt-1">
+              {errors.category && <span>{errors.category.message}</span>}
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

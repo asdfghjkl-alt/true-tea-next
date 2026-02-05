@@ -5,6 +5,7 @@ import { productSchema } from "@/lib/schemas";
 import { uploadImages } from "@/lib/upload";
 import { getSession } from "@/lib/session";
 import User from "@/database/user.model";
+import Category from "@/database/category.model";
 import { apiHandler } from "@/lib/api-handler";
 
 export const POST = apiHandler(async (req: Request) => {
@@ -64,6 +65,19 @@ export const POST = apiHandler(async (req: Request) => {
     );
   }
 
+  // Validate category
+  let categoryId;
+  if (value.category) {
+    const categoryDoc = await Category.findOne({ name: value.category });
+    if (!categoryDoc) {
+      return NextResponse.json(
+        { message: "Invalid category selected" },
+        { status: 400 },
+      );
+    }
+    categoryId = categoryDoc._id;
+  }
+
   // Upload images
   const uploadedImages = await uploadImages(imageFiles);
 
@@ -72,6 +86,7 @@ export const POST = apiHandler(async (req: Request) => {
   // Create product
   const newProduct = await Product.create({
     ...value,
+    categoryId, // Add the resolved category ID
     images: uploadedImages,
   });
 
