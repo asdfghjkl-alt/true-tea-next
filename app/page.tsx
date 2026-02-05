@@ -13,7 +13,7 @@ export default async function Home() {
   const products = (await Product.find({ onShelf: true })) as IProductDB[];
 
   return (
-    <main className="min-h-screen bg-teal-50 p-4 md:p-8 lg:p-12">
+    <main className="min-h-screen p-4 md:p-8 lg:p-12">
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-8 text-3xl font-bold text-emerald-800">Our Teas</h1>
         <div className="flex flex-col gap-4">

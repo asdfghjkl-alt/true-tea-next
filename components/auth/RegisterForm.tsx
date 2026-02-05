@@ -2,55 +2,14 @@
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Link from "next/link";
-import Joi from "joi";
-import { type RegisterFormData, AgeRange } from "@/types/auth";
+import { registerSchema } from "@/lib/schemas";
+import { AgeRange, RegisterFormData } from "@/types/auth";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import EmailSentSuccess from "@/components/auth/EmailSentSuccess";
-
-const registerSchema = Joi.object({
-  fname: Joi.string().required().messages({
-    "string.empty": "First name cannot be blank",
-  }),
-  lname: Joi.string().required().messages({
-    "string.empty": "Last name cannot be blank",
-  }),
-  phone: Joi.string()
-    .pattern(/^04\d{8}$/)
-    .required()
-    .messages({
-      "string.empty": "Mobile number cannot be blank",
-      "string.pattern.base":
-        "Please enter a valid Australian mobile number starting with 04 (10 digits)",
-    }),
-  age: Joi.string()
-    .valid(...Object.values(AgeRange))
-    .required()
-    .messages({
-      "any.only": "Please select a valid age range",
-      "string.empty": "Age range is required",
-    }),
-  postcode: Joi.string().required().messages({
-    "string.empty": "Postcode cannot be blank",
-  }),
-  email: Joi.string()
-    .required()
-    .email({ tlds: { allow: false } })
-    .messages({
-      "string.empty": "Email cannot be blank",
-      "string.email": "Please enter a valid email address",
-    }),
-  password: Joi.string().min(6).required().messages({
-    "string.empty": "Password cannot be blank",
-    "string.min": "Password must be at least 6 characters",
-  }),
-  confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
-    "any.only": "Passwords must match",
-  }),
-});
 
 export default function RegisterForm() {
   const {
@@ -80,8 +39,7 @@ export default function RegisterForm() {
     setIsSubmitting(true);
     setSuccessMessage(null);
     try {
-      const { confirmPassword, ...registerData } = data;
-      const response = await axios.post("/api/auth/register", registerData);
+      const response = await axios.post("/api/auth/register", data);
       if (response.status === 201) {
         setSuccessMessage(
           "Registration successful! Please check your email (including spam) to verify your account.",

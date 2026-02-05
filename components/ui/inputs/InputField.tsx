@@ -13,6 +13,8 @@ export default function InputField<T extends FieldValues>({
   register,
   error,
   className = "",
+  min,
+  max,
 }: {
   label: string;
   name: Path<T>;
@@ -21,6 +23,8 @@ export default function InputField<T extends FieldValues>({
   register: UseFormRegister<T>;
   error?: FieldError;
   className?: string;
+  min?: number;
+  max?: number;
 }) {
   return (
     <div className={className}>
@@ -32,7 +36,9 @@ export default function InputField<T extends FieldValues>({
           id={name}
           type={type}
           placeholder={placeholder}
-          {...register(name)}
+          {...register(name, { valueAsNumber: type === "number" })}
+          min={min}
+          max={max}
         />
       </div>
       <div className="text-red-500">

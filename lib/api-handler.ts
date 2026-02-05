@@ -49,7 +49,7 @@ export const apiHandler =
 
       if (error.code === 404) {
         return NextResponse.json(
-          { message: "Page does not exist" },
+          { message: "Page not found" },
           { status: 404 },
         );
       }

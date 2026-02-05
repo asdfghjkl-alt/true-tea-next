@@ -5,7 +5,6 @@ export interface IUser {
   _id: string;
   fname: string; // First Name
   lname: string; // Last Name
-  gender: string;
   age: AgeRange;
   email: string;
   password: string;
@@ -30,7 +29,6 @@ export interface IUser {
 const userSchema = new mongoose.Schema<IUser>({
   fname: String,
   lname: String,
-  gender: String,
   age: {
     type: String,
     enum: Object.values(AgeRange),
@@ -57,9 +55,9 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   activated: { type: Boolean, default: false },
   stripeCusId: String,
-  regDate: Date,
+  regDate: { type: Date, default: Date.now },
   emailToken: String,
-  emailTokenExpires: Date,
+  emailTokenExpires: { type: Date },
 });
 
 const User = models.User || mongoose.model<IUser>("User", userSchema);

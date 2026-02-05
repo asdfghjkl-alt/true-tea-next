@@ -19,16 +19,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  // Use product images if available, otherwise fallback to main image or temp
+  // Use product images if available, otherwise fallback to temp
   const rawImages =
     product.images && product.images.length > 0
       ? product.images
-      : product.image
-        ? [product.image]
-        : ["/temp.jpeg"];
+      : ["/temp.jpeg"];
 
   const productImages = rawImages.map((image) =>
-    image.startsWith("/") ? image : `https://true-tea.com.au/${image}`,
+    image.startsWith("uploads") ? `https://true-tea.com.au/${image}` : image,
   );
 
   return (
