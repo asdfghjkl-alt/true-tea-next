@@ -31,7 +31,7 @@ export const VerificationEmail = ({
       <Preview>Verify your email for True Tea</Preview>
       <Tailwind>
         <Body className="bg-white font-sans">
-          <Container className="mx-auto py-5 pb-12">
+          <Container className="mx-auto p-5 pb-12">
             <Section>
               <Img
                 src={`${webLink}${webLogo}`}

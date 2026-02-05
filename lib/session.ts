@@ -1,14 +1,14 @@
 import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { cookies } from "next/headers";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const JWT_NAME = process.env.JWT_NAME ?? "project_token";
 const JWT_SECRET = process.env.JWT_SECRET ?? "project_jwt_secret_key";
 const secret = new TextEncoder().encode(JWT_SECRET);
 
-// expiration duration for JWT tokens, used signSession
+// Expiration duration for JWT tokens, used signSession
 const JWT_EXPIRATION = "7d"; // 7 days
-// expiration duration for JWT cookies in milliseconds, used in cookies.set
+// Expiration duration for JWT cookies in milliseconds, used in cookies.set
 const JWT_SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
 export type SessionPayload = JWTPayload & {
@@ -21,7 +21,11 @@ export type SessionPayload = JWTPayload & {
   };
 };
 
-// create a session for the user
+/**
+ * Creates a session payload stored in a cookie
+ * @param payload - Information to be stored in the cookie
+ * @returns
+ */
 export async function createSession(payload: SessionPayload) {
   try {
     // sign the payload into a JWT token
@@ -60,24 +64,50 @@ export async function getSession(): Promise<SessionPayload | null> {
   }
 }
 
-// update the session to refresh the expiration date
+// Updates the session to refresh the expiration date
 export async function updateSession(request: NextRequest) {
   try {
     const token = request.cookies.get(JWT_NAME)?.value ?? null;
     if (!token) return;
     const { payload } = await jwtVerify(token, secret);
-    // sign a new token with the same payload
+    // Signs a new token with the same payload
     await createSession(payload as SessionPayload);
   } catch (error) {
-    // if the token is invalid, clear the session and return an error
+    // If the token is invalid, clear the session and return an error
     await clearSession();
     console.error(error);
     return;
   }
 }
 
-// clear the JWT token from the cookie
+// Clears the JWT token from the cookie
 export async function clearSession() {
   const cookieStore = await cookies();
   cookieStore.set(JWT_NAME, "", { expires: new Date(0) });
+}
+
+export async function updateSessionMiddleware(request: NextRequest) {
+  const token = request.cookies.get(JWT_NAME)?.value;
+  if (!token) return NextResponse.next();
+
+  try {
+    const { payload } = await jwtVerify(token, secret);
+    const newToken = await new SignJWT(payload)
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime(JWT_EXPIRATION)
+      .sign(secret);
+
+    const response = NextResponse.next();
+    response.cookies.set(JWT_NAME, newToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      expires: new Date(Date.now() + JWT_SESSION_DURATION),
+    });
+    return response;
+  } catch (err) {
+    return NextResponse.next();
+  }
 }
