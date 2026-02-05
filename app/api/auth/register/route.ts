@@ -66,7 +66,6 @@ export async function POST(req: Request) {
         postcode,
       },
       activated: false,
-      membership: "member",
       emailToken: token,
       emailTokenExpires: expires,
       regDate: new Date(),

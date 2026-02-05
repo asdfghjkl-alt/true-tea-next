@@ -1,3 +1,4 @@
+import { Membership } from "@/types/auth";
 import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +18,7 @@ export type SessionPayload = JWTPayload & {
     email: string;
     fname: string;
     admin: boolean;
-    membership: string;
+    membership: Membership;
   };
 };
 

@@ -1,17 +1,17 @@
-import { AgeRange } from "@/types/auth";
+import { AgeRange, Membership } from "@/types/auth";
 import mongoose, { models } from "mongoose";
 
 export interface IUser {
   _id: string;
-  fname: string;
-  lname: string;
+  fname: string; // First Name
+  lname: string; // Last Name
   gender: string;
   age: AgeRange;
   email: string;
   password: string;
-  admin: boolean;
-  membership: string;
-  phone: string;
+  admin: boolean; // Whether user is admin
+  membership: Membership; // Determines discounts user recieves
+  phone: string; // Phone number
   address: {
     line1: string;
     line2: string;
@@ -20,11 +20,11 @@ export interface IUser {
     postcode: string;
     country: string;
   };
-  activated: boolean;
-  stripeCusId: string;
-  regDate: Date;
-  emailToken: string;
-  emailTokenExpires: Date;
+  activated: boolean; // Whether the user has activated via email
+  stripeCusId: string; // Stripe Customer ID
+  regDate: Date; // Date of registration
+  emailToken: string; // Token for user activation
+  emailTokenExpires: Date; // Time when token expires
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -41,7 +41,11 @@ const userSchema = new mongoose.Schema<IUser>({
     required: true,
   },
   admin: { type: Boolean, default: false },
-  membership: String,
+  membership: {
+    type: String,
+    enum: Object.values(Membership),
+    default: Membership.Member,
+  },
   phone: String,
   address: {
     line1: String,

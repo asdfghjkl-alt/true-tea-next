@@ -13,6 +13,12 @@ export enum AgeRange {
   SeventyPlus = "≥70",
 }
 
+export enum Membership {
+  Member = "member",
+  Friend = "friend",
+  VIP = "vip",
+}
+
 export interface RegisterFormData extends LoginFormData {
   fname: string;
   lname: string;
