@@ -45,7 +45,7 @@ export default async function ProductsPage({
     const products = (await Product.find({
       categoryId: category._id,
       onShelf: true,
-    })) as IProductDB[];
+    }).sort({ seqNr: 1 })) as IProductDB[];
 
     // Returns the category page
     return (
@@ -167,7 +167,9 @@ export default async function ProductsPage({
   const categories = (await Category.find({ active: true }).sort({
     catID: 1,
   })) as ICategory[];
-  const allProducts = (await Product.find({ onShelf: true })) as IProductDB[];
+  const allProducts = (await Product.find({ onShelf: true }).sort({
+    seqNr: 1,
+  })) as IProductDB[];
 
   return (
     <main className="min-h-screen bg-teal-50 p-4 md:p-8 lg:p-12">
