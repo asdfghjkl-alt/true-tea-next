@@ -49,7 +49,7 @@ export const POST = apiHandler(async (req: Request) => {
   });
 
   // Validates the request body with the schema
-  const { error, value } = productSchema.validate(body, {
+  const { error, value: validatedData } = productSchema.validate(body, {
     abortEarly: false,
   });
 
@@ -80,8 +80,10 @@ export const POST = apiHandler(async (req: Request) => {
 
   // Validates that category is actually stored in the database
   let categoryId;
-  if (value.category) {
-    const categoryDoc = await Category.findOne({ name: value.category });
+  if (validatedData.category) {
+    const categoryDoc = await Category.findOne({
+      name: validatedData.category,
+    });
     if (!categoryDoc) {
       return NextResponse.json(
         { message: "Invalid category selected" },
@@ -98,7 +100,7 @@ export const POST = apiHandler(async (req: Request) => {
 
   // Create product
   const newProduct = await Product.create({
-    ...value,
+    ...validatedData,
     categoryId, // Add the resolved category ID
     images: uploadedImages,
   });

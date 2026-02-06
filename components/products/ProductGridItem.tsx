@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface ProductGridItemProps {
   product: any;
@@ -97,7 +98,12 @@ export default function ProductGridItem({ product }: ProductGridItemProps) {
 
       {/* Edit Button */}
       <div className="mt-auto flex justify-end">
-        <button className="btn btn-edit">Edit</button>
+        <Link
+          href={`/products/edit/${product._id}`}
+          className="btn btn-edit inline-block"
+        >
+          Edit
+        </Link>
       </div>
     </div>
   );

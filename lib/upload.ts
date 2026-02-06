@@ -42,3 +42,28 @@ export async function uploadImages(files: File[]): Promise<IImage[]> {
   // Waits for all uploads to complete
   return Promise.all(uploadPromises);
 }
+
+// Deletes images from Cloudinary
+export async function deleteImages(publicIds: string[]): Promise<void> {
+  if (!publicIds || publicIds.length === 0) return;
+
+  const deletePromises = publicIds.map((publicId) => {
+    return new Promise<void>((resolve, reject) => {
+      cloudinary.uploader.destroy(
+        publicId,
+        { resource_type: "image", invalidate: true },
+        (error) => {
+          if (error) {
+            console.error(`Failed to delete image ${publicId}:`, error);
+            // We resolve anyway to not block other deletions or the main process
+            resolve();
+          } else {
+            resolve();
+          }
+        },
+      );
+    });
+  });
+
+  await Promise.all(deletePromises);
+}

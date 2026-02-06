@@ -29,7 +29,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { v4 as uuidv4 } from "uuid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { ProductFormData } from "@/database/product.model";
+import { IProduct, ProductFormData } from "@/database/product.model";
+import { redirect, useRouter } from "next/navigation";
 
 /* 
   Pure presentation component for the image card
@@ -39,24 +40,27 @@ const ImageCard = memo(
   forwardRef<
     HTMLDivElement,
     {
-      file: File;
+      image: { url?: string; file?: File }; // Accept generic image object
       onRemove?: (id: string) => void;
       id: string;
       isOverlay?: boolean;
       style?: React.CSSProperties;
       [key: string]: any;
     }
-  >(({ file, onRemove, id, isOverlay, style, ...props }, ref) => {
+  >(({ image, onRemove, id, isOverlay, style, ...props }, ref) => {
     const [preview, setPreview] = useState<string>("");
 
     useEffect(() => {
-      // Create preview
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-
-      // Initial cleanup function
-      return () => URL.revokeObjectURL(objectUrl);
-    }, [file]);
+      // Use URL if available
+      if (image.url) {
+        setPreview(image.url);
+      } else if (image.file) {
+        // Fallback to creating object URL if only file is present (legacy/safety)
+        const objectUrl = URL.createObjectURL(image.file);
+        setPreview(objectUrl);
+        return () => URL.revokeObjectURL(objectUrl);
+      }
+    }, [image]);
 
     return (
       <div
@@ -105,11 +109,11 @@ ImageCard.displayName = "ImageCard";
 // Wrapper for individual sortable image item
 const SortableImage = memo(function SortableImage({
   id,
-  file,
+  image,
   onRemove,
 }: {
   id: string;
-  file: File;
+  image: { url?: string; file?: File };
   onRemove: (id: string) => void;
 }) {
   const {
@@ -131,7 +135,7 @@ const SortableImage = memo(function SortableImage({
     <ImageCard
       ref={setNodeRef}
       id={id}
-      file={file}
+      image={image}
       onRemove={onRemove}
       style={style}
       {...attributes}
@@ -142,8 +146,10 @@ const SortableImage = memo(function SortableImage({
 
 export default function ProductForm({
   categories = [],
+  product,
 }: {
   categories?: string[];
+  product?: IProduct;
 }) {
   const {
     register,
@@ -153,27 +159,46 @@ export default function ProductForm({
   } = useForm<ProductFormData>({
     resolver: joiResolver(productSchema),
     defaultValues: {
-      name: "",
-      nameCN: "",
-      category: "",
-      seqNr: 0,
-      price: 0,
-      discount: 0,
-      includeGST: true,
-      unit: "",
-      stock: 0,
-      onShelf: true,
-      region: "",
-      year: "",
-      note: "",
+      name: product?.name || "",
+      nameCN: product?.nameCN || "",
+      category: product?.categoryId.name || "",
+      seqNr: product?.seqNr || 0,
+      price: product?.price || 0,
+      discount: product?.discount || 0,
+      includeGST: product?.includeGST ?? true,
+      unit: product?.unit || "",
+      stock: product?.stock || 0,
+      onShelf: product?.onShelf ?? true,
+      region: product?.region || "",
+      year: product?.year || "",
+      note: product?.note || "",
     },
     mode: "onTouched",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   // Store files with unique IDs for dnd-kit
-  const [images, setImages] = useState<{ id: string; file: File }[]>([]);
+  // Unified image state for both existing and new images
+  const [images, setImages] = useState<
+    { id: string; file?: File; url?: string; isExisting: boolean }[]
+  >([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const router = useRouter();
+
+  // Initialize images from product prop
+  useEffect(() => {
+    if (product?.images && product.images.length > 0) {
+      const initialImages = product.images.map((img) => {
+        return {
+          id: uuidv4(), // Generate a unique ID for dnd-kit
+          url: img.url,
+          originalUrl: img.url, // Keep original relative path for backend
+          isExisting: true,
+        };
+      });
+      setImages(initialImages);
+    }
+  }, [product]);
 
   // Setup sensors for dnd-kit
   const sensors = useSensors(
@@ -189,6 +214,8 @@ export default function ProductForm({
       const newFiles = Array.from(e.target.files).map((file) => ({
         id: uuidv4(),
         file,
+        url: URL.createObjectURL(file), // Create preview URL
+        isExisting: false,
       }));
       // Adds new files to the images state
       setImages((prev) => [...prev, ...newFiles]);
@@ -225,22 +252,54 @@ export default function ProductForm({
       Object.keys(data).forEach((key) => {
         formData.append(key, data[key]);
       });
-      // Appends images in the correct order
-      images.forEach((item) => {
-        formData.append("images", item.file);
-      });
 
-      // Posts the form data to the API
-      const res = await api.post("/products", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      // Handle Image Logic based on mode
+      if (product) {
+        // EDIT MODE: Send new files + order instructions
+        const newFiles: File[] = [];
+        const order: string[] = [];
 
-      // Shows success message
-      toast.success(res.data.message || "Product created successfully!");
-      reset();
-      setImages([]);
+        images.forEach((img) => {
+          if (img.file) {
+            // It's a new file
+            newFiles.push(img.file);
+            // Marker for backend to grab the file at specific index
+            order.push(`new:${newFiles.length - 1}`);
+          } else {
+            // It's an existing image, send the ORIGINAL relative URL (or full URL if stored that way)
+            // We stored 'originalUrl' in state for this exact purpose
+            // @ts-ignore
+            order.push(img.originalUrl || img.url);
+          }
+        });
+
+        // Append new files
+        newFiles.forEach((file) => {
+          formData.append("images", file);
+        });
+        // Append order
+        formData.append("imageOrder", JSON.stringify(order));
+
+        // PUT request
+        const res = await api.put(`/products/${product._id}`, formData);
+        toast.success(res.data.message || "Product updated successfully!");
+      } else {
+        // CREATE MODE: Just append all files
+        images.forEach((item) => {
+          if (item.file) {
+            formData.append("images", item.file);
+          }
+        });
+
+        // POST request
+        const res = await api.post("/products", formData);
+        toast.success(res.data.message || "Product created successfully!");
+        reset();
+        setImages([]);
+      }
+      router.push("/products/manage");
     } catch (error: any) {
-      const msg = error.response?.data?.message || "Failed to create product";
+      const msg = error.response?.data?.message || "Failed to save product";
       toast.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -251,7 +310,7 @@ export default function ProductForm({
     <div className="w-full max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
       {/* Header */}
       <h3 className="mb-6 text-center text-2xl font-semibold">
-        Add New Product
+        {product ? "Edit Product" : "Add New Product"}
       </h3>
 
       {/* Form */}
@@ -455,7 +514,7 @@ export default function ProductForm({
                       <SortableImage
                         key={img.id}
                         id={img.id}
-                        file={img.file}
+                        image={img}
                         onRemove={handleRemoveImage}
                       />
                     ))}
@@ -465,7 +524,7 @@ export default function ProductForm({
                   {activeId ? (
                     <ImageCard
                       id={activeId}
-                      file={images.find((img) => img.id === activeId)?.file!}
+                      image={images.find((img) => img.id === activeId)!}
                       isOverlay
                     />
                   ) : null}
@@ -481,7 +540,13 @@ export default function ProductForm({
           disabled={isSubmitting}
           className="btn btn-submit w-full mt-6"
         >
-          {isSubmitting ? "Creating..." : "Create Product"}
+          {isSubmitting
+            ? product
+              ? "Updating..."
+              : "Creating..."
+            : product
+              ? "Update Product"
+              : "Create Product"}
         </button>
       </form>
     </div>

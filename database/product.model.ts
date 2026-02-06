@@ -13,7 +13,7 @@ interface IProductBase {
   slug?: string; // Auto-generated from name for SEO
   nameCN: string; // Chinese name
   seqNr: number; // Order in which product should be displayed
-  images: (IImage | string)[]; // Array of image objects or image URLs
+  images: IImage[]; // Array of image objects or image URLs
   price: number; // Price of the product
   discount: number; // Discount percentage
   includeGST: boolean; // Whether the price includes GST
@@ -56,24 +56,31 @@ const imageSchema = new Schema<IImage>({
   size: { type: Number, required: true },
 });
 
-const productSchema = new Schema<IProductDB>({
-  name: { type: String, required: true },
-  slug: { type: String, unique: true, sparse: true },
-  nameCN: String,
-  seqNr: Number,
-  categoryId: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-  year: String,
-  price: { type: Number, required: true, min: 0 },
-  discount: { type: Number, default: 0, min: 0, max: 100 },
-  includeGST: { type: Boolean, default: true },
-  unit: { type: String, required: true },
-  stock: { type: Number, required: true, min: 0 },
-  onShelf: { type: Boolean, default: true },
-  entryDate: { type: Date, default: Date.now },
-  images: [Schema.Types.Mixed],
-  region: String,
-  note: String,
-});
+const productSchema = new Schema<IProductDB>(
+  {
+    name: { type: String, required: true },
+    slug: { type: String, unique: true, sparse: true },
+    nameCN: String,
+    seqNr: Number,
+    categoryId: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+    year: String,
+    price: { type: Number, required: true, min: 0 },
+    discount: { type: Number, default: 0, min: 0, max: 100 },
+    includeGST: { type: Boolean, default: true },
+    unit: { type: String, required: true },
+    stock: { type: Number, required: true, min: 0 },
+    onShelf: { type: Boolean, default: true },
+    entryDate: { type: Date, default: Date.now },
+    images: [imageSchema],
+    region: String,
+    note: String,
+  },
+  { collection: "productsdev" },
+);
 
 productSchema.pre("save", async function () {
   // Generates slug if name modified or slug doesn't exist

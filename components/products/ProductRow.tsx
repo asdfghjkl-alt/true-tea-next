@@ -1,5 +1,6 @@
 import { IProduct } from "@/database/product.model";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ProductRowProps {
   product: IProduct;
@@ -59,7 +60,12 @@ export default function ProductRow({ product }: ProductRowProps) {
         {product.discount > 0 ? `${product.discount}%` : "-"}
       </td>
       <td className="px-4 py-3 text-center">
-        <button className="btn btn-edit">Edit</button>
+        <Link
+          href={`/products/edit/${product._id}`}
+          className="btn btn-edit inline-block"
+        >
+          Edit
+        </Link>
       </td>
     </tr>
   );
