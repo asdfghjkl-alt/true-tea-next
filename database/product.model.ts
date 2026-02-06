@@ -1,4 +1,5 @@
 import mongoose, { models, Schema } from "mongoose";
+import { ICategory } from "./category.model";
 
 export interface IImage {
   url: string; // URL of the image
@@ -46,7 +47,7 @@ export interface IProductDB extends IProductBase {
 }
 
 export interface IProduct extends IProductBase {
-  categoryId: string;
+  categoryId: ICategory;
 }
 
 const imageSchema = new Schema<IImage>({
