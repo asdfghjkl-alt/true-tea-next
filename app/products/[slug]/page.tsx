@@ -41,7 +41,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
           {/* Left Column: Product Images */}
-          <div>
+          <div className="relative">
+            {/* Badge for Discount */}
+            {product.discount > 0 && (
+              <>
+                {/* Shows badge on top left of the screen */}
+                <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-2 py-1 text-md font-bold text-white shadow-sm">
+                  {product.discount}% OFF
+                </div>
+              </>
+            )}
             <ImageCarousel images={productImages} />
           </div>
 
@@ -69,8 +78,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {/* Product Price */}
               <div className="flex items-center justify-between border-b border-gray-100 pb-4">
                 <span className="text-lg font-medium text-gray-500">Price</span>
-                <span className="text-2xl font-bold text-emerald-600 text-right">
-                  ${product.price} / {product.unit}
+                <span className="text-black text-right">
+                  {product.discount > 0 ? (
+                    <>
+                      {/* Shows price after discount (estimated) */}
+                      <span className="text-lg font-bold text-emerald-600">
+                        $
+                        {(product.price * (1 - product.discount / 100)).toFixed(
+                          2,
+                        )}
+                      </span>{" "}
+                      {/* Shows original price (strikethrough) */}
+                      <span className="text-sm text-gray-400 line-through">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-lg font-bold text-emerald-600">
+                      ${product.price.toFixed(2)}
+                    </span>
+                  )}{" "}
+                  / {product.unit}
                 </span>
               </div>
             </div>
