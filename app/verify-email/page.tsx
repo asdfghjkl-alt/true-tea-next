@@ -1,8 +1,8 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react"; // Added Suspense
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,27 +11,28 @@ export default function VerifyEmailContent() {
   const token = searchParams.get("token");
 
   const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading",
+    token ? "loading" : "error",
   );
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(
+    token ? "" : "Invalid verification link.",
+  );
 
   useEffect(() => {
-    // If no token is provided, return error message
-    if (!token) {
-      setStatus("error");
-      setMessage("Invalid verification link.");
-      return;
-    }
+    if (!token) return;
 
     const verify = async () => {
       try {
         // Verifies the token by calling API to find the user with the token
         await axios.get(`/api/auth/verify?token=${token}`);
         setStatus("success");
-      } catch (error: any) {
+      } catch (error) {
         // If verification fails, set error status and message
         setStatus("error");
-        setMessage(error.response?.data?.message || "Verification failed.");
+        if (error instanceof AxiosError) {
+          setMessage(error.response?.data?.message || "Verification failed.");
+        } else {
+          setMessage("Verification failed.");
+        }
       }
     };
 

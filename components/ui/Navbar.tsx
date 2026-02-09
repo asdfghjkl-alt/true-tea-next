@@ -84,6 +84,8 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                 src="/logo-true-tea-origin.jpeg"
                 alt="True Tea"
                 fill
+                loading="eager"
+                sizes="(max-width: 768px) 48px, 128px"
                 className="object-contain"
               />
             </div>

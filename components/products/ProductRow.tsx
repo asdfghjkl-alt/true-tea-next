@@ -1,6 +1,7 @@
 import { IProduct } from "@/database/product.model";
 import Image from "next/image";
 import Link from "next/link";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 
 interface ProductRowProps {
   product: IProduct;
@@ -41,12 +42,15 @@ export default function ProductRow({ product }: ProductRowProps) {
       </td>
       <td className="px-4 py-3 text-gray-700">{product.stock}</td>
       <td className="px-4 py-3 text-center">
-        <input
-          type="checkbox"
-          checked={product.onShelf}
-          disabled
-          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-        />
+        {product.onShelf ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
+            <CheckCircleIcon className="h-3 w-3" /> Active
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-800">
+            <XCircleIcon className="h-3 w-3" /> Inactive
+          </span>
+        )}
       </td>
       <td className="px-4 py-3 text-center">
         <input

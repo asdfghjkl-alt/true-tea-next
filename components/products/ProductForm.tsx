@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { productSchema } from "@/lib/schemas";
-import { useState, useEffect, memo, forwardRef } from "react";
+import { useState, useEffect, memo, forwardRef, useMemo } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import TextArea from "@/components/ui/inputs/TextArea";
 import api from "@/lib/axios";
@@ -30,7 +30,8 @@ import { v4 as uuidv4 } from "uuid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { IProduct, ProductFormData } from "@/database/product.model";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 /* 
   Pure presentation component for the image card
@@ -45,21 +46,16 @@ const ImageCard = memo(
       id: string;
       isOverlay?: boolean;
       style?: React.CSSProperties;
-      [key: string]: any;
     }
   >(({ image, onRemove, id, isOverlay, style, ...props }, ref) => {
-    const [preview, setPreview] = useState<string>("");
-
-    useEffect(() => {
-      // Use URL if available
+    const preview = useMemo(() => {
       if (image.url) {
-        setPreview(image.url);
-      } else if (image.file) {
-        // Fallback to creating object URL if only file is present (legacy/safety)
-        const objectUrl = URL.createObjectURL(image.file);
-        setPreview(objectUrl);
-        return () => URL.revokeObjectURL(objectUrl);
+        return image.url;
       }
+      if (image.file) {
+        return URL.createObjectURL(image.file);
+      }
+      return "";
     }, [image]);
 
     return (
@@ -113,7 +109,7 @@ const SortableImage = memo(function SortableImage({
   onRemove,
 }: {
   id: string;
-  image: { url?: string; file?: File };
+  image: { url: string; file?: File };
   onRemove: (id: string) => void;
 }) {
   const {
@@ -144,13 +140,15 @@ const SortableImage = memo(function SortableImage({
   );
 });
 
+interface ProductFormProps {
+  categories?: string[];
+  product?: IProduct;
+}
+
 export default function ProductForm({
   categories = [],
   product,
-}: {
-  categories?: string[];
-  product?: IProduct;
-}) {
+}: ProductFormProps) {
   const {
     register,
     handleSubmit,
@@ -180,7 +178,7 @@ export default function ProductForm({
   // Store files with unique IDs for dnd-kit
   // Unified image state for both existing and new images
   const [images, setImages] = useState<
-    { id: string; file?: File; url?: string; isExisting: boolean }[]
+    { id: string; file?: File; url: string; isExisting: boolean }[]
   >([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const router = useRouter();
@@ -192,7 +190,6 @@ export default function ProductForm({
         return {
           id: uuidv4(), // Generate a unique ID for dnd-kit
           url: img.url,
-          originalUrl: img.url, // Keep original relative path for backend
           isExisting: true,
         };
       });
@@ -244,12 +241,13 @@ export default function ProductForm({
   };
 
   // Handles form submission
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ProductFormData) => {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
       // Appends data from form to new FormData
       Object.keys(data).forEach((key) => {
+        // @ts-expect-error form data expects string key
         formData.append(key, data[key]);
       });
 
@@ -268,8 +266,7 @@ export default function ProductForm({
           } else {
             // It's an existing image, send the ORIGINAL relative URL (or full URL if stored that way)
             // We stored 'originalUrl' in state for this exact purpose
-            // @ts-ignore
-            order.push(img.originalUrl || img.url);
+            order.push(img.url);
           }
         });
 
@@ -298,9 +295,12 @@ export default function ProductForm({
         setImages([]);
       }
       router.push("/products/manage");
-    } catch (error: any) {
-      const msg = error.response?.data?.message || "Failed to save product";
-      toast.error(msg);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "Failed to save product");
+      } else {
+        toast.error("Failed to save product");
+      }
     } finally {
       setIsSubmitting(false);
     }

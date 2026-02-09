@@ -12,11 +12,12 @@ import api from "@/lib/axios";
 import { SessionPayload } from "@/lib/session";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 interface AuthContextType {
   user: SessionPayload["userData"] | null;
   login: (data: LoginFormData) => Promise<void>;
-  register: (data: RegisterFormData) => Promise<any>;
+  register: (data: RegisterFormData) => Promise<void>;
   setUser: (user: SessionPayload["userData"] | null) => void;
   logout: () => Promise<void>;
   isLoading: boolean;
@@ -61,8 +62,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(meRes.data.user);
       }
       router.push("/");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
       throw error;
     }
   };
@@ -74,8 +79,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       toast.success(res.data.message);
       router.push("/auth/login");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Logout failed");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "Logout failed");
+      } else {
+        toast.error("Logout failed");
+      }
     }
   };
 
@@ -84,8 +93,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Posts to registration route
       await api.post("/auth/register", data);
       toast.success("Registration successful!");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Registration failed");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "Registration failed");
+      } else {
+        toast.error("Registration failed");
+      }
       throw error;
     }
   };

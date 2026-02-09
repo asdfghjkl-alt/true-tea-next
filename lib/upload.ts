@@ -1,8 +1,11 @@
 import { cloudinary } from "./cloudinary";
-import { IImage } from "@/database/product.model";
+import { IImage } from "@/database/image.model";
 
 // Uploads an array of files to Cloudinary and returns the uploaded image data
-export async function uploadImages(files: File[]): Promise<IImage[]> {
+export async function uploadImages(
+  files: File[],
+  folder: string = "True Tea",
+): Promise<IImage[]> {
   const uploadPromises = files.map(async (file) => {
     // Converts the file to a buffer for upload
     const arrayBuffer = await file.arrayBuffer();
@@ -15,7 +18,7 @@ export async function uploadImages(files: File[]): Promise<IImage[]> {
         .upload_stream(
           {
             resource_type: "image",
-            folder: "True Tea", // Specifies the folder in Cloudinary
+            folder: folder, // Specifies the folder in Cloudinary
             transformation: [{ quality: "auto", fetch_format: "auto" }], // Optimizes image quality and format
           },
           (error, result) => {
@@ -48,7 +51,7 @@ export async function deleteImages(publicIds: string[]): Promise<void> {
   if (!publicIds || publicIds.length === 0) return;
 
   const deletePromises = publicIds.map((publicId) => {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve) => {
       cloudinary.uploader.destroy(
         publicId,
         { resource_type: "image", invalidate: true },

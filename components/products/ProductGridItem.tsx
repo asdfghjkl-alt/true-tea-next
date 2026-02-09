@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import { IProduct } from "@/database/product.model";
 
 interface ProductGridItemProps {
-  product: any;
+  product: IProduct;
 }
 
 export default function ProductGridItem({ product }: ProductGridItemProps) {
@@ -67,13 +69,18 @@ export default function ProductGridItem({ product }: ProductGridItemProps) {
 
         {/* On Shelf */}
         <div className="flex justify-between gap-2 items-center">
-          <span className="whitespace-nowrap">On Shelf:</span>
-          <input
-            type="checkbox"
-            checked={product.onShelf}
-            disabled
-            className="h-4 w-4 rounded border-gray-300 text-green-600"
-          />
+          <span className="whitespace-nowrap">Status:</span>
+          {product.onShelf ? (
+            <span className="flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
+              {/* Icon to indicate active */}
+              <CheckCircleIcon className="h-3 w-3" /> Active
+            </span>
+          ) : (
+            <span className="flex items-center gap-1 rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-800">
+              {/* Icon to indicate inactive */}
+              <XCircleIcon className="h-3 w-3" /> Inactive
+            </span>
+          )}
         </div>
 
         {/* Include GST */}

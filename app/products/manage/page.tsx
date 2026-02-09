@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/session";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Product from "@/database/product.model";
+import Product, { IProduct } from "@/database/product.model";
 import Category from "@/database/category.model";
 import connectToDatabase from "@/lib/mongodb";
 import ProductRow from "@/components/products/ProductRow";
@@ -86,7 +86,7 @@ export default async function ManageProductsPage() {
           </thead>
           <tbody className="divide-y divide-gray-200">
             {/* Product Rows */}
-            {products.map((product: any) => (
+            {products.map((product: IProduct) => (
               <ProductRow key={product._id} product={product} />
             ))}
           </tbody>
@@ -96,7 +96,7 @@ export default async function ManageProductsPage() {
       {/* Medium/Small Screen: Grid View */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:hidden">
         {/* Product Grid Items */}
-        {products.map((product: any) => (
+        {products.map((product: IProduct) => (
           <ProductGridItem key={product._id} product={product} />
         ))}
       </div>

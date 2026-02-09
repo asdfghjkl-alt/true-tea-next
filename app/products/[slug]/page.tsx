@@ -1,6 +1,7 @@
 import connectToDatabase from "@/lib/mongodb";
-import Product, { IImage } from "@/database/product.model";
+import Product from "@/database/product.model";
 import ImageCarousel from "@/components/products/ImageCarousel";
+import { IImage } from "@/database/image.model";
 import { notFound } from "next/navigation";
 import { IProductDB } from "@/database/product.model";
 
@@ -13,7 +14,10 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   await connectToDatabase();
-  const product = (await Product.findOne({ slug: slug })) as IProductDB;
+  const product = (await Product.findOne({
+    slug: slug,
+    onShelf: true,
+  })) as IProductDB;
 
   if (!product) {
     notFound();

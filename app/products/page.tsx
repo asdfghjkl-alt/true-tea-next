@@ -34,7 +34,7 @@ export default async function ProductsPage({
               Category Not Found
             </h1>
             <p className="text-gray-600">
-              We couldn't find a category named "{categoryName}".
+              We couldn&apos;t find a category named &quot;{categoryName}&quot;.
             </p>
           </div>
         </main>
@@ -71,11 +71,7 @@ export default async function ProductsPage({
                 {/* Category Banner Image */}
                 <div className="relative h-full w-full overflow-hidden rounded-xl shadow-lg">
                   <Image
-                    src={
-                      category.image.startsWith("/")
-                        ? category.image
-                        : `https://true-tea.com.au/${category.image}`
-                    }
+                    src={category.image.url}
                     alt={category.name}
                     fill
                     className="object-cover"

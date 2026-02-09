@@ -109,6 +109,7 @@ export async function updateSessionMiddleware(request: NextRequest) {
     });
     return response;
   } catch (err) {
+    void err;
     return NextResponse.next();
   }
 }

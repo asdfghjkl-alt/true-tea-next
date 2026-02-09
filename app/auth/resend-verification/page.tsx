@@ -49,11 +49,15 @@ export default function ResendVerificationPage() {
         setSuccessMessage(response.data.message);
         toast.success("Request processed successfully.");
       }
-    } catch (error: any) {
-      console.error(error);
-      const msg =
-        error.response?.data?.message || "Failed to send verification email.";
-      toast.error(msg);
+    } catch (error) {
+      void error;
+      if (axios.isAxiosError(error)) {
+        const msg =
+          error.response?.data?.message || "Failed to send verification email.";
+        toast.error(msg);
+      } else {
+        toast.error("Failed to send verification email.");
+      }
     } finally {
       setIsSubmitting(false);
     }

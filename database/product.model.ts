@@ -1,11 +1,6 @@
 import mongoose, { models, Schema } from "mongoose";
 import { ICategory } from "./category.model";
-
-export interface IImage {
-  url: string; // URL of the image
-  filename: string; // Name of the image file
-  size: number; // Size of the image in bytes
-}
+import { IImage, imageSchema } from "./image.model";
 
 interface IProductBase {
   _id: string;
@@ -50,37 +45,28 @@ export interface IProduct extends IProductBase {
   categoryId: ICategory;
 }
 
-const imageSchema = new Schema<IImage>({
-  url: { type: String, required: true },
-  filename: { type: String, required: true },
-  size: { type: Number, required: true },
-});
-
-const productSchema = new Schema<IProductDB>(
-  {
-    name: { type: String, required: true },
-    slug: { type: String, unique: true, sparse: true },
-    nameCN: String,
-    seqNr: Number,
-    categoryId: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-      required: true,
-    },
-    year: String,
-    price: { type: Number, required: true, min: 0 },
-    discount: { type: Number, default: 0, min: 0, max: 100 },
-    includeGST: { type: Boolean, default: true },
-    unit: { type: String, required: true },
-    stock: { type: Number, required: true, min: 0 },
-    onShelf: { type: Boolean, default: true },
-    entryDate: { type: Date, default: Date.now },
-    images: [imageSchema],
-    region: String,
-    note: String,
+const productSchema = new Schema<IProductDB>({
+  name: { type: String, required: true },
+  slug: { type: String, unique: true, sparse: true },
+  nameCN: { type: String, required: true },
+  seqNr: { type: Number, required: true },
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: "Category",
+    required: true,
   },
-  { collection: "productsdev" },
-);
+  year: String,
+  price: { type: Number, required: true, min: 0 },
+  discount: { type: Number, default: 0, min: 0, max: 100 },
+  includeGST: { type: Boolean, default: true },
+  unit: { type: String, required: true },
+  stock: { type: Number, required: true, min: 0 },
+  onShelf: { type: Boolean, default: true },
+  entryDate: { type: Date, default: Date.now },
+  images: [imageSchema],
+  region: String,
+  note: String,
+});
 
 productSchema.pre("save", async function () {
   // Generates slug if name modified or slug doesn't exist

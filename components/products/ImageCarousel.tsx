@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 interface ImageCarouselProps {
@@ -10,27 +10,28 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
 
-  const handleImageChange = (newIndex: number) => {
-    if (newIndex === currentIndex) return;
-    // Constructs fade out and fade in effect
-    setIsFading(true);
-    setTimeout(() => {
-      setCurrentIndex(newIndex);
-      setIsFading(false);
-    }, 300);
-  };
+  const handleImageChange = useCallback((newIndex: number) => {
+    setCurrentIndex((prevIndex) => {
+      if (newIndex === prevIndex) return prevIndex;
+      // Constructs fade out and fade in effect
+      setIsFading(true);
+      setTimeout(() => {
+        setCurrentIndex(newIndex);
+        setIsFading(false);
+      }, 300);
+      return prevIndex;
+    });
+  }, []);
 
-  const prevImage = () => {
-    // Constructs previous image index
+  const prevImage = useCallback(() => {
     const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
     handleImageChange(newIndex);
-  };
+  }, [handleImageChange, currentIndex, images.length]);
 
-  const nextImage = () => {
-    // Constructs next image index
+  const nextImage = useCallback(() => {
     const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
     handleImageChange(newIndex);
-  };
+  }, [handleImageChange, currentIndex, images.length]);
 
   // Auto-scroll effect
   useEffect(() => {
@@ -41,7 +42,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, images.length]);
+  }, [currentIndex, images.length, nextImage]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -52,9 +53,11 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
             src={images[currentIndex]}
             alt={`Product Image ${currentIndex + 1}`}
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className={`object-cover transition-opacity duration-300 ease-in-out ${
               isFading ? "opacity-0" : "opacity-100"
             }`}
+            loading="eager"
           />
         </div>
 
@@ -124,6 +127,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
                 src={image}
                 alt={`Thumbnail ${index + 1}`}
                 fill
+                sizes="80px"
                 className="object-cover"
               />
             </button>

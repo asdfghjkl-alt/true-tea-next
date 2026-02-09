@@ -7,7 +7,6 @@ import { AgeRange, RegisterFormData } from "@/types/auth";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import Image from "next/image";
-import { toast } from "react-hot-toast";
 import EmailSentSuccess from "@/components/auth/EmailSentSuccess";
 import { useAuth } from "@/context/AuthContext";
 
@@ -45,7 +44,8 @@ export default function RegisterForm() {
         "Registration successful! Please check your email (including spam) to verify your account.",
       );
       reset();
-    } catch (error: any) {
+    } catch (error) {
+      void error;
       // Error is already handled by the auth context
     } finally {
       // Stop loading

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import Product, { IImage } from "@/database/product.model";
+import Product from "@/database/product.model";
+import { IImage } from "@/database/image.model";
 import Category from "@/database/category.model";
 import User from "@/database/user.model";
 import { uploadImages, deleteImages } from "@/lib/upload";
@@ -55,7 +56,7 @@ export const PUT = apiHandler(
 
       // Parses the form data
       const formData = await req.formData();
-      const body: any = {};
+      const body: Record<string, unknown> = {};
       const files: File[] = [];
 
       // Converts form data into a JSON object

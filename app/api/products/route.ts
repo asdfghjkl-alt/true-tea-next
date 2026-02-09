@@ -34,7 +34,7 @@ export const POST = apiHandler(async (req: Request) => {
   const formData = await req.formData();
 
   // Extracts fields and files
-  const body: Record<string, any> = {};
+  const body: Record<string, unknown> = {};
   const images: File[] = [];
 
   // Extracts JSON body and images separately from the request form data
