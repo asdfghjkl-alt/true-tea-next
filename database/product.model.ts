@@ -63,7 +63,16 @@ const productSchema = new Schema<IProductDB>({
   stock: { type: Number, required: true, min: 0 },
   onShelf: { type: Boolean, default: true },
   entryDate: { type: Date, default: Date.now },
-  images: [imageSchema],
+  images: {
+    type: [imageSchema],
+    required: true,
+    validate: {
+      validator: function (v: IImage[]) {
+        return v && v.length > 0;
+      },
+      message: "A product must have at least one image.",
+    },
+  },
   region: String,
   note: String,
 });

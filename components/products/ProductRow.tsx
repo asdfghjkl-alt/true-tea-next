@@ -2,6 +2,7 @@ import { IProduct } from "@/database/product.model";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import DeleteProductButton from "./DeleteProductButton";
 
 interface ProductRowProps {
   product: IProduct;
@@ -70,6 +71,8 @@ export default function ProductRow({ product }: ProductRowProps) {
         >
           Edit
         </Link>
+        <br />
+        <DeleteProductButton productId={product._id} />
       </td>
     </tr>
   );

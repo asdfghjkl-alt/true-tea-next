@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { IProduct } from "@/database/product.model";
+import DeleteProductButton from "./DeleteProductButton";
 
 interface ProductGridItemProps {
   product: IProduct;
@@ -111,6 +112,7 @@ export default function ProductGridItem({ product }: ProductGridItemProps) {
         >
           Edit
         </Link>
+        <DeleteProductButton productId={product._id} />
       </div>
     </div>
   );

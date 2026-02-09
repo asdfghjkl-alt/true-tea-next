@@ -211,3 +211,50 @@ export const PUT = apiHandler(
     }
   },
 );
+
+export const DELETE = apiHandler(
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+    try {
+      const { id } = await params;
+      const session = await getSession();
+
+      // Check Auth & Admin Status
+      if (!session) {
+        return NextResponse.json({ message: "Not found" }, { status: 404 });
+      }
+
+      await connectToDatabase();
+      const user = await User.findById(session.userData._id);
+
+      if (!user || user.admin !== true) {
+        return NextResponse.json({ message: "Not found" }, { status: 404 });
+      }
+
+      const product = await Product.findById(id);
+
+      if (!product) {
+        return NextResponse.json({ message: "Not found" }, { status: 404 });
+      }
+
+      const publicIds = product.images.map((img: IImage) => img.filename);
+
+      if (publicIds.length > 0) {
+        await deleteImages(publicIds);
+      }
+
+      // Deletes product from DB
+      await Product.findByIdAndDelete(id);
+
+      return NextResponse.json(
+        { message: "Product deleted successfully" },
+        { status: 200 },
+      );
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      return NextResponse.json(
+        { message: "Internal server error" },
+        { status: 500 },
+      );
+    }
+  },
+);
