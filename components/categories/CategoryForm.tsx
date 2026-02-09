@@ -74,7 +74,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
   };
 
   const onSubmit = async (data: CategoryFormData) => {
-    if (!imageFile) {
+    if (!imageFile && !initialData) {
       toast.error("Please upload an image for the category.");
       return;
     }
