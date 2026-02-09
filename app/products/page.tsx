@@ -74,12 +74,13 @@ export default async function ProductsPage({
                     src={category.image.url}
                     alt={category.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                   />
                 </div>
 
                 {/* Steeping Recommendation */}
-                <div className="max-h-64 overflow-y-auto rounded-xl bg-white p-6 shadow-sm">
+                <div className="h-64 overflow-y-auto rounded-xl bg-white p-6 shadow-sm">
                   {/* Steeping Recommendation Heading */}
                   <h3 className="mb-4 text-lg font-bold text-emerald-800">
                     {category.name} Steeping (Brewing) Recommendation

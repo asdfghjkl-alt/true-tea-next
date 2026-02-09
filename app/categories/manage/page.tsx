@@ -40,6 +40,7 @@ export default async function ManageCategoriesPage() {
                     src={category.image.url}
                     alt={category.name}
                     fill
+                    sizes="300px"
                     className="object-cover"
                   />
                 </div>

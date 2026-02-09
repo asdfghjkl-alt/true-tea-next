@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
+import { ICategory } from "@/database/category.model";
 
 interface CategoryFormData {
   name: string;
@@ -26,7 +27,11 @@ interface CategoryFormData {
   recTimes: string;
 }
 
-export default function CategoryForm() {
+interface CategoryFormProps {
+  initialData?: ICategory;
+}
+
+export default function CategoryForm({ initialData }: CategoryFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -39,8 +44,16 @@ export default function CategoryForm() {
   } = useForm<CategoryFormData>({
     resolver: joiResolver(categorySchema),
     defaultValues: {
-      active: true,
-      catID: 0,
+      name: initialData?.name || "",
+      nameCN: initialData?.nameCN || "",
+      url: initialData?.url || "",
+      catID: initialData?.catID || 0,
+      active: initialData?.active ?? true,
+      description: initialData?.description || "",
+      recWater: initialData?.recWater || "",
+      recTemp: initialData?.recTemp || "",
+      recTime: initialData?.recTime || "",
+      recTimes: initialData?.recTimes || "",
     },
     mode: "onTouched",
   });
@@ -74,18 +87,30 @@ export default function CategoryForm() {
         formData.append(key, data[key]);
       });
 
-      formData.append("image", imageFile);
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
 
-      const res = await api.post("/categories", formData);
-      toast.success(res.data.message || "Category created successfully!");
+      let res;
+      if (initialData) {
+        res = await api.put(`/categories/${initialData._id}`, formData);
+      } else {
+        res = await api.post(`/categories`, formData);
+      }
+
+      toast.success(
+        res.data.message ||
+          `Category ${initialData ? "updated" : "created"} successfully!`,
+      );
       router.push("/categories/manage");
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(
-          error.response?.data?.message || "Failed to create category",
+          error.response?.data?.message ||
+            `Failed to ${initialData ? "update" : "create"} category`,
         );
       } else {
-        toast.error("Failed to create category");
+        toast.error(`Failed to ${initialData ? "update" : "create"} category`);
       }
     } finally {
       setIsSubmitting(false);
@@ -97,7 +122,7 @@ export default function CategoryForm() {
       <div className="container mx-auto px-4 flex justify-center">
         <div className="w-full max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
           <h3 className="mb-6 text-center text-2xl font-semibold">
-            Add New Category
+            {initialData ? "Edit Category" : "Add New Category"}
           </h3>
 
           <form
@@ -204,10 +229,28 @@ export default function CategoryForm() {
               </label>
             </div>
 
+            {/* Previous Image Display */}
+            {initialData?.image?.url && (
+              <div className="mb-4">
+                <label className="block font-medium mb-2 text-sm text-gray-700">
+                  Previous Image
+                </label>
+                <div className="relative h-64 w-full overflow-hidden rounded-xl border border-gray-100 shadow-lg bg-gray-50">
+                  <Image
+                    src={initialData.image.url}
+                    alt="Current Category Image"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Image Upload */}
             <div>
               <label className="block font-medium mb-2 text-sm text-gray-700">
-                Category Image
+                {initialData ? "New Category Image" : "Category Image"}
               </label>
 
               {!previewUrl ? (
@@ -235,19 +278,20 @@ export default function CategoryForm() {
                   </div>
                 </div>
               ) : (
-                <div className="relative w-40 h-40 overflow-hidden rounded-md border border-gray-200">
+                <div className="relative h-64 w-full overflow-hidden rounded-xl border border-gray-100 shadow-lg">
                   <Image
                     src={previewUrl}
                     alt="Category Preview"
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                   />
                   <button
                     type="button"
                     onClick={removeImage}
-                    className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-sm hover:bg-gray-100"
+                    className="absolute top-2 right-2 bg-white/80 rounded-full p-1.5 shadow-md hover:bg-white transiton-colors"
                   >
-                    <XMarkIcon className="w-4 h-4 text-gray-600" />
+                    <XMarkIcon className="w-5 h-5 text-gray-700" />
                   </button>
                 </div>
               )}
@@ -258,7 +302,13 @@ export default function CategoryForm() {
               disabled={isSubmitting}
               className="btn btn-submit w-full"
             >
-              {isSubmitting ? "Creating..." : "Create Category"}
+              {isSubmitting
+                ? initialData
+                  ? "Updating..."
+                  : "Creating..."
+                : initialData
+                  ? "Update Category"
+                  : "Create Category"}
             </button>
           </form>
         </div>
