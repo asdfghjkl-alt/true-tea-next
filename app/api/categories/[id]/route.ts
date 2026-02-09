@@ -92,3 +92,44 @@ export const PUT = apiHandler(
     });
   },
 );
+
+export const DELETE = apiHandler(
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+    await connectToDatabase();
+    const session = await getSession();
+
+    // Check Auth & Admin Status
+    if (!session) {
+      return NextResponse.json({ message: "Not found" }, { status: 404 });
+    }
+
+    const user = await User.findById(session.userData._id);
+
+    if (!user || !user.admin) {
+      return NextResponse.json({ message: "Not found" }, { status: 404 });
+    }
+
+    const { id } = await params;
+    const category = await Category.findById(id);
+
+    if (!category) {
+      return NextResponse.json(
+        { message: "Category not found" },
+        { status: 404 },
+      );
+    }
+
+    // Delete image from Cloudinary if exists
+    if (category.image && category.image.filename) {
+      await deleteImages([category.image.filename]);
+    }
+
+    // Delete category from DB
+    await Category.findByIdAndDelete(id);
+
+    return NextResponse.json(
+      { message: "Category deleted successfully" },
+      { status: 200 },
+    );
+  },
+);

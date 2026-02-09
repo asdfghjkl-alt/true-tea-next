@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import DeleteCategoryButton from "@/components/categories/DeleteCategoryButton";
 
 export default async function ManageCategoriesPage() {
   const session = await getSession();
@@ -111,13 +112,14 @@ export default async function ManageCategoriesPage() {
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-end">
+              <div className="mt-4 flex justify-end gap-2">
                 <Link
                   href={`/categories/edit/${category._id}`}
                   className="btn btn-edit"
                 >
                   Edit Category
                 </Link>
+                <DeleteCategoryButton categoryId={category._id.toString()} />
               </div>
             </div>
           </div>
