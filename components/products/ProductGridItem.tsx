@@ -105,7 +105,7 @@ export default function ProductGridItem({ product }: ProductGridItemProps) {
       </div>
 
       {/* Edit Button */}
-      <div className="mt-auto flex justify-end">
+      <div className="mt-auto flex justify-end gap-2">
         <Link
           href={`/products/edit/${product._id}`}
           className="btn btn-edit inline-block"
