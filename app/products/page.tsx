@@ -47,7 +47,6 @@ export default async function ProductsPage({
       onShelf: true,
     }).sort({ seqNr: 1 })) as IProductDB[];
 
-    // Returns the category page
     return (
       <main className="min-h-screen bg-teal-50 p-4 md:p-8 lg:p-12">
         <div className="mx-auto max-w-7xl">
@@ -136,6 +135,32 @@ export default async function ProductsPage({
                 <p className="whitespace-pre-line leading-relaxed text-gray-700">
                   {category.description}
                 </p>
+                {category.url && (
+                  <div className="mt-4">
+                    <a
+                      href={category.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
+                    >
+                      Learn more about {category.name}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>

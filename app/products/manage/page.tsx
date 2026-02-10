@@ -4,8 +4,8 @@ import Link from "next/link";
 import Product, { IProduct } from "@/database/product.model";
 import Category from "@/database/category.model";
 import connectToDatabase from "@/lib/mongodb";
-import ProductRow from "@/components/products/ProductRow";
-import ProductGridItem from "@/components/products/ProductGridItem";
+import ProductRow from "@/components/products/admin/ProductRow";
+import ProductGridItem from "@/components/products/admin/ProductGridItem";
 
 async function getProducts() {
   await connectToDatabase();

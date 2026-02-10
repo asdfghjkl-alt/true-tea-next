@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getSession } from "@/lib/session";
-import ProductForm from "@/components/products/ProductForm";
+import ProductForm from "@/components/products/admin/ProductForm";
 
 import connectToDatabase from "@/lib/mongodb";
 import Category from "@/database/category.model";
