@@ -189,7 +189,10 @@ export const PUT = apiHandler(
         images: finalImages, // Replaces previous array
       };
 
-      const updatedProduct = await Product.findByIdAndUpdate(id, updateData);
+      const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+        runValidators: true,
+        new: true,
+      });
 
       if (!updatedProduct) {
         return NextResponse.json(

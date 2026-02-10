@@ -30,6 +30,7 @@ export const apiHandler =
 
       // Handle Mongoose Validation Errors specifically if needed
       if (error.name === "ValidationError") {
+        console.log(error.errors);
         return NextResponse.json(
           { message: "Validation Error", errors: error.errors },
           { status: 400 },

@@ -16,7 +16,7 @@ export enum AgeRange {
 export enum Membership {
   Member = "member",
   Friend = "friend",
-  VIP = "vip",
+  VIP = "VIP",
 }
 
 export interface RegisterFormData extends LoginFormData {

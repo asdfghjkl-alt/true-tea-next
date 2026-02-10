@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
 import Category, { ICategory } from "@/database/category.model";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
@@ -11,7 +11,7 @@ export default async function ManageCategoriesPage() {
   const session = await getSession();
 
   if (!session || !session.userData?.admin) {
-    redirect("/");
+    notFound();
   }
 
   await connectToDatabase();
