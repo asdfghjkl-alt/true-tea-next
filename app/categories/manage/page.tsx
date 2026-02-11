@@ -13,7 +13,7 @@ export default async function ManageCategoriesPage() {
   }
 
   await connectToDatabase();
-  const categories = await Category.find({}).sort({ catID: 1 }).lean();
+  const categories = await Category.find().sort({ catID: 1 }).lean();
 
   return (
     <div className="container mx-auto px-4 py-8">
