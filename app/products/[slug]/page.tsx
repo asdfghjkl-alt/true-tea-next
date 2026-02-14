@@ -3,7 +3,8 @@ import Product from "@/database/product.model";
 import ImageCarousel from "@/components/products/ImageCarousel";
 import { IImage } from "@/database/image.model";
 import { notFound } from "next/navigation";
-import { IProductDB } from "@/database/product.model";
+import { IProduct } from "@/database/product.model";
+import QuantityControl from "@/components/ui/QuantityControl";
 
 interface ProductPageProps {
   params: Promise<{
@@ -14,10 +15,14 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   await connectToDatabase();
-  const product = (await Product.findOne({
-    slug: slug,
-    onShelf: true,
-  })) as IProductDB;
+  const product = JSON.parse(
+    JSON.stringify(
+      await Product.findOne({
+        slug: slug,
+        onShelf: true,
+      }),
+    ),
+  ) as IProduct;
 
   if (!product) {
     notFound();
@@ -114,6 +119,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </h3>
               <p className="leading-relaxed text-gray-600">{product.note}</p>
             </div>
+            <QuantityControl product={product} />
           </div>
         </div>
       </div>

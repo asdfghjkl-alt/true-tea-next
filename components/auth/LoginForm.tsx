@@ -4,7 +4,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import Link from "next/link";
 import Joi from "joi";
 import type { LoginFormData } from "@/types/auth";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import Image from "next/image";

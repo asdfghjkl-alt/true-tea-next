@@ -2,7 +2,7 @@ import connectToDatabase from "@/lib/mongodb";
 import Product from "@/database/product.model";
 import Category from "@/database/category.model";
 import CategorySection from "@/components/products/CategorySection";
-import { IProductDB } from "@/database/product.model";
+import { IProduct } from "@/database/product.model";
 import { ICategory } from "@/database/category.model";
 
 export default async function Home() {
@@ -10,7 +10,9 @@ export default async function Home() {
   const categories = (await Category.find({ active: true }).sort({
     catID: 1,
   })) as ICategory[];
-  const products = (await Product.find({ onShelf: true })) as IProductDB[];
+  const products = JSON.parse(
+    JSON.stringify(await Product.find({ onShelf: true })),
+  ) as IProduct[];
 
   return (
     <main className="min-h-screen p-4 md:p-8 lg:p-12">

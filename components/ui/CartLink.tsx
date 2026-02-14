@@ -1,0 +1,33 @@
+import { linkBaseClass } from "./Navbar";
+import { useOrder } from "@/contexts/OrderContext";
+import type { MouseEventHandler } from "react";
+import NavLink from "./NavLink";
+import Image from "next/image";
+
+export default function CartLink({
+  onClick,
+}: {
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+}) {
+  const { cart } = useOrder();
+
+  return (
+    <NavLink
+      href="/cart"
+      onClick={onClick}
+      className={({ isActive }: { isActive: boolean }) =>
+        `${linkBaseClass} flex items-center justify-center border-2 border-white/30 ${
+          isActive ? "bg-emerald-500" : "bg-emerald-700"
+        }`
+      }
+    >
+      <Image src="/icons/cart.png" alt="Cart" width={24} height={24} />{" "}
+      <p>Cart</p>
+      {cart.length !== 0 && (
+        <div className="ml-1 flex items-center rounded-full bg-red-500 px-2">
+          <p>{cart.reduce((acc, item) => acc + item.quantity, 0)}</p>
+        </div>
+      )}
+    </NavLink>
+  );
+}

@@ -8,7 +8,7 @@ import { useState } from "react";
 import InputField from "@/components/ui/inputs/InputField";
 import Image from "next/image";
 import EmailSentSuccess from "@/components/auth/EmailSentSuccess";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function RegisterForm() {
   const { register: registerUser } = useAuth();

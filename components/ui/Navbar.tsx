@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import NavLink from "./NavLink";
 import Image from "next/image";
 import Dropdown from "./Dropdown";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -22,6 +22,7 @@ export const linkBaseClass =
   "tracking-wide px-5 py-2 rounded-xl text-teal-50 hover:bg-emerald-600 transition-colors";
 
 import { ICategory } from "@/database/category.model";
+import CartLink from "./CartLink";
 
 interface NavbarProps {
   categories?: ICategory[];
@@ -166,6 +167,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                     ))}
                   </>
                 )}
+                <CartLink />
               </nav>
 
               <div className="flex items-center gap-2 lg:hidden">
@@ -316,6 +318,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                 ))}
               </>
             )}
+            <CartLink onClick={closeMenu} />
           </nav>
         </div>
       </header>

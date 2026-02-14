@@ -4,9 +4,23 @@ import { Schema, model, models } from "mongoose";
 export interface IOrderProduct {
   product_id: Schema.Types.ObjectId;
   name: string;
+  imageUrl: string;
   nameCN: string;
   price: number;
+  discount: number;
   GST: number;
+  unit: string;
+  quantity: number;
+}
+
+export interface IOrderProductFrontend {
+  product_id: string;
+  name: string;
+  imageUrl: string;
+  nameCN: string;
+  price: number;
+  discount: number;
+  includeGST: boolean;
   unit: string;
   quantity: number;
 }
@@ -48,6 +62,7 @@ const orderProductSchema = new Schema<IOrderProduct>(
   {
     product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
     name: { type: String, required: true },
+    imageUrl: { type: String, required: true },
     nameCN: { type: String, required: true },
     price: { type: Number, required: true },
     GST: { type: Number, required: true },

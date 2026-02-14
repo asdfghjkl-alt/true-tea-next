@@ -1,10 +1,10 @@
 import { ICategory } from "@/database/category.model";
-import { IProductDB } from "@/database/product.model";
+import { IProduct } from "@/database/product.model";
 import ProductCard from "./ProductCard";
 
 interface CategorySectionProps {
   category: ICategory;
-  products: IProductDB[];
+  products: IProduct[];
 }
 
 const CategorySection = ({ category, products }: CategorySectionProps) => {

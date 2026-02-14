@@ -1,9 +1,10 @@
 import Image from "next/image";
-import { IProductDB } from "@/database/product.model";
+import { IProduct } from "@/database/product.model";
 import Link from "next/link";
+import QuantityControl from "@/components/ui/QuantityControl";
 
 interface ProductCardProps {
-  product: IProductDB;
+  product: IProduct;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
@@ -32,7 +33,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           )}
         </div>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 flex-1">
           {/* Display price and unit */}
           <div className="flex items-baseline gap-2">
             {product.discount > 0 ? (
@@ -56,7 +57,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
 
           {/* Display product name */}
-          <div>
+          <div className="mb-2">
             {/* Product name in English */}
             <h3 className="text-base font-semibold text-gray-800">
               {product.name}
@@ -64,6 +65,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
             {/* Product name in Chinese */}
             <p className="text-sm text-gray-500">{product.nameCN}</p>
+          </div>
+
+          {/* Quantity Control */}
+          <div className="mt-auto">
+            <QuantityControl product={product} />
           </div>
         </div>
       </div>
