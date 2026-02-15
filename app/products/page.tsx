@@ -1,5 +1,5 @@
 import connectToDatabase from "@/lib/mongodb";
-import Product, { IProductDB } from "@/database/product.model";
+import Product, { IProduct } from "@/database/product.model";
 import Category, { ICategory } from "@/database/category.model";
 import CategorySection from "@/components/products/CategorySection";
 import ProductCard from "@/components/products/ProductCard";
@@ -42,10 +42,14 @@ export default async function ProductsPage({
     }
 
     // Retrieves all products in the category
-    const products = (await Product.find({
-      categoryId: category._id,
-      onShelf: true,
-    }).sort({ seqNr: 1 })) as IProductDB[];
+    const products = JSON.parse(
+      JSON.stringify(
+        await Product.find({
+          categoryId: category._id,
+          onShelf: true,
+        }).sort({ seqNr: 1 }),
+      ),
+    ) as IProduct[];
 
     return (
       <main className="min-h-screen bg-teal-50 p-4 md:p-8 lg:p-12">
@@ -189,9 +193,13 @@ export default async function ProductsPage({
   const categories = (await Category.find({ active: true }).sort({
     catID: 1,
   })) as ICategory[];
-  const allProducts = (await Product.find({ onShelf: true }).sort({
-    seqNr: 1,
-  })) as IProductDB[];
+  const allProducts = JSON.parse(
+    JSON.stringify(
+      await Product.find({ onShelf: true }).sort({
+        seqNr: 1,
+      }),
+    ),
+  ) as IProduct[];
 
   return (
     <main className="min-h-screen bg-teal-50 p-4 md:p-8 lg:p-12">

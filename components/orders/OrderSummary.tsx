@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { POSTAGE_FEE } from "@/lib/constants";
+
 interface OrderSummaryProps {
   totals: {
     subtotal: number;
@@ -9,6 +12,8 @@ interface OrderSummaryProps {
 }
 
 export default function OrderSummary({ totals }: OrderSummaryProps) {
+  const total = totals.subtotal + POSTAGE_FEE;
+
   return (
     <div className="min-w-[300px] lg:w-1/3">
       <div className="sticky top-4 rounded-lg border border-gray-200 bg-white p-6 shadow-md">
@@ -18,6 +23,13 @@ export default function OrderSummary({ totals }: OrderSummaryProps) {
           <div className="flex justify-between">
             <span>Subtotal</span>
             <span>${totals.subtotal.toFixed(2)}</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span>Shipping</span>
+            <span>
+              {POSTAGE_FEE === 0 ? "Free" : `$${POSTAGE_FEE.toFixed(2)}`}
+            </span>
           </div>
 
           <div className="flex justify-between text-sm text-gray-500">
@@ -35,14 +47,15 @@ export default function OrderSummary({ totals }: OrderSummaryProps) {
           <div className="mt-4 flex justify-between border-t pt-4 items-center">
             <span className="text-lg font-bold">Total</span>
             <span className="text-2xl font-bold text-primary">
-              ${totals.subtotal.toFixed(2)}
+              ${total.toFixed(2)}
             </span>
           </div>
         </div>
-
-        <button className="btn btn-submit mt-6 w-full py-3 text-lg font-semibold shadow-md transition-all hover:shadow-lg">
-          Proceed to Checkout
-        </button>
+        <Link href="/checkout">
+          <button className="btn btn-submit mt-6 w-full py-3 text-lg font-semibold shadow-md transition-all hover:shadow-lg">
+            Proceed to Checkout
+          </button>
+        </Link>
       </div>
     </div>
   );

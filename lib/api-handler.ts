@@ -24,13 +24,13 @@ export const apiHandler =
       return await handler(req as NextRequest, ...args);
     } catch (err) {
       const error = err as ApiError;
+      console.error(err);
 
       const statusCode = error.statusCode || 500;
       const message = error.message || "Internal Server Error";
 
       // Handle Mongoose Validation Errors specifically if needed
       if (error.name === "ValidationError") {
-        console.log(error.errors);
         return NextResponse.json(
           { message: "Validation Error", errors: error.errors },
           { status: 400 },
