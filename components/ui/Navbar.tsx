@@ -10,7 +10,10 @@ const navLinks = [
   { href: "/products", label: "Products" },
 ];
 const unauthLinks = [{ href: "/auth/login", label: "Login" }];
-const authLinks = [{ href: "/orders", label: "My Orders" }];
+const authLinks = [
+  { href: "/users/profile", label: "My Profile" },
+  { href: "/orders", label: "My Orders" },
+];
 const adminLinks = [
   { href: "/products/manage", label: "Manage Products" },
   { href: "/categories/manage", label: "Manage Categories" },

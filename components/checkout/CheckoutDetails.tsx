@@ -1,11 +1,12 @@
 "use client";
 
 import { IUserDetails } from "@/database/order.model";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/ui/inputs/InputField";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { userDetailsSchema } from "@/lib/schemas";
+import api from "@/lib/axios";
 
 interface CheckoutDetailsProps {
   // Function for handling proceeding to next step
@@ -27,6 +28,7 @@ export default function CheckoutDetails({
     formState: { errors: errorsBilling },
     trigger: triggerBilling,
     getValues: getValuesBilling,
+    reset: resetBilling,
   } = useForm<IUserDetails>({
     resolver: joiResolver(userDetailsSchema),
     mode: "onTouched",
@@ -34,6 +36,39 @@ export default function CheckoutDetails({
       address: { country: "Australia" },
     },
   });
+
+  // Fetch user details locally to pre-fill form
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await api.get("/users/me");
+        if (data.user) {
+          const u = data.user;
+
+          // Default user billing details
+          const billingDefaults: IUserDetails = {
+            fname: u.fname || "",
+            lname: u.lname || "",
+            email: u.email || "",
+            phone: u.phone || "",
+            address: {
+              line1: u.address?.line1 || "",
+              line2: u.address?.line2 || "",
+              suburb: u.address?.suburb || "",
+              state: u.address?.state || "",
+              postcode: u.address?.postcode || "",
+              country: "Australia",
+            },
+          };
+
+          resetBilling(billingDefaults);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user details", error);
+      }
+    };
+    fetchUser();
+  }, [resetBilling]);
 
   // React Hook Form for delivery details
   const {
