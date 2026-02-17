@@ -31,12 +31,12 @@ export default function OrderCard({ order, isAdmin }: OrderCardProps) {
       {/* Header: Buyer & Delivery Info */}
       <div className="p-4 bg-gray-50 border-b border-gray-100 text-sm">
         <div className="grid grid-cols-2 gap-4">
-          <div>
+          <div className="min-w-0">
             <h4 className="font-semibold text-gray-700 mb-1">Billing Info</h4>
             <p>
               {order.buyer.fname} {order.buyer.lname}
             </p>
-            <p className="text-gray-500">{order.buyer.email}</p>
+            <p className="text-gray-500 break-all">{order.buyer.email}</p>
             <p className="text-gray-500">{order.buyer.phone}</p>
           </div>
           <div>
