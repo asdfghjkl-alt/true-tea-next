@@ -24,7 +24,7 @@ const adminLinks = [
 export const linkBaseClass =
   "tracking-wide px-5 py-2 rounded-xl text-teal-50 hover:bg-emerald-600 transition-colors";
 
-import { ICategory } from "@/database/category.model";
+import { ICategory } from "@/database";
 import CartLink from "./CartLink";
 
 interface NavbarProps {

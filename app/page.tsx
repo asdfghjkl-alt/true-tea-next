@@ -1,9 +1,6 @@
 import connectToDatabase from "@/lib/mongodb";
-import Product from "@/database/product.model";
-import Category from "@/database/category.model";
+import { Product, Category, IProduct, ICategory } from "@/database";
 import CategorySection from "@/components/products/CategorySection";
-import { IProduct } from "@/database/product.model";
-import { ICategory } from "@/database/category.model";
 
 export default async function Home() {
   await connectToDatabase();

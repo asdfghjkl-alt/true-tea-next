@@ -9,7 +9,7 @@ import Joi from "joi";
 import InputField from "@/components/ui/inputs/InputField";
 import api from "@/lib/axios";
 import toast from "react-hot-toast";
-import { IUser } from "@/database/user.model";
+import { IUser } from "@/database";
 import { profileSchema } from "@/lib/schemas";
 
 interface ProfileFormData {

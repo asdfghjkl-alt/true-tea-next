@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { type NextRequest } from "next/server"; // Explicitly import NextRequest
-import User from "@/database/user.model";
+import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
 

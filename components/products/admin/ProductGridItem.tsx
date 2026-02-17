@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
-import { IProduct } from "@/database/product.model";
+import { IProduct } from "@/database";
 import DeleteProductButton from "./DeleteProductButton";
 
 interface ProductGridItemProps {

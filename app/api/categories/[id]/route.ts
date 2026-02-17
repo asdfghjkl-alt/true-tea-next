@@ -3,8 +3,7 @@ import { apiHandler } from "@/lib/api-handler";
 import { getSession } from "@/lib/session";
 import { categorySchema } from "@/lib/schemas";
 import { uploadImages, deleteImages } from "@/lib/upload";
-import User from "@/database/user.model";
-import Category from "@/database/category.model";
+import { User, Category } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 
 export const PUT = apiHandler(

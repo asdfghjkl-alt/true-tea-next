@@ -3,8 +3,7 @@ import { getSession } from "@/lib/session";
 import ProductForm from "@/components/products/admin/ProductForm";
 
 import connectToDatabase from "@/lib/mongodb";
-import Category from "@/database/category.model";
-import Product from "@/database/product.model";
+import { Category, Product } from "@/database";
 
 export default async function EditProductPage({
   params,

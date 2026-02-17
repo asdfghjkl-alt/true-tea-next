@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { getSession } from "@/lib/session";
 import { apiHandler } from "@/lib/api-handler";
 import connectToDatabase from "@/lib/mongodb";
-import User from "@/database/user.model";
+import { User } from "@/database";
 import { changePasswordSchema } from "@/lib/schemas";
 
 export const PUT = apiHandler(async (req: NextRequest) => {

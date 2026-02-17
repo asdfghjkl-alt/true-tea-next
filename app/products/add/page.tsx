@@ -3,7 +3,7 @@ import { getSession } from "@/lib/session";
 import ProductForm from "@/components/products/admin/ProductForm";
 
 import connectToDatabase from "@/lib/mongodb";
-import Category from "@/database/category.model";
+import { Category } from "@/database";
 
 export default async function AddProductPage() {
   const session = await getSession();

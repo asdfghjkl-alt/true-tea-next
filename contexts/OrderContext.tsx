@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { IOrderProductFrontend } from "@/database/order.model";
-import { IProduct } from "@/database/product.model";
+import { IOrderProductFrontend, IProduct } from "@/database";
 
 export interface OrderContextType {
   cart: IOrderProductFrontend[];

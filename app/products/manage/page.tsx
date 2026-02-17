@@ -1,8 +1,7 @@
 import { getSession } from "@/lib/session";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Product, { IProduct } from "@/database/product.model";
-import Category from "@/database/category.model";
+import { Product, IProduct, Category } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import ProductRow from "@/components/products/admin/ProductRow";
 import ProductGridItem from "@/components/products/admin/ProductGridItem";

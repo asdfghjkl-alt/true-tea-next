@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import Product from "@/database/product.model";
+import { Product } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
 import { POSTAGE_FEE } from "@/lib/constants";

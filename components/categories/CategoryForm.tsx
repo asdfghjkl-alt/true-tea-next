@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
-import { ICategory } from "@/database/category.model";
+import { ICategory } from "@/database";
 
 interface CategoryFormData {
   name: string;

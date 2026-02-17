@@ -1,5 +1,5 @@
 import { cloudinary } from "./cloudinary";
-import { IImage } from "@/database/image.model";
+import { IImage } from "@/database";
 
 // Uploads an array of files to Cloudinary and returns the uploaded image data
 export async function uploadImages(

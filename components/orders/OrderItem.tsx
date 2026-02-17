@@ -1,6 +1,6 @@
 "use client";
 
-import { IOrderProduct } from "@/database/order.model";
+import { IOrderProduct } from "@/database";
 import Image from "next/image";
 
 interface OrderItemProps {

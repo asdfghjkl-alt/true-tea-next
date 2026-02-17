@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import User from "@/database/user.model";
+import { User } from "@/database";
 import { notFound } from "next/navigation";
 import UserRow from "@/components/users/admin/UserRow";
 import UserGridItem from "@/components/users/admin/UserGridItem";

@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import Category, { ICategory } from "@/database/category.model";
+import { Category, ICategory } from "@/database";
 import { notFound, redirect } from "next/navigation";
 import CategoryForm from "@/components/categories/CategoryForm";
 import React from "react";

@@ -1,9 +1,7 @@
 import connectToDatabase from "@/lib/mongodb";
-import Product from "@/database/product.model";
+import { Product, IImage, IProduct } from "@/database";
 import ImageCarousel from "@/components/products/ImageCarousel";
-import { IImage } from "@/database/image.model";
 import { notFound } from "next/navigation";
-import { IProduct } from "@/database/product.model";
 import QuantityControl from "@/components/ui/QuantityControl";
 
 interface ProductPageProps {

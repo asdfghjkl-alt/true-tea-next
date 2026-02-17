@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import User, { IUser } from "@/database/user.model";
+import { User, IUser } from "@/database";
 import ProfileForm from "@/components/users/ProfileForm";
 
 export default async function EditProfilePage() {

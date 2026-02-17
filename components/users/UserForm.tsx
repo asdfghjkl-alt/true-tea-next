@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "@/lib/axios";
-import { IUser } from "@/database/user.model";
+import { IUser } from "@/database";
 import { Membership } from "@/types/auth";
 import { AxiosError } from "axios";
 import InputField from "@/components/ui/inputs/InputField";

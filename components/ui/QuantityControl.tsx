@@ -1,8 +1,7 @@
 "use client";
 
 import { useOrder } from "@/contexts/OrderContext";
-import { IOrderProductFrontend } from "@/database/order.model";
-import { IProduct } from "@/database/product.model";
+import { IOrderProductFrontend, IProduct } from "@/database";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/solid";
 
 interface QuantityControlProps {

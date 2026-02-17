@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiHandler } from "@/lib/api-handler";
 import connectToDatabase from "@/lib/mongodb";
-import User from "@/database/user.model";
+import { User } from "@/database";
 import bcrypt from "bcrypt";
 import { createSession } from "@/lib/session";
 

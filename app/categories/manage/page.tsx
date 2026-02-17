@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import Category, { ICategory } from "@/database/category.model";
+import { Category, ICategory } from "@/database";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import CategoryGridItem from "@/components/categories/admin/CategoryGridItem";

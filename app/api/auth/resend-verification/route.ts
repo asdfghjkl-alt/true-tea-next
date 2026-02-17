@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Joi from "joi";
-import User from "@/database/user.model";
+import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/email";

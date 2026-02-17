@@ -2,8 +2,7 @@
 
 import { useState, useEffect, ReactNode } from "react";
 import { OrderContext } from "./OrderContext";
-import { IOrderProductFrontend } from "@/database/order.model";
-import { IProduct } from "@/database/product.model";
+import { IOrderProductFrontend, IProduct } from "@/database";
 
 export function OrderProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<IOrderProductFrontend[]>([]);

@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Order from "@/database/order.model";
-import Product from "@/database/product.model";
-import User from "@/database/user.model";
+import { Order, Product, User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import Stripe from "stripe";
 import { OrderStatus } from "@/types/order";

@@ -1,6 +1,5 @@
 import connectToDatabase from "@/lib/mongodb";
-import Product, { IProduct } from "@/database/product.model";
-import Category, { ICategory } from "@/database/category.model";
+import { Product, IProduct, Category, ICategory } from "@/database";
 import CategorySection from "@/components/products/CategorySection";
 import ProductCard from "@/components/products/ProductCard";
 

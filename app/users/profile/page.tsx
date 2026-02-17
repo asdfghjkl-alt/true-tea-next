@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/session";
-import User from "@/database/user.model";
+import { User } from "@/database";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import connectToDatabase from "@/lib/mongodb";

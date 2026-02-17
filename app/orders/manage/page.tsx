@@ -1,5 +1,4 @@
-import { IOrder } from "@/database/order.model";
-import Order from "@/database/order.model";
+import { IOrder, Order } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import OrderCard from "@/components/orders/OrderCard";
 import { getSession } from "@/lib/session";

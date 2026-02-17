@@ -1,6 +1,6 @@
 "use client";
 
-import { IUserDetails } from "@/database/order.model";
+import { IUserDetails } from "@/database";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/ui/inputs/InputField";

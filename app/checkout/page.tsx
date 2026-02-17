@@ -6,7 +6,7 @@ import { useOrder } from "@/contexts/OrderContext";
 import CheckoutReview from "@/components/checkout/CheckoutReview";
 import CheckoutDetails from "@/components/checkout/CheckoutDetails";
 import CheckoutPayment from "@/components/checkout/CheckoutPayment";
-import { IOrderProductFrontend, IUserDetails } from "@/database/order.model";
+import { IOrderProductFrontend, IUserDetails } from "@/database";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import api from "@/lib/axios";

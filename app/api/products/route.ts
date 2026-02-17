@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
-import Product from "@/database/product.model";
+import { Product, User, Category } from "@/database";
 import { productSchema } from "@/lib/schemas";
 import { uploadImages } from "@/lib/upload";
 import { getSession } from "@/lib/session";
-import User from "@/database/user.model";
-import Category from "@/database/category.model";
 import { apiHandler } from "@/lib/api-handler";
 
 export const POST = apiHandler(async (req: Request) => {

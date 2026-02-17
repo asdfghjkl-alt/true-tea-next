@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Order from "@/database/order.model";
-import User from "@/database/user.model";
+import { Order, User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
 import { getSession } from "@/lib/session";

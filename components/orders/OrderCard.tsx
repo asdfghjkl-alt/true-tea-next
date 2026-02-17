@@ -1,4 +1,4 @@
-import { IOrder, IOrderProduct } from "@/database/order.model";
+import { IOrder, IOrderProduct } from "@/database";
 import OrderItem from "./OrderItem";
 import OrderStatusButton from "./OrderStatusButton";
 

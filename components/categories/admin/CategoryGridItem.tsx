@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import DeleteCategoryButton from "@/components/categories/DeleteCategoryButton";
-import { ICategory } from "@/database/category.model";
+import { ICategory } from "@/database";
 
 interface CategoryGridItemProps {
   category: ICategory;

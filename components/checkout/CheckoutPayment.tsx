@@ -7,7 +7,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useOrder } from "@/contexts/OrderContext";
-import { IUserDetails } from "@/database/order.model";
+import { IUserDetails } from "@/database";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useAuth } from "@/contexts/AuthContext";

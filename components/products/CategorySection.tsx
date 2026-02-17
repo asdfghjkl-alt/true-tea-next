@@ -1,5 +1,4 @@
-import { ICategory } from "@/database/category.model";
-import { IProduct } from "@/database/product.model";
+import { ICategory, IProduct } from "@/database";
 import ProductCard from "./ProductCard";
 
 interface CategorySectionProps {

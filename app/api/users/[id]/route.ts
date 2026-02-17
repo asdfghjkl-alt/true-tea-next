@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiHandler } from "@/lib/api-handler";
 import { getSession } from "@/lib/session";
-import User from "@/database/user.model";
+import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { adminUserUpdateSchema } from "@/lib/schemas";
 

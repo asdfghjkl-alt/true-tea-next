@@ -1,32 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import Product from "@/database/product.model";
-import { IImage } from "@/database/image.model";
-import Category from "@/database/category.model";
-import User from "@/database/user.model";
+import { Product, IImage, Category, User } from "@/database";
 import { uploadImages, deleteImages } from "@/lib/upload";
-import Joi from "joi";
+import { productEditSchema } from "@/lib/schemas";
 import { apiHandler } from "@/lib/api-handler";
-
-// Validation schema (similar to create but relaxed if needed)
-// reusing loose structure or redefining
-const productEditSchema = Joi.object({
-  name: Joi.string().required(),
-  nameCN: Joi.string().allow("", null),
-  category: Joi.string().required(),
-  seqNr: Joi.number().optional(),
-  price: Joi.number().min(0).required(),
-  discount: Joi.number().min(0).max(100).optional(),
-  includeGST: Joi.boolean().optional(),
-  unit: Joi.string().required(),
-  stock: Joi.number().min(0).required(),
-  onShelf: Joi.boolean().optional(),
-  region: Joi.string().allow("", null),
-  year: Joi.string().allow("", null),
-  note: Joi.string().allow("", null),
-  imageOrder: Joi.string().optional(), // JSON string
-});
 
 export const PUT = apiHandler(
   async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { IProduct } from "@/database/product.model";
+import { IProduct } from "@/database";
 import Link from "next/link";
 import QuantityControl from "@/components/ui/QuantityControl";
 

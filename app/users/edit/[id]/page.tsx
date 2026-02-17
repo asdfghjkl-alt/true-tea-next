@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import User, { IUser } from "@/database/user.model";
+import { User, IUser } from "@/database";
 import { notFound } from "next/navigation";
 import UserForm from "@/components/users/UserForm";
 import React from "react";

@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getSession } from "@/lib/session";
 import { apiHandler } from "@/lib/api-handler";
 import connectToDatabase from "@/lib/mongodb";
-import User from "@/database/user.model";
+import { User } from "@/database";
 import { profileSchema } from "@/lib/schemas";
 
 export const GET = apiHandler(async () => {

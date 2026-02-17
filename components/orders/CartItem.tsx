@@ -1,6 +1,6 @@
 "use client";
 
-import { IOrderProductFrontend } from "@/database/order.model";
+import { IOrderProductFrontend } from "@/database";
 import QuantityControl from "@/components/ui/QuantityControl";
 import Image from "next/image";
 

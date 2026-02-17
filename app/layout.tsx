@@ -5,7 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
 import Navbar from "@/components/ui/Navbar";
 import connectToDatabase from "@/lib/mongodb";
-import Category, { ICategory } from "@/database/category.model";
+import { Category, ICategory } from "@/database";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

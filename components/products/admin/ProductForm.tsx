@@ -29,7 +29,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { v4 as uuidv4 } from "uuid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { IProduct, ProductFormData } from "@/database/product.model";
+import { IProduct, ProductFormData } from "@/database";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
-import { IUser } from "@/database/user.model";
+import { IUser } from "@/database";
 
 interface UserRowProps {
   user: IUser;
