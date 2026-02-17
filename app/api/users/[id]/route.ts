@@ -3,6 +3,7 @@ import { apiHandler } from "@/lib/api-handler";
 import { getSession } from "@/lib/session";
 import User from "@/database/user.model";
 import connectToDatabase from "@/lib/mongodb";
+import { adminUserUpdateSchema } from "@/lib/schemas";
 
 export const PUT = apiHandler(
   async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
@@ -29,21 +30,21 @@ export const PUT = apiHandler(
 
     const body = await req.json();
 
+    // Validate request body
+    const validation = adminUserUpdateSchema.validate(body);
+    if (validation.error) {
+      return NextResponse.json(
+        { message: validation.error.details[0].message },
+        { status: 400 },
+      );
+    }
+
     // Allow updating ONLY specific fields
-    const { address, membership, admin, activated } = body;
-
-    // Correctly handle boolean values that might be missing or explicitly false
-    // and complex objects like address.
-    const updateData: Record<string, any> = {};
-
-    updateData.address = address;
-    updateData.membership = membership;
-    updateData.admin = admin;
-    updateData.activated = activated;
+    const { address, membership, admin, activated } = validation.value;
 
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { $set: updateData },
+      { $set: { address, membership, admin, activated } },
       { new: true, runValidators: true },
     );
 

@@ -64,7 +64,7 @@ export default function VerifyEmailContent() {
               Verified!
             </h3>
             <p className="mb-6">Your email has been verified successfully.</p>
-            <Link href="/auth/login" className="btn btn-submit w-full">
+            <Link href="/auth/login" className="btn btn-submit w-full p-4">
               Proceed to Login
             </Link>
           </div>

@@ -4,7 +4,8 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const JWT_NAME = process.env.JWT_NAME ?? "project_token";
-const JWT_SECRET = process.env.JWT_SECRET ?? "project_jwt_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("JWT_SECRET environment variable is required");
 const secret = new TextEncoder().encode(JWT_SECRET);
 
 // Expiration duration for JWT tokens, used signSession

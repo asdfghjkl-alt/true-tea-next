@@ -47,7 +47,7 @@ export const PUT = apiHandler(async (req: NextRequest) => {
 
   if (status === OrderStatus.delivered) {
     updatedOrder.deliveredDate = new Date();
-    updatedOrder.save();
+    await updatedOrder.save();
   }
 
   return NextResponse.json({ success: true, order: updatedOrder });
