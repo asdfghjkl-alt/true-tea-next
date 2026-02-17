@@ -29,9 +29,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   await connectToDatabase();
-  const categories = (await Category.find({ active: true }).sort({
-    catID: 1,
-  })) as ICategory[];
+  const categories = (await Category.find({ active: true })
+    .sort({
+      catID: 1,
+    })
+    .lean()) as ICategory[];
 
   const serializedCategories = JSON.parse(JSON.stringify(categories));
 

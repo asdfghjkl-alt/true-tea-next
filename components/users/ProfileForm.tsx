@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { AgeRange } from "@/types/auth";
-import Joi from "joi";
 import InputField from "@/components/ui/inputs/InputField";
 import api from "@/lib/axios";
 import toast from "react-hot-toast";
