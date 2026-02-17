@@ -72,6 +72,13 @@ export default function OrderCard({ order, isAdmin }: OrderCardProps) {
           <br />
           {formatDate(order.paidDate)}
         </div>
+        {order.status === "delivered" && order.deliveredDate && (
+          <div>
+            <span className="font-medium text-gray-700">Delivered:</span>
+            <br />
+            {formatDate(order.deliveredDate)}
+          </div>
+        )}
         <div>
           <span className="font-medium text-gray-700">Payment ID:</span>
           <br />

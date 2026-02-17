@@ -4,6 +4,17 @@
   input {
     @apply my-1 size-full rounded-xl border-2 border-solid border-gray-400 p-3 text-lg;
   }
+
+  /* Hide number input arrows */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
   textarea {
     @apply my-1 size-full rounded-xl border-2 border-solid border-gray-400 p-3 text-lg;
   }

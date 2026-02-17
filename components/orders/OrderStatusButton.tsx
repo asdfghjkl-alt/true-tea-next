@@ -26,7 +26,7 @@ export default function OrderStatusButton({
   const handleStatusUpdate = async (newStatus: OrderStatus) => {
     setIsLoading(true);
     try {
-      await axios.post("/api/orders/status", {
+      await axios.put("/api/orders/status", {
         orderId: orderId,
         status: newStatus,
       });

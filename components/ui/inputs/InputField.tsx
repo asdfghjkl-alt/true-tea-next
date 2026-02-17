@@ -42,6 +42,7 @@ export default function InputField<T extends FieldValues>({
           {...register(name, { valueAsNumber: type === "number" })}
           min={min}
           max={max}
+          onWheel={(e) => e.currentTarget.blur()}
         />
       </div>
 

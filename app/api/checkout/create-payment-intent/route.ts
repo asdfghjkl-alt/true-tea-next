@@ -84,9 +84,19 @@ export const POST = apiHandler(async (req: NextRequest) => {
       enabled: true,
     },
     metadata: {
-      cart: JSON.stringify(cart),
-      buyer: JSON.stringify(buyer),
-      delivery: JSON.stringify(delivery), // Added delivery for completeness
+      cart_summary: cart
+        .map((item: any) => `${item.name} (${item.quantity})`)
+        .join(", ")
+        .slice(0, 500),
+      buyer_info: `${buyer.fname} ${buyer.lname} <${buyer.email}>`.slice(
+        0,
+        500,
+      ),
+      delivery_address:
+        `${delivery.fname} ${delivery.lname}, ${delivery.address.suburb}, ${delivery.address.state} ${delivery.address.postcode}`.slice(
+          0,
+          500,
+        ),
       ownerId: owner_id || "guest",
     },
   });

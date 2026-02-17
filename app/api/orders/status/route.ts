@@ -45,5 +45,10 @@ export const PUT = apiHandler(async (req: NextRequest) => {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
 
+  if (status === OrderStatus.delivered) {
+    updatedOrder.deliveredDate = new Date();
+    updatedOrder.save();
+  }
+
   return NextResponse.json({ success: true, order: updatedOrder });
 });
