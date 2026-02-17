@@ -7,6 +7,7 @@ import Stripe from "stripe";
 import { OrderStatus } from "@/types/order";
 import { apiHandler } from "@/lib/api-handler";
 import { POSTAGE_FEE } from "@/lib/constants";
+import { orderBackendSchema } from "@/lib/schemas";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -54,6 +55,20 @@ export const POST = apiHandler(async (req: NextRequest) => {
   try {
     if (!cart || !buyer || !delivery) {
       throw new Error("Missing required fields");
+    }
+
+    const buyerValidation = orderBackendSchema.validate(buyer);
+    if (buyerValidation.error) {
+      throw new Error(
+        `Buyer details invalid: ${buyerValidation.error.details[0].message}`,
+      );
+    }
+
+    const deliveryValidation = orderBackendSchema.validate(delivery);
+    if (deliveryValidation.error) {
+      throw new Error(
+        `Delivery details invalid: ${deliveryValidation.error.details[0].message}`,
+      );
     }
 
     if (

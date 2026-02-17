@@ -32,12 +32,20 @@ export default async function UserProfilePage() {
               </h2>
               <p className="text-gray-500">{user.email}</p>
             </div>
-            <Link
-              href="/users/profile/edit"
-              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors text-sm font-medium"
-            >
-              Edit Profile
-            </Link>
+            <div className="flex gap-2">
+              <Link
+                href="/users/profile/edit"
+                className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors text-sm font-medium"
+              >
+                Edit Profile
+              </Link>
+              <Link
+                href="/users/profile/password"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors text-sm font-medium"
+              >
+                Change Password
+              </Link>
+            </div>
           </div>
         </div>
 

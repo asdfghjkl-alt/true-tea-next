@@ -27,11 +27,12 @@ export interface IUser {
 }
 
 const userSchema = new mongoose.Schema<IUser>({
-  fname: String,
-  lname: String,
+  fname: { type: String, required: true },
+  lname: { type: String, required: true },
   age: {
     type: String,
     enum: Object.values(AgeRange),
+    required: true,
   },
   email: { type: String, required: true, unique: true },
   password: {
@@ -44,13 +45,13 @@ const userSchema = new mongoose.Schema<IUser>({
     enum: Object.values(Membership),
     default: Membership.Member,
   },
-  phone: String,
+  phone: { type: String, required: true },
   address: {
     line1: String,
     line2: String,
     suburb: String,
     state: String,
-    postcode: String,
+    postcode: { type: String, required: true },
     country: String,
   },
   activated: { type: Boolean, default: false },

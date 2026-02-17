@@ -171,3 +171,97 @@ export const userDetailsSchema = Joi.object({
     }),
   }).required(),
 });
+
+export const profileSchema = Joi.object({
+  fname: Joi.string().required().label("First Name").messages({
+    "string.empty": "First name is required",
+    "any.required": "First name is required",
+  }),
+  lname: Joi.string().required().label("Last Name").messages({
+    "string.empty": "Last name is required",
+    "any.required": "Last name is required",
+  }),
+  phone: Joi.string()
+    .pattern(/^04\d{8}$/)
+    .required()
+    .label("Phone")
+    .messages({
+      "string.empty": "Phone number is required",
+      "string.pattern.base":
+        "Please enter a valid Australian mobile number starting with 04 (10 digits)",
+      "any.required": "Phone number is required",
+    }),
+  age: Joi.string()
+    .valid(...Object.values(AgeRange))
+    .required()
+    .messages({
+      "any.only": "Please select a valid age range",
+      "string.empty": "Age range is required",
+      "any.required": "Age range is required",
+    }),
+  address: Joi.object({
+    line1: Joi.string().optional().allow("").label("Address Line 1"),
+    line2: Joi.string().optional().allow("").label("Address Line 2"),
+    suburb: Joi.string().optional().allow("").label("Suburb"),
+    state: Joi.string().optional().allow("").label("State"),
+    postcode: Joi.string().required().label("Postcode").messages({
+      "string.empty": "Postcode is required",
+      "any.required": "Postcode is required",
+    }),
+    country: Joi.string().default("Australia").label("Country"),
+  }).optional(),
+});
+
+export const orderBackendSchema = profileSchema.keys({
+  email: Joi.string()
+    .required()
+    .email({ tlds: { allow: false } })
+    .messages({
+      "string.empty": "Email cannot be blank",
+      "string.email": "Please enter a valid email address",
+      "any.required": "Email is required",
+    }),
+  address: Joi.object({
+    line1: Joi.string().required().messages({
+      "string.empty": "Address Line 1 is required",
+      "any.required": "Address Line 1 is required",
+    }),
+    line2: Joi.string().allow("").optional(),
+    suburb: Joi.string().required().messages({
+      "string.empty": "Suburb is required",
+      "any.required": "Suburb is required",
+    }),
+    state: Joi.string().required().messages({
+      "string.empty": "State is required",
+      "any.required": "State is required",
+    }),
+    postcode: Joi.string().required().messages({
+      "string.empty": "Postcode is required",
+      "any.required": "Postcode is required",
+    }),
+    country: Joi.string().required().messages({
+      "string.empty": "Country is required",
+      "any.required": "Country is required",
+    }),
+  }).required(),
+});
+
+export const changePasswordSchema = Joi.object({
+  currentPassword: Joi.string().required().messages({
+    "string.empty": "Current password is required",
+    "any.required": "Current password is required",
+  }),
+  newPassword: Joi.string().min(6).required().messages({
+    "string.empty": "New password is required",
+    "string.min": "New password must be at least 6 characters",
+    "any.required": "New password is required",
+  }),
+  confirmPassword: Joi.string()
+    .valid(Joi.ref("newPassword"))
+    .required()
+    .messages({
+      "any.only": "Passwords must match",
+      "string.empty": "Please confirm your new password",
+      "any.required": "Please confirm your new password",
+    }),
+});
