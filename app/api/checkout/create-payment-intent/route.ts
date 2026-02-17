@@ -4,6 +4,7 @@ import Product from "@/database/product.model";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
 import { POSTAGE_FEE } from "@/lib/constants";
+import { userDetailsSchema } from "@/lib/schemas";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -16,12 +17,30 @@ export const POST = apiHandler(async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid cart" }, { status: 400 });
   }
 
+  // Validate buyer details
+  const buyerValidation = userDetailsSchema.validate(buyer);
+  if (buyerValidation.error) {
+    return NextResponse.json(
+      {
+        error: `Buyer details invalid: ${buyerValidation.error.details[0].message}`,
+      },
+      { status: 400 },
+    );
+  }
+
+  // Validate delivery details
+  const deliveryValidation = userDetailsSchema.validate(delivery);
+  if (deliveryValidation.error) {
+    return NextResponse.json(
+      {
+        error: `Delivery details invalid: ${deliveryValidation.error.details[0].message}`,
+      },
+      { status: 400 },
+    );
+  }
+
   // Validate country to be strictly Australia
   if (
-    !buyer ||
-    !delivery ||
-    !buyer.address ||
-    !delivery.address ||
     buyer.address.country.trim().toLowerCase() !== "australia" ||
     delivery.address.country.trim().toLowerCase() !== "australia"
   ) {

@@ -121,7 +121,7 @@ export default function CheckoutPage() {
           >
             Review
           </span>
-          <span className="text-gray-300">&gt;</span>
+          <span className="text-gray-500">&gt;</span>
           {/* Indicating at Details Stage */}
           <span
             className={
@@ -132,7 +132,7 @@ export default function CheckoutPage() {
           >
             Details
           </span>
-          <span className="text-gray-300">&gt;</span>
+          <span className="text-gray-500">&gt;</span>
           {/* Indicating at Payment Stage */}
           <span
             className={
