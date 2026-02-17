@@ -52,6 +52,7 @@ export interface IOrder {
   paymentId: string;
   paymentMethod: string;
   receipt: string;
+  receiptUrl: string;
   status: OrderStatus;
   paidDate: Date;
   deliveredDate: Date | null;
@@ -105,6 +106,7 @@ const orderSchema = new Schema<IOrder>({
   paymentId: { type: String, required: true },
   paymentMethod: { type: String, required: true },
   receipt: { type: String, required: true },
+  receiptUrl: { type: String, required: false }, // URL to Stripe receipt
   status: {
     type: String,
     enum: Object.values(OrderStatus),

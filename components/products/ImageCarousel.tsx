@@ -4,9 +4,10 @@ import Image from "next/image";
 
 interface ImageCarouselProps {
   images: string[];
+  isOutOfStock?: boolean;
 }
 
-const ImageCarousel = ({ images }: ImageCarouselProps) => {
+const ImageCarousel = ({ images, isOutOfStock }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
 
@@ -47,6 +48,14 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 shadow-md">
+        {/* Out of Stock Overlay */}
+        {isOutOfStock && (
+          <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
+            <span className="bg-black/70 text-white px-6 py-3 rounded-lg font-bold text-xl shadow-lg backdrop-blur-sm">
+              Out of Stock
+            </span>
+          </div>
+        )}
         <div className="relative h-full w-full">
           {/* Image display */}
           <Image
@@ -56,7 +65,7 @@ const ImageCarousel = ({ images }: ImageCarouselProps) => {
             sizes="(max-width: 768px) 100vw, 50vw"
             className={`object-cover transition-opacity duration-300 ease-in-out ${
               isFading ? "opacity-0" : "opacity-100"
-            }`}
+            } ${isOutOfStock ? "grayscale opacity-60" : ""}`}
             loading="eager"
           />
         </div>

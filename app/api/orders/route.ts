@@ -28,7 +28,9 @@ export const POST = apiHandler(async (req: NextRequest) => {
   }
 
   // Verifies payment has gone through with Stripe
-  const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentId, {
+    expand: ["latest_charge"],
+  });
 
   // Payment failed
   if (paymentIntent.status !== "succeeded") {
@@ -129,6 +131,18 @@ export const POST = apiHandler(async (req: NextRequest) => {
       throw new Error("Payment amount mismatch - Potential security issue");
     }
 
+    // Extract receipt URL and Number from the latest charge
+    let receiptUrl = "receipt_url_not_available";
+    let receiptNumber = "receipt_number_not_available";
+
+    const latestCharge = paymentIntent.latest_charge as Stripe.Charge | null;
+
+    if (latestCharge && typeof latestCharge === "object") {
+      if (latestCharge.receipt_url) receiptUrl = latestCharge.receipt_url;
+      if (latestCharge.receipt_number)
+        receiptNumber = latestCharge.receipt_number;
+    }
+
     // Creates order
     const newOrder = await Order.create({
       owner_id: owner_id,
@@ -141,7 +155,8 @@ export const POST = apiHandler(async (req: NextRequest) => {
       GSTTotal: gstTotal,
       paymentId: paymentId,
       paymentMethod: "stripe",
-      receipt: "receipt_url_placeholder", // Stripe charge object has receipt_url
+      receipt: receiptNumber,
+      receiptUrl: receiptUrl,
       status: OrderStatus.paid,
       paidDate: new Date(),
       note: "",

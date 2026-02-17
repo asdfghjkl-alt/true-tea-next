@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export const POST = apiHandler(async (req: NextRequest) => {
   await connectToDatabase();
-  const { cart, buyer, delivery } = await req.json();
+  const { cart, buyer, delivery, owner_id } = await req.json();
 
   // Checks that cart field exists and is array and is has at least 1 item
   if (!cart || !Array.isArray(cart) || cart.length === 0) {
@@ -82,6 +82,12 @@ export const POST = apiHandler(async (req: NextRequest) => {
     currency: "aud", // Adjust currency as needed
     automatic_payment_methods: {
       enabled: true,
+    },
+    metadata: {
+      cart: JSON.stringify(cart),
+      buyer: JSON.stringify(buyer),
+      delivery: JSON.stringify(delivery), // Added delivery for completeness
+      ownerId: owner_id || "guest",
     },
   });
 

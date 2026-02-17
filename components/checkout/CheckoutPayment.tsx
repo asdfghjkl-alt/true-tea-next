@@ -12,12 +12,14 @@ import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import toast from "react-hot-toast";
+import { ValidatedCartItem } from "@/app/checkout/page";
 
 interface CheckoutPaymentProps {
   userDetails: {
     billing: IUserDetails;
     delivery: IUserDetails;
   } | null;
+  validatedCart: ValidatedCartItem[];
   onSuccess: () => void;
   onError: (message: string, paymentId?: string) => void;
   onBack: () => void;
@@ -25,6 +27,7 @@ interface CheckoutPaymentProps {
 
 export default function CheckoutPayment({
   userDetails,
+  validatedCart,
   onSuccess,
   onError,
   onBack,
@@ -32,7 +35,7 @@ export default function CheckoutPayment({
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const { cart, resetCart } = useOrder();
+  const { resetCart } = useOrder();
   const { user } = useAuth();
 
   const handleSubmit = async (e: React.SubmitEvent) => {
@@ -79,8 +82,8 @@ export default function CheckoutPayment({
       if (paymentIntent && paymentIntent.status === "succeeded") {
         // Create Order in Backend
         try {
-          await api.post("/orders/create", {
-            cart,
+          await api.post("/orders", {
+            cart: validatedCart,
             buyer: userDetails.billing,
             delivery: userDetails.delivery,
             paymentId: paymentIntent.id,

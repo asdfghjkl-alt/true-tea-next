@@ -166,6 +166,7 @@ export default function CheckoutPage() {
           {/* This is a context wrapper for Stripe */}
           <CheckoutPayment
             userDetails={userDetails}
+            validatedCart={validatedCart}
             onSuccess={handlePaymentSuccess}
             onError={handlePaymentError}
             onBack={() => setCurrentStep("details")}

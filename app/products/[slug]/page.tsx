@@ -40,6 +40,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
       : (image as IImage).url,
   );
 
+  const isOutOfStock = product.stock <= 0;
+
   return (
     <main className="min-h-screen bg-teal-50 py-12">
       <div className="container mx-auto max-w-6xl px-4">
@@ -50,17 +52,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
           {/* Left Column: Product Images */}
-          <div className="relative">
+          {/* Left Column: Product Images */}
+          <div className="relative rounded-xl overflow-hidden">
             {/* Badge for Discount */}
-            {product.discount > 0 && (
+            {!isOutOfStock && product.discount > 0 && (
               <>
                 {/* Shows badge on top left of the screen */}
-                <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-2 py-1 text-md font-bold text-white shadow-sm">
+                <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-3 py-1 text-md font-bold text-white shadow-sm">
                   {product.discount}% OFF
                 </div>
               </>
             )}
-            <ImageCarousel images={productImages} />
+
+            <div>
+              <ImageCarousel
+                images={productImages}
+                isOutOfStock={isOutOfStock}
+              />
+            </div>
           </div>
 
           {/* Right Column: Product Details */}
@@ -86,8 +95,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
               {/* Product Price */}
               <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                <span className="text-lg font-medium text-gray-500">Price</span>
-                <span className="text-black text-right">
+                <span
+                  className={`text-lg font-medium text-gray-500 ${isOutOfStock ? "opacity-50" : ""}`}
+                >
+                  Price
+                </span>
+                <span
+                  className={`text-black text-right ${isOutOfStock ? "opacity-50" : ""}`}
+                >
                   {product.discount > 0 ? (
                     <>
                       {/* Shows price after discount (estimated) */}
@@ -119,7 +134,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </h3>
               <p className="leading-relaxed text-gray-600">{product.note}</p>
             </div>
-            <QuantityControl product={product} />
+
+            <div className="mt-auto">
+              {isOutOfStock ? (
+                <button
+                  disabled
+                  className="w-full py-3 bg-gray-100 text-gray-400 rounded-lg text-lg font-bold border-2 border-gray-200 cursor-not-allowed"
+                >
+                  Out of Stock
+                </button>
+              ) : (
+                <QuantityControl product={product} />
+              )}
+            </div>
           </div>
         </div>
       </div>

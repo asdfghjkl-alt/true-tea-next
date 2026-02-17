@@ -10,6 +10,8 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const imageSrc = product.images[0].url;
 
+  const isOutOfStock = product.stock <= 0;
+
   return (
     <Link href={`/products/${product.slug}`} className="block h-full">
       <div className="flex h-full flex-col gap-2 rounded-lg bg-white p-4 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl">
@@ -20,10 +22,20 @@ const ProductCard = ({ product }: ProductCardProps) => {
             alt={product.name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            className="object-cover"
+            className={`object-cover ${isOutOfStock ? "opacity-60 grayscale" : ""}`}
           />
-          {/* Badge for Discount */}
-          {product.discount > 0 && (
+
+          {/* Out of Stock Overlay */}
+          {isOutOfStock && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10">
+              <span className="bg-black/70 text-white px-3 py-1 rounded-md font-bold text-sm">
+                Out of Stock
+              </span>
+            </div>
+          )}
+
+          {/* Badge for Discount - Only show if in stock */}
+          {!isOutOfStock && product.discount > 0 && (
             <>
               {/* Shows badge on top left of the screen */}
               <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-2 py-1 text-xs font-bold text-white shadow-sm">
@@ -35,7 +47,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         <div className="flex flex-col gap-1 flex-1">
           {/* Display price and unit */}
-          <div className="flex items-baseline gap-2">
+          <div
+            className={`flex items-baseline gap-2 ${isOutOfStock ? "opacity-50" : ""}`}
+          >
             {product.discount > 0 ? (
               <>
                 {/* Shows price after discount (estimated) */}
@@ -57,7 +71,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
 
           {/* Display product name */}
-          <div className="mb-2">
+          <div className={`mb-2 ${isOutOfStock ? "opacity-50" : ""}`}>
             {/* Product name in English */}
             <h3 className="text-base font-semibold text-gray-800">
               {product.name}
@@ -69,7 +83,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
           {/* Quantity Control */}
           <div className="mt-auto">
-            <QuantityControl product={product} />
+            {isOutOfStock ? (
+              <button
+                disabled
+                className="w-full py-2 bg-gray-100 text-gray-400 rounded-md font-medium text-sm cursor-not-allowed border border-gray-200"
+              >
+                Out of Stock
+              </button>
+            ) : (
+              <QuantityControl product={product} />
+            )}
           </div>
         </div>
       </div>
