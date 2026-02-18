@@ -101,6 +101,16 @@ export default function Login() {
             </Link>
           </p>
 
+          {/* Link to forgot password page */}
+          <p className="mt-4">
+            <Link
+              href="/auth/forgot-password"
+              className="text-sm text-gray-500 hover:text-gray-700 hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </p>
+
           {/* Link to resend verification email page */}
           <p className="mt-1">
             <Link

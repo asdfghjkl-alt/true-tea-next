@@ -45,7 +45,7 @@ export const POST = apiHandler(async (req: Request) => {
   const { token, hashedToken, expires } = generateVerificationToken();
 
   // Creates the new user in the database
-  const newUser = await User.create({
+  await User.create({
     email,
     fname,
     lname,
@@ -60,19 +60,7 @@ export const POST = apiHandler(async (req: Request) => {
   });
 
   // Sends verification email to the user
-  const emailSent = await sendVerificationEmail(email, fname, token);
-
-  // Sends 201 on successful user creation but alerts user that email failed to be sent
-  if (!emailSent) {
-    return NextResponse.json(
-      {
-        message:
-          "If this email is not already registered, you will receive a verification link.",
-        userId: newUser._id,
-      },
-      { status: 201 },
-    );
-  }
+  await sendVerificationEmail(email, fname, token);
 
   // Returns on successful registration
   return NextResponse.json(

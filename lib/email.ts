@@ -5,6 +5,7 @@ import DeliveryEmail from "@/components/emails/DeliveryEmail";
 import AlreadyRegisteredEmail from "@/components/emails/AlreadyRegisteredEmail";
 import AlreadyActivatedEmail from "@/components/emails/AlreadyActivatedEmail";
 import AccountNotFoundEmail from "@/components/emails/AccountNotFoundEmail";
+import ResetPasswordEmail from "@/components/emails/ResetPasswordEmail";
 import { IOrderProduct, IUserDetails } from "@/database";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -201,6 +202,42 @@ export const sendAccountNotFoundEmail = async (email: string) => {
     return true;
   } catch (error) {
     console.error("Error sending account not found email:", error);
+    return false;
+  }
+};
+
+/**
+ * Sends password reset email to user
+ * @param email User's email
+ * @param fname User's first name
+ * @param token Reset token
+ * @returns true if email was sent successfully
+ */
+export const sendResetPasswordEmail = async (
+  email: string,
+  fname: string,
+  token: string,
+) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log(
+      "RESEND_API_KEY is not set. Reset Password link:",
+      `${APP_URL}/auth/reset-password?token=${token}`,
+    );
+    return true;
+  }
+
+  const resetLink = `${APP_URL}/auth/reset-password?token=${token}`;
+
+  try {
+    await resend.emails.send({
+      from: `True Tea <${process.env.EMAIL_FROM}>`,
+      to: email,
+      subject: "Reset your password",
+      react: ResetPasswordEmail({ resetLink, fname }),
+    });
+    return true;
+  } catch (error) {
+    console.error("Error sending reset password email:", error);
     return false;
   }
 };

@@ -24,6 +24,8 @@ export interface IUser {
   regDate: Date; // Date of registration
   emailToken: string; // Token for user activation
   emailTokenExpires: Date; // Time when token expires
+  resetToken: string; // Token for password reset
+  resetTokenExpires: Date; // Time when reset token expires
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -59,6 +61,8 @@ const userSchema = new mongoose.Schema<IUser>({
   regDate: { type: Date, default: Date.now },
   emailToken: { type: String, unique: true, sparse: true },
   emailTokenExpires: { type: Date },
+  resetToken: { type: String, unique: true, sparse: true },
+  resetTokenExpires: { type: Date },
 });
 
 const User = models.User || mongoose.model<IUser>("User", userSchema);
