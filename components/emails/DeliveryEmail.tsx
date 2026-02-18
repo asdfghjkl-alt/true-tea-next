@@ -146,6 +146,7 @@ export const DeliveryEmail = ({
   const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
   const webDomain = process.env.WEBDOMAIN || "www.true-tea.com.au";
   const webLogo = process.env.WEBLOGO || "/logo-true-tea-origin.jpeg";
+  const abn = process.env.ABN_NUMBER || "49168458580";
 
   const formatDate = (date: string) => {
     const d = new Date(date);
@@ -203,8 +204,8 @@ export const DeliveryEmail = ({
             <Section className="bg-white p-6 pb-0 text-center">
               <Img
                 src={`${webLink}${webLogo}`}
-                width={128}
-                height={128}
+                width={200}
+                height={200}
                 alt="True Tea Logo"
                 className="mx-auto"
               />
@@ -452,7 +453,7 @@ export const DeliveryEmail = ({
               <Text className="text-xs text-gray-500 leading-5">
                 <b>Valleyview Enterprises Pty. Ltd.</b>
                 <br />
-                ABN: 49168458580
+                ABN: {abn}
                 <br />
                 <Link href={webLink} className="text-[#5f51e8] underline">
                   {webDomain}

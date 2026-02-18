@@ -41,7 +41,7 @@ export default function RegisterForm() {
     try {
       await registerUser(data);
       setSuccessMessage(
-        "Registration successful! Please check your email (including spam) to verify your account.",
+        "If this email is not already registered, you will receive a verification link.",
       );
       reset();
     } catch (error) {

@@ -39,7 +39,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(res.data.user);
         }
       } catch (error) {
-        // Silently fail if no session exists or error occurs
         console.error("Failed to fetch session:", error);
       } finally {
         setIsLoading(false);
@@ -91,8 +90,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (data: RegisterFormData) => {
     try {
       // Posts to registration route
-      await api.post("/auth/register", data);
-      toast.success("Registration successful!");
+      const res = await api.post("/auth/register", data);
+      toast.success(res.data.message || "Registration successful!");
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data?.message || "Registration failed");

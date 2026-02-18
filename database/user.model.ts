@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema<IUser>({
   activated: { type: Boolean, default: false },
   stripeCusId: String,
   regDate: { type: Date, default: Date.now },
-  emailToken: String,
+  emailToken: { type: String, unique: true, sparse: true },
   emailTokenExpires: { type: Date },
 });
 

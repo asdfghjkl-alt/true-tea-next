@@ -2,6 +2,9 @@ import { Resend } from "resend";
 import VerificationEmail from "@/components/emails/VerificationEmail";
 import OrderEmail from "@/components/emails/OrderEmail";
 import DeliveryEmail from "@/components/emails/DeliveryEmail";
+import AlreadyRegisteredEmail from "@/components/emails/AlreadyRegisteredEmail";
+import AlreadyActivatedEmail from "@/components/emails/AlreadyActivatedEmail";
+import AccountNotFoundEmail from "@/components/emails/AccountNotFoundEmail";
 import { IOrderProduct, IUserDetails } from "@/database";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -115,6 +118,89 @@ export const sendDeliveryEmail = async (orderData: OrderEmailData) => {
     return true;
   } catch (error) {
     console.error("Error sending delivery email:", error);
+    return false;
+  }
+};
+
+/**
+ * Sends email to user indicating they already have an account
+ * @param email User's email
+ * @param fname User's first name
+ * @returns true if email was sent successfully
+ */
+export const sendAlreadyRegisteredEmail = async (
+  email: string,
+  fname: string,
+) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("RESEND_API_KEY is not set. Already Registered email skipped.");
+    return true;
+  }
+
+  try {
+    await resend.emails.send({
+      from: `True Tea <${process.env.EMAIL_FROM}>`,
+      to: email,
+      subject: "You already have an account",
+      react: AlreadyRegisteredEmail({ fname }),
+    });
+    return true;
+  } catch (error) {
+    console.error("Error sending already registered email:", error);
+    return false;
+  }
+};
+
+/**
+ * Sends email to user indicating their account is already activated
+ * @param email User's email
+ * @param fname User's first name
+ * @returns true if email was sent successfully
+ */
+export const sendAlreadyActivatedEmail = async (
+  email: string,
+  fname: string,
+) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("RESEND_API_KEY is not set. Already Activated email skipped.");
+    return true;
+  }
+
+  try {
+    await resend.emails.send({
+      from: `True Tea <${process.env.EMAIL_FROM}>`,
+      to: email,
+      subject: "Your account is already active",
+      react: AlreadyActivatedEmail({ fname }),
+    });
+    return true;
+  } catch (error) {
+    console.error("Error sending already activated email:", error);
+    return false;
+  }
+};
+
+/**
+ * Sends email to user indicating no account was found for their email
+ * @param email User's email
+ * @returns true if email was sent successfully
+ */
+export const sendAccountNotFoundEmail = async (email: string) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("RESEND_API_KEY is not set. Account Not Found email skipped.");
+    return true;
+  }
+
+  try {
+    await resend.emails.send({
+      from: `True Tea <${process.env.EMAIL_FROM}>`,
+      to: email,
+      subject: "Verification Request",
+      react: AccountNotFoundEmail({ email }),
+    });
+    return true;
+  } catch (error) {
+    console.error("Error sending account not found email:", error);
     return false;
   }
 };

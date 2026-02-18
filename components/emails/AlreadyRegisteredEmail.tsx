@@ -12,25 +12,24 @@ import {
   Tailwind,
 } from "@react-email/components";
 
-interface VerificationEmailProps {
-  confirmLink: string;
+interface AlreadyRegisteredEmailProps {
   fname: string;
 }
 
-// React Component for verification email
-export const VerificationEmail = ({
-  confirmLink,
+// React Component for already registered email
+export const AlreadyRegisteredEmail = ({
   fname,
-}: VerificationEmailProps) => {
+}: AlreadyRegisteredEmailProps) => {
   const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
   const webDomain = process.env.WEBDOMAIN || "www.true-tea.com.au";
   const webLogo = process.env.WEBLOGO || "/logo-true-tea-origin.jpeg";
+  const loginLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/login`;
   const abn = process.env.ABN_NUMBER || "49168458580";
 
   return (
     <Html>
       <Head />
-      <Preview>Verify your email for True Tea</Preview>
+      <Preview>Registration Attempt - True Tea</Preview>
       <Tailwind>
         <Body className="bg-white font-sans">
           <Container className="mx-auto p-5 pb-12">
@@ -47,7 +46,7 @@ export const VerificationEmail = ({
 
             {/* Heading */}
             <Heading className="my-10 text-center text-2xl font-bold">
-              Verify your email address
+              You already have an account
             </Heading>
 
             {/* Greeting */}
@@ -55,36 +54,28 @@ export const VerificationEmail = ({
               Dear {fname},
             </Text>
             <Text className="text-base leading-6 text-gray-800">
-              Thank you for registering with True Tea!
+              We noticed a registration attempt with your email address.
+              However, you already have an existing account with True Tea.
             </Text>
             <Text className="text-base leading-6 text-gray-800">
-              To activate your account, please click on the following link (or
-              paste it into your browser) to complete the account activation
-              process within one hour of receiving it:
+              If this was you, you can log in to your account using the button
+              below:
             </Text>
 
-            {/* Verify Email button */}
+            {/* Login button */}
             <Section className="my-5 text-center">
               <Link
                 className="block rounded bg-emerald-600 px-5 py-3 text-center text-base text-white no-underline"
-                href={confirmLink}
+                href={loginLink}
               >
-                Verify Email
+                Log In to True Tea
               </Link>
             </Section>
 
-            {/* Alternative verification link */}
-            <Text className="text-base leading-6 text-gray-800">
-              Or copy and paste this URL into your browser:{" "}
-              <Link href={confirmLink} className="text-emerald-600 underline">
-                {confirmLink}
-              </Link>
-            </Text>
-
             {/* If you did not register */}
             <Text className="text-base leading-6 text-gray-800">
-              If you did not register, please reply to this email to request
-              removal of this registration.
+              If you did not attempt to register, you can safely ignore this
+              email. Your account is secure.
             </Text>
 
             {/* Best regards */}
@@ -113,4 +104,4 @@ export const VerificationEmail = ({
   );
 };
 
-export default VerificationEmail;
+export default AlreadyRegisteredEmail;

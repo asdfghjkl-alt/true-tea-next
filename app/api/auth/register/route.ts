@@ -4,7 +4,7 @@ import { registerSchema } from "@/lib/schemas";
 import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/email";
+import { sendVerificationEmail, sendAlreadyRegisteredEmail } from "@/lib/email";
 import { apiHandler } from "@/lib/api-handler";
 
 export const POST = apiHandler(async (req: Request) => {
@@ -26,31 +26,36 @@ export const POST = apiHandler(async (req: Request) => {
   // Check if user already exists with the corresponding email
   const existingUser = await User.findOne({ email });
   if (existingUser) {
+    // Send email to existing user
+    await sendAlreadyRegisteredEmail(email, existingUser.fname);
+
     return NextResponse.json(
-      { message: "User with this email already exists" },
-      { status: 409 },
+      {
+        message:
+          "If this email is not already registered, you will receive a verification link.",
+      },
+      { status: 201 },
     );
   }
 
   // Hashes passwords with 12 levels of salting
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  // Generates a verification token for the user
-  const { token, expires } = generateVerificationToken();
+  // Generates a new verification token for the user
+  const { token, hashedToken, expires } = generateVerificationToken();
 
-  // Create user with new fields
+  // Creates the new user in the database
   const newUser = await User.create({
+    email,
     fname,
     lname,
-    email,
-    password: hashedPassword,
     phone,
     age,
     address: {
       postcode,
     },
-    activated: false,
-    emailToken: token,
+    password: hashedPassword,
+    emailToken: hashedToken,
     emailTokenExpires: expires,
   });
 
@@ -61,7 +66,8 @@ export const POST = apiHandler(async (req: Request) => {
   if (!emailSent) {
     return NextResponse.json(
       {
-        message: "User created but failed to send verification email.",
+        message:
+          "If this email is not already registered, you will receive a verification link.",
         userId: newUser._id,
       },
       { status: 201 },
@@ -72,7 +78,7 @@ export const POST = apiHandler(async (req: Request) => {
   return NextResponse.json(
     {
       message:
-        "User registered successfully. Please check your email to verify.",
+        "If this email is not already registered, you will receive a verification link.",
     },
     { status: 201 },
   );

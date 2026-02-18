@@ -3,7 +3,11 @@ import Joi from "joi";
 import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/email";
+import {
+  sendVerificationEmail,
+  sendAlreadyActivatedEmail,
+  sendAccountNotFoundEmail,
+} from "@/lib/email";
 import { apiHandler } from "@/lib/api-handler";
 
 const resendSchema = Joi.object({
@@ -30,6 +34,9 @@ export const POST = apiHandler(async (req: Request) => {
   const user = await User.findOne({ email });
 
   if (!user) {
+    // If user not found, send "account not found" email
+    await sendAccountNotFoundEmail(email);
+
     // Returns generic success message to avoid user enumeration
     return NextResponse.json(
       {
@@ -41,7 +48,9 @@ export const POST = apiHandler(async (req: Request) => {
   }
 
   if (user.activated) {
-    // If already activated, returns generic success message to avoid user enumeration
+    // If already activated, send email and return generic success message
+    await sendAlreadyActivatedEmail(email, user.fname);
+
     return NextResponse.json(
       {
         message:
@@ -52,9 +61,9 @@ export const POST = apiHandler(async (req: Request) => {
   }
 
   // Generates a new verification token for the user
-  const { token, expires } = generateVerificationToken();
+  const { token, hashedToken, expires } = generateVerificationToken();
 
-  user.emailToken = token;
+  user.emailToken = hashedToken;
   user.emailTokenExpires = expires;
   await user.save();
 

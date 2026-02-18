@@ -3,6 +3,7 @@ import { type NextRequest } from "next/server"; // Explicitly import NextRequest
 import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
+import { hashToken } from "@/lib/tokens";
 
 export const GET = apiHandler(async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams;
@@ -16,11 +17,14 @@ export const GET = apiHandler(async (req: NextRequest) => {
     );
   }
 
+  // Hashes the token to compare with the stored hashed token
+  const hashedToken = hashToken(token);
+
   await connectToDatabase();
 
   // Finds user with the corresponding token that hasn't expired yet
   const user = await User.findOne({
-    emailToken: token,
+    emailToken: hashedToken,
     // Uses mongo selector to find if token is greater than current date
     emailTokenExpires: { $gt: new Date() },
   });

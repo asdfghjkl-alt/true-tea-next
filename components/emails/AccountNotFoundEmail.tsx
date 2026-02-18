@@ -12,25 +12,22 @@ import {
   Tailwind,
 } from "@react-email/components";
 
-interface VerificationEmailProps {
-  confirmLink: string;
-  fname: string;
+interface AccountNotFoundEmailProps {
+  email: string;
 }
 
-// React Component for verification email
-export const VerificationEmail = ({
-  confirmLink,
-  fname,
-}: VerificationEmailProps) => {
+// React Component for account not found email
+export const AccountNotFoundEmail = ({ email }: AccountNotFoundEmailProps) => {
   const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
   const webDomain = process.env.WEBDOMAIN || "www.true-tea.com.au";
   const webLogo = process.env.WEBLOGO || "/logo-true-tea-origin.jpeg";
+  const registerLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/register`;
   const abn = process.env.ABN_NUMBER || "49168458580";
 
   return (
     <Html>
       <Head />
-      <Preview>Verify your email for True Tea</Preview>
+      <Preview>Verification Request - True Tea</Preview>
       <Tailwind>
         <Body className="bg-white font-sans">
           <Container className="mx-auto p-5 pb-12">
@@ -47,44 +44,38 @@ export const VerificationEmail = ({
 
             {/* Heading */}
             <Heading className="my-10 text-center text-2xl font-bold">
-              Verify your email address
+              Verification Request Received
             </Heading>
 
-            {/* Greeting */}
+            {/* Content */}
+            <Text className="text-base leading-6 text-gray-800">Hello,</Text>
             <Text className="text-base leading-6 text-gray-800">
-              Dear {fname},
+              We received a request to resend a verification email for the
+              address <span className="font-semibold">{email}</span>.
             </Text>
             <Text className="text-base leading-6 text-gray-800">
-              Thank you for registering with True Tea!
+              However, we could not find an account associated with this email
+              address.
             </Text>
             <Text className="text-base leading-6 text-gray-800">
-              To activate your account, please click on the following link (or
-              paste it into your browser) to complete the account activation
-              process within one hour of receiving it:
+              If you would like to create an account, you can do so by clicking
+              the button below:
             </Text>
 
-            {/* Verify Email button */}
+            {/* Register button */}
             <Section className="my-5 text-center">
               <Link
                 className="block rounded bg-emerald-600 px-5 py-3 text-center text-base text-white no-underline"
-                href={confirmLink}
+                href={registerLink}
               >
-                Verify Email
+                Create an Account
               </Link>
             </Section>
 
-            {/* Alternative verification link */}
+            {/* If you did not request */}
             <Text className="text-base leading-6 text-gray-800">
-              Or copy and paste this URL into your browser:{" "}
-              <Link href={confirmLink} className="text-emerald-600 underline">
-                {confirmLink}
-              </Link>
-            </Text>
-
-            {/* If you did not register */}
-            <Text className="text-base leading-6 text-gray-800">
-              If you did not register, please reply to this email to request
-              removal of this registration.
+              If you did not make this request, you can safely ignore this
+              email.
             </Text>
 
             {/* Best regards */}
@@ -113,4 +104,4 @@ export const VerificationEmail = ({
   );
 };
 
-export default VerificationEmail;
+export default AccountNotFoundEmail;
