@@ -9,7 +9,7 @@ export default async function EditProfilePage() {
   const session = await getSession();
 
   if (!session || !session.userData) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   const user = await User.findById(session.userData._id)
@@ -17,7 +17,7 @@ export default async function EditProfilePage() {
     .lean();
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   // Convert _id and dates to string to pass to client component
