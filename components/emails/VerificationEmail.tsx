@@ -94,7 +94,7 @@ export const VerificationEmail = ({
             </Text>
 
             {/* Company information */}
-            <Section className="mt-5 border-t border-gray-200 pt-5">
+            <Section className="mt-5 border-t border-gray-200 pt-5 text-center">
               <Text className="text-xs text-gray-500 leading-5">
                 <b>Valleyview Enterprises Pty. Ltd.</b>
                 <br />

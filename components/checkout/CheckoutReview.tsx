@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useOrder } from "@/contexts/OrderContext";
 import { ValidatedCartItem } from "@/app/checkout/page";
-import Image from "next/image";
+import CheckoutItem from "./CheckoutItem";
 import toast from "react-hot-toast";
 import api from "@/lib/axios";
 import { POSTAGE_FEE } from "@/lib/constants";
@@ -95,37 +95,7 @@ export default function CheckoutReview({ onProceed }: CheckoutReviewProps) {
       {/* Cart items */}
       <div className="space-y-4 mb-6">
         {validatedItems.map((item) => (
-          <div
-            key={item.product_id}
-            className="flex items-center gap-4 border-b pb-4 last:border-0 last:pb-0"
-          >
-            <div className="relative w-16 h-16 bg-gray-100 rounded overflow-hidden shrink-0">
-              <Image
-                src={item.imageUrl}
-                alt={item.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="grow">
-              <h3 className="font-medium">{item.name}</h3>
-              <p className="text-sm text-gray-500">{item.nameCN}</p>
-              <div className="text-sm mt-1">
-                Qty: {item.quantity} x ${item.price.toFixed(2)}
-                {item.discount > 0 && (
-                  <span className="text-red-500 ml-2">(-{item.discount}%)</span>
-                )}
-              </div>
-            </div>
-            <div className="font-medium text-right">
-              $
-              {(
-                item.price *
-                (1 - (item.discount || 0) / 100) *
-                item.quantity
-              ).toFixed(2)}
-            </div>
-          </div>
+          <CheckoutItem key={item.product_id} item={item} />
         ))}
       </div>
 

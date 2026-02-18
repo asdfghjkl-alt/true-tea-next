@@ -66,6 +66,7 @@ const orderProductSchema = new Schema<IOrderProduct>(
     imageUrl: { type: String, required: true },
     nameCN: { type: String, required: true },
     price: { type: Number, required: true },
+    discount: { type: Number, default: 0 },
     GST: { type: Number, required: true },
     unit: { type: String, required: true },
     quantity: { type: Number, required: true },

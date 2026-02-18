@@ -40,6 +40,8 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@react-email/preview": "^0.0.14",
+    "@react-email/preview-server": "^5.2.6",
     "@tailwindcss/postcss": "^4",
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^20",

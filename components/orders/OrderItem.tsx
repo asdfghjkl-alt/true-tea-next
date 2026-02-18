@@ -1,5 +1,3 @@
-"use client";
-
 import { IOrderProduct } from "@/database";
 import Image from "next/image";
 
@@ -29,11 +27,29 @@ export default function OrderItem({ item }: OrderItemProps) {
         <p className="font-medium truncate" title={item.name}>
           {item.name}
         </p>
-        <div className="flex justify-between text-gray-500 text-xs mt-1">
-          <span>
-            Price: ${item.price.toFixed(2)} / {item.unit}
-          </span>
-          <span>Qty: {item.quantity}</span>
+        <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <div>
+            {item.discount > 0 ? (
+              <>
+                Price:{" "}
+                <span className="line-through text-gray-400">
+                  ${item.price.toFixed(2)}
+                </span>{" "}
+                <span className="text-emerald-600 font-medium">
+                  ${(item.price * (1 - item.discount / 100)).toFixed(2)}
+                </span>{" "}
+                / {item.unit}
+                <span className="text-emerald-600 ml-1">
+                  ({item.discount}% off)
+                </span>
+              </>
+            ) : (
+              <>
+                Price: ${item.price.toFixed(2)} / {item.unit}
+              </>
+            )}
+          </div>
+          <div>Qty: {item.quantity}</div>
         </div>
       </div>
     </div>

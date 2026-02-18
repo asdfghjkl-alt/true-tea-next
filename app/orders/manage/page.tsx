@@ -38,7 +38,7 @@ export default async function OrderManagePage() {
             <p className="text-gray-500 text-lg">No orders found.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {serializedOrders.map((order) => (
               <div key={order._id} className="h-full">
                 <OrderCard order={order} isAdmin={true} />

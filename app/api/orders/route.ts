@@ -6,6 +6,7 @@ import { OrderStatus } from "@/types/order";
 import { apiHandler } from "@/lib/api-handler";
 import { POSTAGE_FEE } from "@/lib/constants";
 import { orderBackendSchema } from "@/lib/schemas";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -174,6 +175,24 @@ export const POST = apiHandler(async (req: NextRequest) => {
       paidDate: new Date(),
       note: "",
     });
+
+    // Send order confirmation email to buyer and store owner (fire-and-forget)
+    sendOrderConfirmationEmail({
+      orderId: newOrder._id.toString(),
+      buyer,
+      delivery,
+      productList: orderProducts,
+      postage,
+      GSTTotal: gstTotal,
+      orderTotal,
+      discountTotal,
+      paidDate: new Date().toISOString(),
+      paymentId,
+      receiptUrl,
+      receipt: receiptNumber,
+    }).catch((err) =>
+      console.error("Failed to send order confirmation email:", err),
+    );
 
     return NextResponse.json({ success: true, orderId: newOrder._id });
   } catch (fulfillmentError: any) {

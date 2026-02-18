@@ -1,5 +1,7 @@
 import { Resend } from "resend";
 import VerificationEmail from "@/components/emails/VerificationEmail";
+import OrderEmail from "@/components/emails/OrderEmail";
+import { IOrderProduct, IUserDetails } from "@/database";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -30,6 +32,59 @@ export const sendVerificationEmail = async (
     return true;
   } catch (error) {
     console.error("Error sending verification email:", error);
+    return false;
+  }
+};
+
+interface OrderEmailData {
+  orderId: string;
+  buyer: IUserDetails;
+  delivery: IUserDetails;
+  productList: IOrderProduct[];
+  postage: number;
+  GSTTotal: number;
+  orderTotal: number;
+  discountTotal: number;
+  paidDate: string;
+  paymentId: string;
+  receiptUrl?: string;
+  receipt?: string;
+}
+
+/**
+ * Sends order confirmation emails to the buyer and store owner
+ * @param orderData Order data for the email template
+ * @returns true if emails were sent successfully
+ */
+export const sendOrderConfirmationEmail = async (orderData: OrderEmailData) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("RESEND_API_KEY is not set. Order email skipped.");
+    return true;
+  }
+
+  const emailContent = OrderEmail(orderData);
+  const from = `True Tea <${process.env.EMAIL_FROM}>`;
+  const subject = `Order Confirmation - #${orderData.orderId.slice(-6)}`;
+
+  // Build list of recipients: buyer email + store owner (EMAIL_TO)
+  const recipients: string[] = [orderData.buyer.email];
+  if (process.env.EMAIL_TO && process.env.EMAIL_TO !== orderData.buyer.email) {
+    recipients.push(process.env.EMAIL_TO);
+  }
+
+  try {
+    // Send to all recipients using batch send
+    await resend.batch.send(
+      recipients.map((to) => ({
+        from,
+        to,
+        subject,
+        react: emailContent,
+      })),
+    );
+    return true;
+  } catch (error) {
+    console.error("Error sending order confirmation email:", error);
     return false;
   }
 };
