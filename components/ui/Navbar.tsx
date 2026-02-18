@@ -5,10 +5,11 @@ import Image from "next/image";
 import Dropdown from "./Dropdown";
 import { useAuth } from "@/contexts/AuthContext";
 
-const navLinks = [
+const baseLinks = [
   { href: "/", label: "Home" },
-  { href: "/products", label: "Products" },
+  { href: "/about-us", label: "About Us" },
 ];
+const navLinks = [{ href: "/products", label: "Products" }];
 const unauthLinks = [{ href: "/auth/login", label: "Login" }];
 const authLinks = [
   { href: "/users/profile", label: "My Profile" },
@@ -75,33 +76,51 @@ export default function Navbar({ categories = [] }: NavbarProps) {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 p-2">
           {/* Logo and home link */}
-          <NavLink
-            href="/"
-            className="flex items-center no-underline"
-            onClick={closeMenu}
-          >
-            {/* Logo */}
-            <div
-              className={`relative transition-all duration-300 ease-in-out mr-2 ${isScrolled ? "h-12 w-12" : "h-32 w-32"}`}
-            >
-              <Image
-                src="/logo-true-tea-origin.jpeg"
-                alt="True Tea"
-                fill
-                loading="eager"
-                sizes="(max-width: 768px) 48px, 128px"
-                className="object-contain"
-              />
-            </div>
 
-            {/* Brand name and year created */}
-            <div className="ps-1 leading-snug">
-              <h2>True Tea</h2>
-              <div className="text-xs font-light tracking-[0.3em] text-teal-100 uppercase">
-                Since 2019
+          <div className="flex items-center gap-6">
+            <NavLink
+              href="/"
+              className="flex items-center no-underline"
+              onClick={closeMenu}
+            >
+              {/* Logo */}
+              <div
+                className={`relative transition-all duration-300 ease-in-out mr-2 ${isScrolled ? "h-12 w-12" : "h-32 w-32"}`}
+              >
+                <Image
+                  src="/logo-true-tea-origin.jpeg"
+                  alt="True Tea"
+                  fill
+                  loading="eager"
+                  sizes="(max-width: 768px) 48px, 128px"
+                  className="object-contain"
+                />
               </div>
-            </div>
-          </NavLink>
+
+              {/* Brand name and year created */}
+              <div className="ps-1 leading-snug">
+                <h2>True Tea</h2>
+                <div className="text-xs font-light tracking-[0.3em] text-teal-100 uppercase">
+                  Since 2019
+                </div>
+              </div>
+            </NavLink>
+
+            {/* Base Links (Left) */}
+            <nav className="hidden items-center gap-3 lg:flex">
+              {baseLinks.map((link) => (
+                <NavLink
+                  key={link.href}
+                  href={link.href}
+                  className={({ isActive }) =>
+                    `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </nav>
+          </div>
 
           <div className="flex flex-col items-end gap-1">
             {/* Slogan */}
@@ -261,7 +280,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
             aria-label="Mobile"
           >
             {/* Navigation links */}
-            {navLinks.map((link) => (
+            {[...baseLinks, ...navLinks].map((link) => (
               <NavLink
                 key={link.href}
                 href={link.href}
