@@ -99,7 +99,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
 
               {/* Brand name and year created */}
               <div className="ps-1 leading-snug">
-                <h2>True Tea</h2>
+                <h2 className="font-serif">True Tea</h2>
                 <div className="text-xs font-light tracking-[0.3em] text-teal-100 uppercase">
                   Since 2019
                 </div>
