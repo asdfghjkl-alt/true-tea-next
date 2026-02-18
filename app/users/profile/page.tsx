@@ -9,13 +9,13 @@ export default async function UserProfilePage() {
   const session = await getSession();
 
   if (!session || !session.userData) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   const user = await User.findById(session.userData._id).select("-password");
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   return (
