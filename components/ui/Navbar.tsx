@@ -107,7 +107,9 @@ export default function Navbar({ categories = [] }: NavbarProps) {
             </NavLink>
 
             {/* Base Links (Left) */}
-            <nav className="hidden items-center gap-3 lg:flex">
+            <nav
+              className={`hidden items-center gap-3 lg:flex ${isScrolled ? "mt-5" : "mt-7"}`}
+            >
               {baseLinks.map((link) => (
                 <NavLink
                   key={link.href}

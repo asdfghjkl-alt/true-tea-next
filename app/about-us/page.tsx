@@ -24,11 +24,14 @@ export default function AboutUsPage() {
 
         <section className="grid md:grid-cols-3 gap-8 mb-12">
           <div className="md:col-span-2">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4" id="faq">
+            <h2
+              className="text-2xl font-bold text-gray-800 mb-4 scroll-mt-40"
+              id="faq"
+            >
               FAQs
             </h2>
             <div className="space-y-6">
-              <div id="shopping-cart">
+              <div id="shopping-cart" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Select the products and quantity you want to purchase –
                   Shopping Cart
@@ -39,7 +42,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="checkout">
+              <div id="checkout" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Check out to complete the purchase
                 </h3>
@@ -53,7 +56,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="payment-options">
+              <div id="payment-options" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Payment options
                 </h3>
@@ -85,7 +88,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="delivery">
+              <div id="delivery" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Product delivery
                 </h3>
@@ -106,7 +109,7 @@ export default function AboutUsPage() {
                 </ul>
               </div>
 
-              <div id="returns">
+              <div id="returns" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Product return policy
                 </h3>
@@ -116,7 +119,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="privacy">
+              <div id="privacy" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Privacy protection policy
                 </h3>
@@ -132,7 +135,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="register">
+              <div id="register" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Register to become ‘Friend of True Tea’ (under construction)
                 </h3>
@@ -166,7 +169,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="logon">
+              <div id="logon" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Log on to our web site
                 </h3>
@@ -179,7 +182,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="operation">
+              <div id="operation" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Our operation
                 </h3>
@@ -198,7 +201,7 @@ export default function AboutUsPage() {
           <div className="md:col-span-1">
             <div className="bg-emerald-50 p-6 rounded-lg sticky top-24">
               <h2
-                className="text-xl font-bold text-emerald-900 mb-4"
+                className="text-xl font-bold text-emerald-900 mb-4 scroll-mt-40"
                 id="contact"
               >
                 Contact Us
