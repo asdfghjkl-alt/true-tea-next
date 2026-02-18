@@ -46,8 +46,16 @@ const ImageCarousel = ({ images, isOutOfStock }: ImageCarouselProps) => {
   }, [currentIndex, images.length, nextImage]);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 shadow-md">
+    <div
+      className="flex flex-col gap-4"
+      role="region"
+      aria-label="Product images"
+      aria-roledescription="carousel"
+    >
+      <div
+        className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 shadow-md"
+        aria-live="polite"
+      >
         {/* Out of Stock Overlay */}
         {isOutOfStock && (
           <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
@@ -120,12 +128,18 @@ const ImageCarousel = ({ images, isOutOfStock }: ImageCarouselProps) => {
       </div>
 
       {images.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div
+          className="flex gap-2 overflow-x-auto pb-2"
+          role="group"
+          aria-label="Image thumbnails"
+        >
           {/* Image thumbnails */}
           {images.map((image, index) => (
             <button
               key={index}
               onClick={() => handleImageChange(index)}
+              aria-label={`View image ${index + 1} of ${images.length}`}
+              aria-current={index === currentIndex ? "true" : undefined}
               className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 transition-all ${
                 index === currentIndex
                   ? "border-emerald-600 opacity-100"

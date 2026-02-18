@@ -2,8 +2,25 @@ import connectToDatabase from "@/lib/mongodb";
 import { Product, IProduct, Category, ICategory } from "@/database";
 import CategorySection from "@/components/products/CategorySection";
 import ProductCard from "@/components/products/ProductCard";
-
+import { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Our Teas - True Tea",
+  description:
+    "Browse our curated collection of authentic Chinese teas. From green to oolong, discover premium quality teas sourced directly from the origin.",
+  openGraph: {
+    title: "Our Teas - True Tea",
+    description:
+      "Browse our curated collection of authentic Chinese teas sourced directly from the origin.",
+    url: "/products",
+  },
+  twitter: {
+    title: "Our Teas - True Tea",
+    description:
+      "Browse our curated collection of authentic Chinese teas sourced directly from the origin.",
+  },
+};
 
 interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

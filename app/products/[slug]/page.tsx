@@ -3,11 +3,58 @@ import { Product, IImage, IProduct } from "@/database";
 import ImageCarousel from "@/components/products/ImageCarousel";
 import { notFound } from "next/navigation";
 import QuantityControl from "@/components/ui/QuantityControl";
+import { Metadata } from "next";
 
 interface ProductPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  await connectToDatabase();
+  const product = (await Product.findOne({
+    slug,
+    onShelf: true,
+  }).lean()) as IProduct | null;
+
+  if (!product) {
+    return {
+      title: "Product Not Found - True Tea",
+    };
+  }
+
+  const price =
+    product.discount > 0
+      ? (product.price * (1 - product.discount / 100)).toFixed(2)
+      : product.price.toFixed(2);
+
+  const description =
+    `${product.name} (${product.nameCN}) — $${price} / ${product.unit}. ${product.note || ""}`.trim();
+  const ogImages =
+    product.images && product.images.length > 0
+      ? product.images.map((img) => ({ url: img.url, alt: product.name }))
+      : [];
+
+  return {
+    title: `${product.name} - True Tea`,
+    description,
+    openGraph: {
+      title: `${product.name} (${product.nameCN}) - True Tea`,
+      description,
+      url: `/products/${product.slug}`,
+      ...(ogImages.length > 0 && { images: ogImages }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} - True Tea`,
+      description,
+      ...(ogImages.length > 0 && { images: ogImages.map((img) => img.url) }),
+    },
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -39,6 +86,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   );
 
   const isOutOfStock = product.stock <= 0;
+  const isLowStock = product.stock > 0 && product.stock <= 10;
 
   return (
     <main className="min-h-screen bg-teal-50 py-12">
@@ -54,12 +102,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="relative rounded-xl overflow-hidden">
             {/* Badge for Discount */}
             {!isOutOfStock && product.discount > 0 && (
-              <>
-                {/* Shows badge on top left of the screen */}
-                <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-3 py-1 text-md font-bold text-white shadow-sm">
-                  {product.discount}% OFF
-                </div>
-              </>
+              <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-3 py-1 text-md font-bold text-white shadow-sm">
+                {product.discount}% OFF
+              </div>
+            )}
+
+            {/* Low Stock Badge */}
+            {isLowStock && (
+              <div className="absolute right-2 top-2 z-10 rounded-full bg-amber-500 ring-2 ring-white px-3 py-1 text-md font-bold text-white shadow-md">
+                Only {product.stock} left
+              </div>
             )}
 
             <div>
@@ -134,6 +186,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             <div className="mt-auto">
+              {/* Low Stock Alert */}
+              {isLowStock && (
+                <p className="text-amber-600 text-sm font-semibold mb-3">
+                  Hurry — only {product.stock} left in stock!
+                </p>
+              )}
+
               {isOutOfStock ? (
                 <button
                   disabled
@@ -142,7 +201,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   Out of Stock
                 </button>
               ) : (
-                <QuantityControl product={product} />
+                <QuantityControl product={product} maxStock={product.stock} />
               )}
             </div>
           </div>

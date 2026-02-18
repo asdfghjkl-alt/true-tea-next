@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import NavLink from "./NavLink";
 import Image from "next/image";
 import Dropdown from "./Dropdown";
@@ -35,6 +36,8 @@ interface NavbarProps {
 export default function Navbar({ categories = [] }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const menuToggleButtonRef = useRef<HTMLButtonElement>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,6 +50,30 @@ export default function Navbar({ categories = [] }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle Escape key and focus management for mobile menu
+  useEffect(() => {
+    if (!isMenuOpen) {
+      // Return focus to toggle button when closed
+      menuToggleButtonRef.current?.focus();
+      return;
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    // Move focus to sidebar when opened
+    const firstFocusable = sidebarRef.current?.querySelector(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    ) as HTMLElement;
+    firstFocusable?.focus();
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMenuOpen]);
+
   const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -55,8 +82,11 @@ export default function Navbar({ categories = [] }: NavbarProps) {
   const userElements = [
     <button
       key="logout"
-      onClick={() => logout()}
-      className="block w-full text-left text-sm font-bold text-teal-50 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+      onClick={() => {
+        logout();
+        closeMenu();
+      }}
+      className="block w-full px-4 py-2 text-left text-sm font-bold text-teal-50 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
     >
       Logout
     </button>,
@@ -198,9 +228,11 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                 {/* Mobile menu button */}
                 <button
                   type="button"
+                  ref={menuToggleButtonRef}
                   className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
                   aria-label="Toggle navigation menu"
                   aria-expanded={isMenuOpen}
+                  aria-controls="mobile-navigation"
                   onClick={toggleMenu}
                 >
                   <span className="sr-only">Menu</span>
@@ -237,15 +269,19 @@ export default function Navbar({ categories = [] }: NavbarProps) {
             className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             onClick={closeMenu}
             aria-hidden="true"
+            role="presentation"
           />
         )}
 
         {/* Mobile navigation sidebar */}
         <div
+          id="mobile-navigation"
+          ref={sidebarRef}
           className={`fixed inset-y-0 right-0 z-50 w-96 transform bg-primary shadow-xl transition-transform duration-300 ease-in-out lg:hidden ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
-          role="navigation"
+          role="dialog"
+          aria-modal="true"
           aria-label="Mobile navigation"
         >
           {/* Mobile navigation header */}

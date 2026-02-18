@@ -4,6 +4,17 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About Us - True Tea",
   description: "Learn about True Tea's passion and mission.",
+  openGraph: {
+    title: "About Us - True Tea",
+    description:
+      "Learn about True Tea's passion for sourcing authentic, premium Chinese teas directly from the origin.",
+    url: "/about-us",
+  },
+  twitter: {
+    title: "About Us - True Tea",
+    description:
+      "Learn about True Tea's passion for sourcing authentic, premium Chinese teas directly from the origin.",
+  },
 };
 
 export default function AboutUsPage() {

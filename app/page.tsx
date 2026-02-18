@@ -187,9 +187,9 @@ export default async function Home() {
       </section>
 
       {/* 4. About Us Teaser */}
-      <section className="py-20 bg-emerald-900 text-white relative overflow-hidden">
-        {/* Background pattern or subtle design could go here */}
-        <div className="absolute inset-0 opacity-10 bg-[url('/pattern.png')]"></div>
+      <section className="py-20 text-white relative overflow-hidden bg-[url('/pattern.png')] bg-cover bg-center">
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-emerald-900/75"></div>
 
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl font-serif italic mb-6">Our Passion</h2>
@@ -251,6 +251,11 @@ export default async function Home() {
                         {product.discount}% OFF
                       </div>
                     )}
+                    {product.stock > 0 && product.stock <= 10 && (
+                      <div className="absolute top-2 right-2 z-10 rounded-full bg-amber-500 ring-2 ring-white px-2 py-1 text-xs font-bold text-white shadow-md">
+                        Only {product.stock} left
+                      </div>
+                    )}
                     {!product.onShelf && (
                       <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
                         Out of Stock
@@ -261,6 +266,11 @@ export default async function Home() {
                     {product.name}
                   </h3>
                   <p className="text-sm text-gray-500 mb-2">{product.nameCN}</p>
+                  {product.stock > 0 && product.stock <= 10 && (
+                    <p className="text-amber-600 text-xs font-semibold">
+                      Hurry — only {product.stock} left in stock!
+                    </p>
+                  )}
                   <div className="flex items-center gap-2 mt-1">
                     {product.discount > 0 ? (
                       <>

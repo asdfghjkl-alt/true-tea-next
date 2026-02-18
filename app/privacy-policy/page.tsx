@@ -3,6 +3,17 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy - True Tea",
   description: "Privacy policy for True Tea.",
+  openGraph: {
+    title: "Privacy Policy - True Tea",
+    description:
+      "How True Tea collects, uses, and protects your personal information in accordance with Australian privacy law.",
+    url: "/privacy-policy",
+  },
+  twitter: {
+    title: "Privacy Policy - True Tea",
+    description:
+      "How True Tea collects, uses, and protects your personal information in accordance with Australian privacy law.",
+  },
 };
 
 export default function PrivacyPolicyPage() {

@@ -11,6 +11,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const imageSrc = product.images[0].url;
 
   const isOutOfStock = product.stock <= 0;
+  const isLowStock = product.stock > 0 && product.stock <= 10;
 
   return (
     <Link href={`/products/${product.slug}`} className="block h-full">
@@ -36,12 +37,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
           {/* Badge for Discount - Only show if in stock */}
           {!isOutOfStock && product.discount > 0 && (
-            <>
-              {/* Shows badge on top left of the screen */}
-              <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-2 py-1 text-xs font-bold text-white shadow-sm">
-                {product.discount}% OFF
-              </div>
-            </>
+            <div className="absolute left-2 top-2 z-10 rounded-full bg-rose-500 px-2 py-1 text-xs font-bold text-white shadow-sm">
+              {product.discount}% OFF
+            </div>
+          )}
+
+          {/* Low Stock Badge */}
+          {isLowStock && (
+            <div className="absolute right-2 top-2 z-10 rounded-full bg-amber-500 ring-2 ring-white px-2 py-1 text-xs font-bold text-white shadow-md">
+              Only {product.stock} left
+            </div>
           )}
         </div>
 
@@ -81,6 +86,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <p className="text-sm text-gray-500">{product.nameCN}</p>
           </div>
 
+          {/* Low Stock Text */}
+          {isLowStock && (
+            <p className="text-amber-600 text-xs font-semibold">
+              Hurry — only {product.stock} left in stock!
+            </p>
+          )}
+
           {/* Quantity Control */}
           <div className="mt-auto">
             {isOutOfStock ? (
@@ -91,7 +103,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 Out of Stock
               </button>
             ) : (
-              <QuantityControl product={product} />
+              <QuantityControl product={product} maxStock={product.stock} />
             )}
           </div>
         </div>

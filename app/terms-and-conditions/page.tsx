@@ -5,6 +5,17 @@ export const metadata: Metadata = {
   title: "Terms and Conditions - True Tea",
   description:
     "Terms and conditions, delivery, and return policies for True Tea.",
+  openGraph: {
+    title: "Terms and Conditions - True Tea",
+    description:
+      "Terms and conditions governing the use of the True Tea online store, including delivery, returns, and Australian Consumer Law rights.",
+    url: "/terms-and-conditions",
+  },
+  twitter: {
+    title: "Terms and Conditions - True Tea",
+    description:
+      "Terms and conditions governing the use of the True Tea online store, including delivery, returns, and Australian Consumer Law rights.",
+  },
 };
 
 export default function TermsAndConditionsPage() {
