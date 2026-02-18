@@ -246,6 +246,11 @@ export default async function Home() {
                         No Image
                       </div>
                     )}
+                    {product.discount > 0 && (
+                      <div className="absolute top-2 left-2 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded shadow-sm z-10">
+                        {product.discount}% OFF
+                      </div>
+                    )}
                     {!product.onShelf && (
                       <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
                         Out of Stock
@@ -256,9 +261,26 @@ export default async function Home() {
                     {product.name}
                   </h3>
                   <p className="text-sm text-gray-500 mb-2">{product.nameCN}</p>
-                  <p className="text-lg font-bold text-emerald-700">
-                    ${product.price.toFixed(2)}
-                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    {product.discount > 0 ? (
+                      <>
+                        <p className="text-lg font-bold text-emerald-700">
+                          $
+                          {(
+                            product.price *
+                            (1 - (product.discount || 0) / 100)
+                          ).toFixed(2)}
+                        </p>
+                        <p className="text-sm text-gray-400 line-through decoration-gray-400">
+                          ${product.price.toFixed(2)}
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-lg font-bold text-emerald-700">
+                        ${product.price.toFixed(2)}
+                      </p>
+                    )}
+                  </div>
                 </Link>
               ))
             ) : (
