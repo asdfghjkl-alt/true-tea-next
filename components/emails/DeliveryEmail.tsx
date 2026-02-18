@@ -123,10 +123,11 @@ const previewProps: OrderEmailProps = {
   paymentId: "pi_3ABC123DEF456GHI789JKL0",
   receiptUrl: "https://receipt.stripe.com/example",
   receipt: "1234-5678",
-  status: "paid",
+  status: "delivered",
+  deliveredDate: new Date().toISOString(),
 };
 
-export const OrderEmail = ({
+export const DeliveryEmail = ({
   orderId = previewProps.orderId,
   buyer = previewProps.buyer,
   delivery = previewProps.delivery,
@@ -140,7 +141,7 @@ export const OrderEmail = ({
   receiptUrl = previewProps.receiptUrl,
   receipt = previewProps.receipt,
   status = previewProps.status,
-  deliveredDate,
+  deliveredDate = previewProps.deliveredDate,
 }: Partial<OrderEmailProps>) => {
   const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
   const webDomain = process.env.WEBDOMAIN || "www.true-tea.com.au";
@@ -193,7 +194,9 @@ export const OrderEmail = ({
             }
           `}</style>
         </Head>
-        <Preview>Order Confirmation - True Tea #{orderId.slice(-6)}</Preview>
+        <Preview>
+          Your Order Has Been Delivered! - True Tea #{orderId.slice(-6)}
+        </Preview>
         <Body className="bg-white my-auto mx-auto font-sans px-2">
           <Container className="email-wrapper border border-solid border-gray-200 rounded-lg max-w-[600px] mx-auto my-[40px] shadow-sm overflow-hidden">
             {/* Logo, Heading & Greeting */}
@@ -206,10 +209,10 @@ export const OrderEmail = ({
                 className="mx-auto"
               />
               <Heading className="mt-4 text-xl font-bold text-gray-800">
-                Order Confirmation
+                Your Order Has Been Delivered!
               </Heading>
               <Text className="mt-2 text-sm text-gray-500">
-                Thank you for your order!
+                Hi {buyer.fname}, your order has been delivered.
               </Text>
             </Section>
 
@@ -265,7 +268,7 @@ export const OrderEmail = ({
                   <Text className="m-0 mt-1">{formatDate(paidDate)}</Text>
                 </Column>
               </Row>
-              {status === "delivered" && deliveredDate && (
+              {deliveredDate && (
                 <Row className="mb-4">
                   <Column className="w-full">
                     <Text className="font-medium text-gray-700 m-0">
@@ -463,4 +466,4 @@ export const OrderEmail = ({
   );
 };
 
-export default OrderEmail;
+export default DeliveryEmail;

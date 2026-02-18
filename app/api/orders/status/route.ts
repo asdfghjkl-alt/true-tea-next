@@ -4,6 +4,7 @@ import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
 import { getSession } from "@/lib/session";
 import { OrderStatus } from "@/types/order";
+import { sendDeliveryEmail } from "@/lib/email";
 
 export const PUT = apiHandler(async (req: NextRequest) => {
   await connectToDatabase();
@@ -47,6 +48,21 @@ export const PUT = apiHandler(async (req: NextRequest) => {
   if (status === OrderStatus.delivered) {
     updatedOrder.deliveredDate = new Date();
     await updatedOrder.save();
+
+    await sendDeliveryEmail({
+      orderId: updatedOrder._id.toString(),
+      buyer: updatedOrder.buyer,
+      delivery: updatedOrder.delivery,
+      productList: updatedOrder.productList,
+      postage: updatedOrder.postage,
+      GSTTotal: updatedOrder.GSTTotal,
+      orderTotal: updatedOrder.orderTotal,
+      discountTotal: updatedOrder.discountTotal,
+      paidDate: updatedOrder.paidDate.toISOString(),
+      paymentId: updatedOrder.paymentId,
+      receiptUrl: updatedOrder.receiptUrl,
+      receipt: updatedOrder.receipt,
+    });
   }
 
   return NextResponse.json({ success: true, order: updatedOrder });

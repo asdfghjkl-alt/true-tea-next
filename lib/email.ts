@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import VerificationEmail from "@/components/emails/VerificationEmail";
 import OrderEmail from "@/components/emails/OrderEmail";
+import DeliveryEmail from "@/components/emails/DeliveryEmail";
 import { IOrderProduct, IUserDetails } from "@/database";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -85,6 +86,35 @@ export const sendOrderConfirmationEmail = async (orderData: OrderEmailData) => {
     return true;
   } catch (error) {
     console.error("Error sending order confirmation email:", error);
+    return false;
+  }
+};
+
+/**
+ * Sends order delivery email to the buyer
+ * @param orderData Order data for the email template
+ * @returns true if email was sent successfully
+ */
+export const sendDeliveryEmail = async (orderData: OrderEmailData) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("RESEND_API_KEY is not set. Delivery email skipped.");
+    return true;
+  }
+
+  const emailContent = DeliveryEmail(orderData);
+  const from = `True Tea <${process.env.EMAIL_FROM}>`;
+  const subject = `Order Delivered - #${orderData.orderId.slice(-6)}`;
+
+  try {
+    await resend.emails.send({
+      from,
+      to: orderData.buyer.email,
+      subject,
+      react: emailContent,
+    });
+    return true;
+  } catch (error) {
+    console.error("Error sending delivery email:", error);
     return false;
   }
 };
