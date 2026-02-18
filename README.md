@@ -19,7 +19,7 @@ True Tea Next is designed to be a comprehensive online store for tea enthusiasts
 - **Payments**: [Stripe](https://stripe.com/)
 - **Emails**: [React Email](https://react.email/) & [Resend](https://resend.com/)
 - **Authentication**: Custom JWT-based auth (Jose/Bcrypt)
-- **Forms**: React Hook Form with Zod validation
+- **Forms**: React Hook Form with Joi validation
 
 ## 🛠️ Getting Started
 
