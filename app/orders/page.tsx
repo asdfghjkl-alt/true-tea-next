@@ -28,7 +28,7 @@ export default async function OrderHistoryPage() {
 
   // Redirect to login if not authenticated
   if (!session || !session.userData) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   const orders = await getMyOrders();
