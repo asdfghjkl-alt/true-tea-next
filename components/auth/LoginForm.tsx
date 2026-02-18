@@ -85,7 +85,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isLoggingIn}
-            className="btn btn-submit w-full"
+            className="btn btn-submit w-full my-2"
           >
             {isLoggingIn ? "Logging in..." : "Login"}
           </button>
@@ -102,7 +102,7 @@ export default function Login() {
           </p>
 
           {/* Link to forgot password page */}
-          <p className="mt-4">
+          <p className="mt-1">
             <Link
               href="/auth/forgot-password"
               className="text-sm text-gray-500 hover:text-gray-700 hover:underline"
