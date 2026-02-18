@@ -49,6 +49,7 @@ Create a `.env.local` file in the root directory and configure the following:
 - `STRIPE_SECRET_KEY` (Stripe secret key)
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (Stripe publishable key)
 - `EMAIL_TO` (Email to send notifications to)
+- `NEXT_PUBLIC_EMAIL_TO` (Public-facing contact email displayed on the website)
 - `ABN_NUMBER` (ABN number)
 - `RESEND_API_KEY` (for emails)
 

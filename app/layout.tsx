@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./providers";
 import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
 import connectToDatabase from "@/lib/mongodb";
 import { Category, ICategory } from "@/database";
 
@@ -40,12 +41,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} bg-teal-50 ${geistMono.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} bg-teal-50 ${geistMono.variable} antialiased overflow-x-hidden min-h-screen flex flex-col`}
       >
         <Toaster position="top-center" />
         <Providers>
           <Navbar categories={serializedCategories} />
-          {children}
+          <main className="grow">{children}</main>
+          <Footer
+            email={process.env.NEXT_PUBLIC_EMAIL_TO || "info@true-tea.com.au"}
+          />
         </Providers>
       </body>
     </html>

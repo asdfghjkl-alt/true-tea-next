@@ -188,10 +188,10 @@ export default function CheckoutPage() {
             <p className="mb-1">
               Email:{" "}
               <a
-                href="mailto:truetea.info@gmail.com"
+                href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_TO || "info@true-tea.com.au"}`}
                 className="text-primary underline"
               >
-                truetea.info@gmail.com
+                {process.env.NEXT_PUBLIC_EMAIL_TO || "info@true-tea.com.au"}
               </a>
             </p>
             {errorData.paymentId && (

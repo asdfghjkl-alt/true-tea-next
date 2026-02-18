@@ -88,53 +88,6 @@ export default function AboutUsPage() {
                 </p>
               </div>
 
-              <div id="delivery" className="scroll-mt-40">
-                <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                  Product delivery
-                </h3>
-                <ul className="list-disc list-inside text-gray-600 space-y-1">
-                  <li>
-                    Unless otherwise processed, we use Australia Post for our
-                    delivery, and we deliver to Australia address.
-                  </li>
-                  <li>
-                    Our standard delivery will be Australia Post’s Standard
-                    Post.
-                  </li>
-                  <li>We provide free shipping for all purchases.</li>
-                  <li>
-                    For purchases more than $40, we will provide complimentary
-                    gift package.
-                  </li>
-                </ul>
-              </div>
-
-              <div id="returns" className="scroll-mt-40">
-                <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                  Product return policy
-                </h3>
-                <p className="text-gray-600">
-                  Given the hygiene consideration, we will not accept return
-                  once the product is shipped.
-                </p>
-              </div>
-
-              <div id="privacy" className="scroll-mt-40">
-                <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                  Privacy protection policy
-                </h3>
-                <p className="text-gray-600 mb-2">
-                  We endeavour to protect your privacy.
-                </p>
-                <p className="text-gray-600">
-                  We collect the minimum information when you register and
-                  purchase, we will keep your profile data and purchase
-                  information, the data be stored with reliable service
-                  providers. We will not disclose these data to any other
-                  parties.
-                </p>
-              </div>
-
               <div id="register" className="scroll-mt-40">
                 <h3 className="font-semibold text-lg text-gray-900 mb-2">
                   Register to become ‘Friend of True Tea’ (under construction)
@@ -181,20 +134,6 @@ export default function AboutUsPage() {
                   your payment details such as credit card information).
                 </p>
               </div>
-
-              <div id="operation" className="scroll-mt-40">
-                <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                  Our operation
-                </h3>
-                <p className="text-gray-600">
-                  The{" "}
-                  <Link href="/" className="text-emerald-600 hover:underline">
-                    www.true-tea.com.au
-                  </Link>{" "}
-                  is a Valleyview Enterprises Pty. Ltd. ABN 49168458580
-                  operation.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -213,10 +152,10 @@ export default function AboutUsPage() {
                     Email:
                   </span>
                   <a
-                    href={`mailto:${process.env.EMAIL_TO || "info@true-tea.com.au"}`}
+                    href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_TO || "info@true-tea.com.au"}`}
                     className="hover:underline hover:text-emerald-600 break-all"
                   >
-                    {process.env.EMAIL_TO || "info@true-tea.com.au"}
+                    {process.env.NEXT_PUBLIC_EMAIL_TO || "info@true-tea.com.au"}
                   </a>
                 </li>
                 <li>
@@ -263,28 +202,20 @@ export default function AboutUsPage() {
                     </a>
                   </li>
                   <li>
-                    <a
-                      href="#delivery"
+                    <Link
+                      href="/terms-and-conditions"
                       className="text-emerald-700 hover:text-emerald-500 hover:underline"
                     >
-                      Delivery
-                    </a>
+                      Terms & Conditions
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#returns"
-                      className="text-emerald-700 hover:text-emerald-500 hover:underline"
-                    >
-                      Returns
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#privacy"
+                    <Link
+                      href="/privacy-policy"
                       className="text-emerald-700 hover:text-emerald-500 hover:underline"
                     >
                       Privacy Policy
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
