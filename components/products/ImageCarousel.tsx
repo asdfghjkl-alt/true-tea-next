@@ -9,25 +9,10 @@ interface ImageCarouselProps {
 
 const ImageCarousel = ({ images, isOutOfStock }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFading, setIsFading] = useState(false);
 
   const handleImageChange = useCallback((newIndex: number) => {
-    setCurrentIndex((prevIndex) => {
-      if (newIndex === prevIndex) return prevIndex;
-      // Constructs fade out and fade in effect
-      setIsFading(true);
-      setTimeout(() => {
-        setCurrentIndex(newIndex);
-        setIsFading(false);
-      }, 300);
-      return prevIndex;
-    });
+    setCurrentIndex(newIndex);
   }, []);
-
-  const prevImage = useCallback(() => {
-    const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
-    handleImageChange(newIndex);
-  }, [handleImageChange, currentIndex, images.length]);
 
   const nextImage = useCallback(() => {
     const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
@@ -66,65 +51,23 @@ const ImageCarousel = ({ images, isOutOfStock }: ImageCarouselProps) => {
         )}
         <div className="relative h-full w-full">
           {/* Image display */}
-          <Image
-            src={images[currentIndex]}
-            alt={`Product Image ${currentIndex + 1}`}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={`object-cover transition-opacity duration-300 ease-in-out ${
-              isFading ? "opacity-0" : "opacity-100"
-            } ${isOutOfStock ? "grayscale opacity-60" : ""}`}
-            loading="eager"
-          />
+          {/* Image display - Render all images stacked for cross-fade */}
+          {images.map((img, index) => (
+            <Image
+              key={img}
+              src={img}
+              alt={`Product Image ${index + 1}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className={`object-cover transition-opacity duration-500 ease-in-out ${
+                index === currentIndex
+                  ? `z-10 ${isOutOfStock ? "opacity-60 grayscale" : "opacity-100"}`
+                  : "z-0 opacity-0"
+              }`}
+              priority={index === 0}
+            />
+          ))}
         </div>
-
-        {images.length > 1 && (
-          <>
-            {/* Previous image button */}
-            <button
-              onClick={prevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 text-emerald-800 shadow-lg transition-transform hover:scale-110 hover:bg-white active:scale-95"
-              aria-label="Previous image"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
-            </button>
-
-            {/* Next image button */}
-            <button
-              onClick={nextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 text-emerald-800 shadow-lg transition-transform hover:scale-110 hover:bg-white active:scale-95"
-              aria-label="Next image"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                />
-              </svg>
-            </button>
-          </>
-        )}
       </div>
 
       {images.length > 1 && (
