@@ -228,7 +228,7 @@ export default async function Home() {
               featuredProducts.map((product) => (
                 <Link
                   key={product._id}
-                  href={`/products/${product._id}`}
+                  href={`/products/${product.slug}`}
                   className="group"
                 >
                   <div className="aspect-square w-full overflow-hidden rounded-lg bg-gray-100 relative mb-4">
