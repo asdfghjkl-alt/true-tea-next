@@ -71,15 +71,11 @@ export const PUT = apiHandler(async (req: NextRequest) => {
       receiptUrl: updatedOrder.receiptUrl,
       receipt: updatedOrder.receipt,
     });
-  } else if (status === OrderStatus.cancelled) {
-    if (updatedOrder.status === OrderStatus.cancelled) {
-      // Order is already cancelled, don't do anything (or handled above)
-    }
-
-    // Identify if we need to refund
-    // We only refund if the previous status was 'paid' (implied, since we are moving TO cancelled)
-    // and if there is a paymentId.
-
+  } else if (
+    status === OrderStatus.cancelled &&
+    updatedOrder.status !== OrderStatus.cancelled
+  ) {
+    // Only refund if payment id exists and is paid through stripe
     if (updatedOrder.paymentId && updatedOrder.paymentMethod === "stripe") {
       console.log(
         `Attempting to refund order ${updatedOrder._id} (PaymentIntent: ${updatedOrder.paymentId})`,
