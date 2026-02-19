@@ -447,6 +447,18 @@ export const OrderEmail = ({
             </Section>
 
             <Section className="mt-5 border-t border-gray-200 pt-5 text-center pb-5">
+              <Text className="text-xs text-gray-500 mb-4">
+                If you have any questions, contact us at{" "}
+                <Link
+                  href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_TO}`}
+                  className="text-blue-600 underline"
+                >
+                  {process.env.NEXT_PUBLIC_EMAIL_TO}
+                </Link>
+              </Text>
+              <Text className="text-xs text-gray-500 mb-2">
+                Please do not reply to this email.
+              </Text>
               <Text className="text-xs text-gray-500 leading-5">
                 <b>Valleyview Enterprises Pty. Ltd.</b>
                 <br />

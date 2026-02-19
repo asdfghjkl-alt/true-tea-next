@@ -180,8 +180,10 @@ export default function CheckoutPage() {
           <h2 className="text-3xl font-bold text-red-600 mb-4">
             Order Creation Failed
           </h2>
-          <p className="mb-4 text-lg">
-            We processed your payment, but could not create your order.
+          <p className="mb-4 text-lg px-6">
+            We processed your payment, but could not create your order. Please
+            check your email to see if a refund was automatically processed. If
+            you do not receive an email, please contact support immediately.
           </p>
           <div className="bg-white p-6 rounded shadow-sm inline-block text-left mb-6">
             <p className="font-semibold mb-2">Please contact support:</p>

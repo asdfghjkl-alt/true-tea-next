@@ -6,7 +6,11 @@ import { OrderStatus } from "@/types/order";
 import { apiHandler } from "@/lib/api-handler";
 import { POSTAGE_FEE } from "@/lib/constants";
 import { orderBackendSchema } from "@/lib/schemas";
-import { sendOrderConfirmationEmail } from "@/lib/email";
+import {
+  sendOrderConfirmationEmail,
+  sendRefundFailedEmail,
+  sendRefundSuccessEmail,
+} from "@/lib/email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -207,11 +211,25 @@ export const POST = apiHandler(async (req: NextRequest) => {
         payment_intent: paymentId,
       });
       console.log(`Refund successful for PaymentIntent: ${paymentId}`);
+      // Send refund success email
+      await sendRefundSuccessEmail(
+        buyer.email,
+        paymentId,
+        paymentIntent.amount / 100,
+        `Order fulfillment failed: ${fulfillmentError.message}`,
+      );
     } catch (refundError) {
       // Logs critical error if refund fails, should notify owner of error
       console.error(
         `CRITICAL: Failed to refund PaymentIntent ${paymentId}`,
         refundError,
+      );
+
+      // Send refund failed email
+      await sendRefundFailedEmail(
+        buyer.email,
+        paymentId,
+        paymentIntent.amount / 100,
       );
     }
     throw fulfillmentError; // Re-throw to be handled by the outer error handler
