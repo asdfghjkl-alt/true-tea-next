@@ -7,6 +7,7 @@ import AlreadyActivatedEmail from "@/components/emails/AlreadyActivatedEmail";
 import AccountNotFoundEmail from "@/components/emails/AccountNotFoundEmail";
 import ResetPasswordEmail from "@/components/emails/ResetPasswordEmail";
 import RefundEmail from "@/components/emails/RefundEmail";
+import OrderCancelledEmail from "@/components/emails/OrderCancelledEmail";
 import { IOrderProduct, IUserDetails } from "@/database";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -293,6 +294,7 @@ export const sendRefundFailedEmail = async (
   email: string,
   orderId: string,
   refundAmount: number,
+  reason?: string,
 ) => {
   if (!process.env.RESEND_API_KEY) {
     console.log(
@@ -311,6 +313,7 @@ export const sendRefundFailedEmail = async (
         orderId,
         refundAmount,
         reason:
+          reason ||
           "Automatic refund failed. Please contact support to resolve this issue.",
         success: false,
       }),
@@ -318,6 +321,35 @@ export const sendRefundFailedEmail = async (
     return true;
   } catch (error) {
     console.error("Error sending refund failed email:", error);
+    return false;
+  }
+};
+
+/**
+ * Sends order cancelled email to the buyer
+ * @param orderData Order data for the email template
+ * @returns true if email was sent successfully
+ */
+export const sendOrderCancelledEmail = async (orderData: OrderEmailData) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.log("RESEND_API_KEY is not set. Order Cancelled email skipped.");
+    return true;
+  }
+
+  const emailContent = OrderCancelledEmail(orderData);
+  const from = `True Tea <${process.env.EMAIL_FROM}>`;
+  const subject = `Order Cancelled - #${orderData.orderId.slice(-6)}`;
+
+  try {
+    await resend.emails.send({
+      from,
+      to: orderData.buyer.email,
+      subject,
+      react: emailContent,
+    });
+    return true;
+  } catch (error) {
+    console.error("Error sending order cancelled email:", error);
     return false;
   }
 };

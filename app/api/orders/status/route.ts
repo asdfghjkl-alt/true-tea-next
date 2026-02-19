@@ -4,7 +4,15 @@ import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
 import { getSession } from "@/lib/session";
 import { OrderStatus } from "@/types/order";
-import { sendDeliveryEmail } from "@/lib/email";
+import {
+  sendDeliveryEmail,
+  sendOrderCancelledEmail,
+  sendRefundFailedEmail,
+  sendRefundSuccessEmail,
+} from "@/lib/email";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export const PUT = apiHandler(async (req: NextRequest) => {
   await connectToDatabase();
@@ -50,6 +58,60 @@ export const PUT = apiHandler(async (req: NextRequest) => {
     await updatedOrder.save();
 
     await sendDeliveryEmail({
+      orderId: updatedOrder._id.toString(),
+      buyer: updatedOrder.buyer,
+      delivery: updatedOrder.delivery,
+      productList: updatedOrder.productList,
+      postage: updatedOrder.postage,
+      GSTTotal: updatedOrder.GSTTotal,
+      orderTotal: updatedOrder.orderTotal,
+      discountTotal: updatedOrder.discountTotal,
+      paidDate: updatedOrder.paidDate.toISOString(),
+      paymentId: updatedOrder.paymentId,
+      receiptUrl: updatedOrder.receiptUrl,
+      receipt: updatedOrder.receipt,
+    });
+  } else if (status === OrderStatus.cancelled) {
+    if (updatedOrder.status === OrderStatus.cancelled) {
+      // Order is already cancelled, don't do anything (or handled above)
+    }
+
+    // Identify if we need to refund
+    // We only refund if the previous status was 'paid' (implied, since we are moving TO cancelled)
+    // and if there is a paymentId.
+
+    if (updatedOrder.paymentId && updatedOrder.paymentMethod === "stripe") {
+      console.log(
+        `Attempting to refund order ${updatedOrder._id} (PaymentIntent: ${updatedOrder.paymentId})`,
+      );
+      try {
+        const refund = await stripe.refunds.create({
+          payment_intent: updatedOrder.paymentId,
+        });
+
+        console.log(`Refund successful: ${refund.id}`);
+
+        // Send refund success email
+        await sendRefundSuccessEmail(
+          updatedOrder.buyer.email,
+          updatedOrder._id.toString(),
+          updatedOrder.orderTotal, // Assuming full refund for cancellation
+          "Order cancelled by admin",
+        );
+      } catch (error: any) {
+        console.error("Refund failed:", error);
+        // Send refund failed email
+        await sendRefundFailedEmail(
+          updatedOrder.buyer.email,
+          updatedOrder._id.toString(),
+          updatedOrder.orderTotal,
+          error.message, // Pass the error message to the email
+        );
+      }
+    }
+
+    await updatedOrder.save();
+    await sendOrderCancelledEmail({
       orderId: updatedOrder._id.toString(),
       buyer: updatedOrder.buyer,
       delivery: updatedOrder.delivery,

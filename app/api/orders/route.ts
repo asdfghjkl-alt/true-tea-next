@@ -230,6 +230,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         buyer.email,
         paymentId,
         paymentIntent.amount / 100,
+        refundError instanceof Error ? refundError.message : "Unknown error",
       );
     }
     throw fulfillmentError; // Re-throw to be handled by the outer error handler

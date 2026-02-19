@@ -19,6 +19,7 @@ import {
   sendResetPasswordEmail,
   sendRefundSuccessEmail,
   sendRefundFailedEmail,
+  sendOrderCancelledEmail,
 } from "../lib/email";
 
 // Mock Data
@@ -114,6 +115,14 @@ async function main() {
 
   console.log("9. Testing Refund Failed Email...");
   await sendRefundFailedEmail(recipient, randomOrderId, 25.0);
+
+  console.log(
+    "10. Testing Order Cancelled Email (Does not trigger Stripe refund in this script)...",
+  );
+  await sendOrderCancelledEmail({
+    ...(sampleOrder as any),
+    status: "cancelled",
+  });
 
   console.log("\n✅ All test emails triggered!");
 }

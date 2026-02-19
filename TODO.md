@@ -13,7 +13,7 @@
 
 - [x] **Empty States**: Design enhanced empty states for Cart, Orders, and Search Results.
 - [ ] **Loading Skeletons**: Implement skeleton loaders for Product Listings and Product Detail Pages.
-- [ ] **Form Validation**: Add more robust client-side validation for address and payment forms.
+- [x] **Form Validation**: Add more robust client-side validation for address and payment forms.
 - [x] **404 & 500 Pages**: Custom error pages that align with brand design.
 
 ## Low Priority (Optimization & nice-to-haves)
