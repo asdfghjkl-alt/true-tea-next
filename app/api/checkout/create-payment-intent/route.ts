@@ -104,7 +104,10 @@ export const POST = apiHandler(async (req: NextRequest) => {
     },
     metadata: {
       cart_summary: cart
-        .map((item: any) => `${item.name} (${item.quantity})`)
+        .map(
+          (item: { name: string; quantity: number }) =>
+            `${item.name} (${item.quantity})`,
+        )
         .join(", ")
         .slice(0, 500),
       buyer_info: `${buyer.fname} ${buyer.lname} <${buyer.email}>`.slice(

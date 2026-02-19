@@ -8,6 +8,18 @@ import toast from "react-hot-toast";
 import api from "@/lib/axios";
 import { POSTAGE_FEE } from "@/lib/constants";
 
+interface RemovedItem {
+  name: string;
+  reason: string;
+}
+
+interface ChangedItem {
+  name: string;
+  reason: string;
+  oldQuantity: number;
+  newQuantity: number;
+}
+
 interface CheckoutReviewProps {
   onProceed: (items: ValidatedCartItem[]) => void;
 }
@@ -33,14 +45,14 @@ export default function CheckoutReview({ onProceed }: CheckoutReviewProps) {
 
         // Adds warnings into the updates for removed items
         if (removedItems && removedItems.length > 0) {
-          removedItems.forEach((item: any) => {
+          removedItems.forEach((item: RemovedItem) => {
             newWarnings.push(`Removed "${item.name}": ${item.reason}`);
           });
         }
 
         // Adds warnings for items that changed quantities
         if (changedItems && changedItems.length > 0) {
-          changedItems.forEach((item: any) => {
+          changedItems.forEach((item: ChangedItem) => {
             newWarnings.push(
               `Adjusted "${item.name}": ${item.reason} (Qty: ${item.oldQuantity} -> ${item.newQuantity})`,
             );
@@ -49,6 +61,7 @@ export default function CheckoutReview({ onProceed }: CheckoutReviewProps) {
 
         setWarnings(newWarnings);
       } catch (error) {
+        console.error(error);
         toast.error("Failed to validate cart. Please try again.");
       } finally {
         setLoading(false);

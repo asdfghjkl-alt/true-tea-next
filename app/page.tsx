@@ -194,9 +194,9 @@ export default async function Home() {
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl font-serif italic mb-6">Our Passion</h2>
           <p className="text-xl leading-relaxed text-emerald-100 mb-8">
-            "Our passion is, based on the classical foundation, to source the
-            right teas, to promote the elegant and practical tea culture, for
-            your overall enjoyment."
+            &quot;Our passion is, based on the classical foundation, to source
+            the right teas, to promote the elegant and practical tea culture,
+            for your overall enjoyment.&quot;
           </p>
           <Link
             href="/about-us"

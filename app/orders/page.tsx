@@ -3,6 +3,7 @@ import connectToDatabase from "@/lib/mongodb";
 import OrderCard from "@/components/orders/OrderCard";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 // Interface for Order with _id from database
 interface OrderWithId extends IOrder {
@@ -65,12 +66,12 @@ export default async function OrderHistoryPage() {
             <p className="text-gray-500 mb-6">
               Looks like you haven&apos;t made any purchases yet.
             </p>
-            <a
+            <Link
               href="/products"
               className="inline-block bg-primary text-white px-6 py-2 rounded-md hover:bg-emerald-700 transition-colors"
             >
               Start Shopping
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

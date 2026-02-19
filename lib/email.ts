@@ -43,7 +43,7 @@ export const sendVerificationEmail = async (
   }
 };
 
-interface OrderEmailData {
+export interface OrderEmailData {
   orderId: string;
   buyer: IUserDetails;
   delivery: IUserDetails;

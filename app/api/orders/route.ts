@@ -16,7 +16,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export const POST = apiHandler(async (req: NextRequest) => {
   await connectToDatabase();
-  let { cart, buyer, delivery, paymentId, owner_id } = await req.json();
+  const body = await req.json();
+  const { cart, buyer, delivery, paymentId } = body;
+  let { owner_id } = body;
 
   // Validate owner_id if provided
   if (owner_id && owner_id !== "guest") {
@@ -199,12 +201,16 @@ export const POST = apiHandler(async (req: NextRequest) => {
     );
 
     return NextResponse.json({ success: true, orderId: newOrder._id });
-  } catch (fulfillmentError: any) {
+  } catch (fulfillmentError) {
     // Order fulfillment failed, refund the payment
     console.error(
       "Order Fulfillment Failed. Initiating Refund...",
       fulfillmentError,
     );
+    const errorMessage =
+      fulfillmentError instanceof Error
+        ? fulfillmentError.message
+        : "Unknown error";
     try {
       // Refunds the payment
       await stripe.refunds.create({
@@ -216,7 +222,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
         buyer.email,
         paymentId,
         paymentIntent.amount / 100,
-        `Order fulfillment failed: ${fulfillmentError.message}`,
+        `Order fulfillment failed: ${errorMessage}`,
       );
     } catch (refundError) {
       // Logs critical error if refund fails, should notify owner of error

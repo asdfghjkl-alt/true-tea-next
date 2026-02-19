@@ -30,7 +30,8 @@ export default function EmailSentSuccess({
         {/* Description */}
         <p className="mb-6">{message}</p>
         <p className="mb-6">
-          If you didn't recieve an email or request a new verification email
+          If you didn&apos;t receive an email or request a new verification
+          email
         </p>
 
         {/* Button to go to login page */}

@@ -10,7 +10,6 @@ import {
   Section,
   Text,
   Tailwind,
-  Hr,
 } from "@react-email/components";
 
 interface RefundEmailProps {

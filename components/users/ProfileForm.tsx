@@ -10,6 +10,7 @@ import api from "@/lib/axios";
 import toast from "react-hot-toast";
 import { IUser } from "@/database";
 import { profileSchema } from "@/lib/schemas";
+import { isAxiosError } from "axios";
 
 interface ProfileFormData {
   fname: string;
@@ -60,8 +61,12 @@ export default function ProfileForm({ user }: { user: IUser }) {
       toast.success("Profile updated successfully");
       router.push("/users/profile");
       router.refresh();
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to update profile");
+    } catch (error: unknown) {
+      if (isAxiosError(error) && error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to update profile");
+      }
     } finally {
       setLoading(false);
     }

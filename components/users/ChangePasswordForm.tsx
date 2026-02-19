@@ -8,6 +8,7 @@ import InputField from "@/components/ui/inputs/InputField";
 import api from "@/lib/axios";
 import toast from "react-hot-toast";
 import { changePasswordSchema } from "@/lib/schemas";
+import { isAxiosError } from "axios";
 
 interface ChangePasswordFormData {
   currentPassword: string;
@@ -34,8 +35,12 @@ export default function ChangePasswordForm() {
       await api.put("/users/password/change", data);
       toast.success("Password changed successfully");
       router.push("/users/profile");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to change password");
+    } catch (error: unknown) {
+      if (isAxiosError(error) && error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to change password");
+      }
     } finally {
       setLoading(false);
     }

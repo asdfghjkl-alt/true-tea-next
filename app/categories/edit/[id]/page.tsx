@@ -1,9 +1,8 @@
 import { getSession } from "@/lib/session";
 import connectToDatabase from "@/lib/mongodb";
-import { Category, ICategory } from "@/database";
+import { Category } from "@/database";
 import { notFound, redirect } from "next/navigation";
 import CategoryForm from "@/components/categories/CategoryForm";
-import React from "react";
 
 interface PageProps {
   params: Promise<{ id: string }>;

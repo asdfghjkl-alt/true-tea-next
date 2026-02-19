@@ -9,6 +9,7 @@
  */
 
 import "dotenv/config";
+import mongoose from "mongoose";
 import {
   sendVerificationEmail,
   sendOrderConfirmationEmail,
@@ -20,6 +21,7 @@ import {
   sendRefundSuccessEmail,
   sendRefundFailedEmail,
   sendOrderCancelledEmail,
+  OrderEmailData,
 } from "../lib/email";
 
 // Mock Data
@@ -42,13 +44,13 @@ const sampleUser = {
   },
 };
 
-const sampleOrder = {
+const sampleOrder: OrderEmailData = {
   orderId: randomOrderId,
   buyer: sampleUser,
   delivery: sampleUser,
   productList: [
     {
-      product_id: "1",
+      product_id: new mongoose.Types.ObjectId("64e62a221234567890abcdef"), // Valid mock ID
       name: "Organic Oolong Tea",
       imageUrl: "",
       nameCN: "有机乌龙茶",
@@ -88,10 +90,10 @@ async function main() {
   await sendVerificationEmail(recipient, "TestUser", "mock-token-123");
 
   console.log("2. Testing Order Confirmation Email...");
-  await sendOrderConfirmationEmail(sampleOrder as any);
+  await sendOrderConfirmationEmail(sampleOrder);
 
   console.log("3. Testing Delivery Email...");
-  await sendDeliveryEmail(sampleOrder as any);
+  await sendDeliveryEmail(sampleOrder);
 
   console.log("4. Testing Already Registered Email...");
   await sendAlreadyRegisteredEmail(recipient, "TestUser");
@@ -120,8 +122,7 @@ async function main() {
     "10. Testing Order Cancelled Email (Does not trigger Stripe refund in this script)...",
   );
   await sendOrderCancelledEmail({
-    ...(sampleOrder as any),
-    status: "cancelled",
+    ...sampleOrder,
   });
 
   console.log("\n✅ All test emails triggered!");

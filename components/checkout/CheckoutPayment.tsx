@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useOrder } from "@/contexts/OrderContext";
 import { IUserDetails } from "@/database";
 import api from "@/lib/axios";
-import { AxiosError } from "axios";
+import { AxiosError, isAxiosError } from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import toast from "react-hot-toast";
 import { ValidatedCartItem } from "@/app/checkout/page";
@@ -108,13 +108,10 @@ export default function CheckoutPayment({
         resetCart();
         onSuccess();
       }
-    } catch (error: any) {
+    } catch (error) {
       // Handle Unexpected Errors
-      if (error instanceof AxiosError) {
-        toast.error(
-          error.response?.data.message ||
-            "An error occurred during payment processing.",
-        );
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.message);
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {

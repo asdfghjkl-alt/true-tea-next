@@ -94,14 +94,14 @@ export const PUT = apiHandler(async (req: NextRequest) => {
           updatedOrder.orderTotal, // Assuming full refund for cancellation
           "Order cancelled by admin",
         );
-      } catch (error: any) {
+      } catch (error) {
         console.error("Refund failed:", error);
         // Send refund failed email
         await sendRefundFailedEmail(
           updatedOrder.buyer.email,
           updatedOrder._id.toString(),
           updatedOrder.orderTotal,
-          error.message, // Pass the error message to the email
+          error instanceof Error ? error.message : "Unknown error", // Pass the error message to the email
         );
       }
     }

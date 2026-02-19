@@ -1,8 +1,8 @@
 import { OrderStatus } from "@/types/order";
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Types } from "mongoose";
 
 export interface IOrderProduct {
-  product_id: Schema.Types.ObjectId;
+  product_id: Types.ObjectId;
   name: string;
   imageUrl: string;
   nameCN: string;
