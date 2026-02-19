@@ -118,7 +118,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                 className={`relative transition-all duration-300 ease-in-out mr-2 ${isScrolled ? "h-12 w-12" : "h-32 w-32"}`}
               >
                 <Image
-                  src="/logo-true-tea-origin.jpeg"
+                  src="/logo-true-tea.jpg"
                   alt="True Tea"
                   fill
                   loading="eager"

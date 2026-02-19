@@ -94,9 +94,8 @@ export const RefundEmail = ({
               )}
             </Section>
 
-            <Section className="px-6 pb-6 text-center">
-              <Hr className="border-gray-200 my-4" />
-              <Text className="text-xs text-gray-500">
+            <Section className="mt-5 border-t border-gray-200 pt-5 text-center pb-5">
+              <Text className="text-xs text-gray-500 mb-4">
                 If you have any questions, contact us at{" "}
                 <Link
                   href={`mailto:${process.env.NEXT_PUBLIC_EMAIL_TO}`}
@@ -105,13 +104,10 @@ export const RefundEmail = ({
                   {process.env.NEXT_PUBLIC_EMAIL_TO}
                 </Link>
               </Text>
-            </Section>
-
-            <Section className="bg-gray-50 border-t border-gray-200 py-5 text-center">
               <Text className="text-xs text-gray-500 mb-2">
                 Please do not reply to this email.
               </Text>
-              <Text className="text-xs text-gray-500 leading-5 m-0">
+              <Text className="text-xs text-gray-500 leading-5">
                 <b>Valleyview Enterprises Pty. Ltd.</b>
                 <br />
                 ABN: {abn}
