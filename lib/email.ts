@@ -34,6 +34,7 @@ export const sendVerificationEmail = async (
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: "Verify your email",
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: VerificationEmail({ confirmLink, fname }),
     });
     return true;
@@ -86,6 +87,7 @@ export const sendOrderConfirmationEmail = async (orderData: OrderEmailData) => {
         from,
         to,
         subject,
+        replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
         react: emailContent,
       })),
     );
@@ -116,6 +118,7 @@ export const sendDeliveryEmail = async (orderData: OrderEmailData) => {
       from,
       to: orderData.buyer.email,
       subject,
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: emailContent,
     });
     return true;
@@ -145,6 +148,7 @@ export const sendAlreadyRegisteredEmail = async (
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: "You already have an account",
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: AlreadyRegisteredEmail({ fname }),
     });
     return true;
@@ -174,6 +178,7 @@ export const sendAlreadyActivatedEmail = async (
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: "Your account is already active",
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: AlreadyActivatedEmail({ fname }),
     });
     return true;
@@ -199,6 +204,7 @@ export const sendAccountNotFoundEmail = async (email: string) => {
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: "Verification Request",
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: AccountNotFoundEmail({ email }),
     });
     return true;
@@ -235,6 +241,7 @@ export const sendResetPasswordEmail = async (
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: "Reset your password",
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: ResetPasswordEmail({ resetLink, fname }),
     });
     return true;
@@ -269,6 +276,7 @@ export const sendRefundSuccessEmail = async (
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: `Refund Processed - Order #${orderId.slice(-6)}`,
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: RefundEmail({
         orderId,
         refundAmount,
@@ -309,6 +317,7 @@ export const sendRefundFailedEmail = async (
       from: `True Tea <${process.env.EMAIL_FROM}>`,
       to: email,
       subject: `URGENT: Refund Failed - Order #${orderId.slice(-6)}`,
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: RefundEmail({
         orderId,
         refundAmount,
@@ -345,6 +354,7 @@ export const sendOrderCancelledEmail = async (orderData: OrderEmailData) => {
       from,
       to: orderData.buyer.email,
       subject,
+      replyTo: process.env.NEXT_PUBLIC_EMAIL_TO,
       react: emailContent,
     });
     return true;

@@ -20,8 +20,10 @@ export default async function Home() {
   return (
     <main className="min-h-screen">
       {/* 1. Hero Section */}
-      <section className="relative bg-linear-to-br from-emerald-50 to-teal-100 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
+      <section className="relative overflow-hidden bg-[url('/pattern.png')] bg-cover bg-center py-20 px-4 sm:px-6 lg:px-8">
+        {/* Light gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-linear-to-br from-emerald-50/70 to-teal-100/70"></div>
+        <div className="relative z-10 mx-auto max-w-7xl flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
           {/* Text Content */}
           <div className="flex-1 text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-emerald-900 mb-6 font-serif">
