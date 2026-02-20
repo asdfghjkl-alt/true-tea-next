@@ -12,7 +12,6 @@ export default async function Home() {
   })) as ICategory[];
 
   // Fetch featured products (limit to 4 for the homepage)
-  // We'll just take the first 4 active products for now as "featured"
   const featuredProducts = JSON.parse(
     JSON.stringify(await Product.find({ onShelf: true }).limit(4)),
   ) as IProduct[];
@@ -162,6 +161,7 @@ export default async function Home() {
                         src={category.image.url}
                         alt={category.name}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
@@ -241,6 +241,7 @@ export default async function Home() {
                         src={product.images[0].url}
                         alt={product.name}
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover object-center group-hover:opacity-75 transition-opacity"
                       />
                     ) : (
