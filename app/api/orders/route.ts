@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { Order, Product, User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import Stripe from "stripe";
@@ -57,6 +58,9 @@ export const POST = apiHandler(async (req: NextRequest) => {
 
   // Payment is verified. Now proceed with order fulfillment.
   // Wrapped in try catch to provide refund if final order validation fails
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     if (!cart || !buyer || !delivery) {
       throw new Error("Missing required fields");
@@ -109,7 +113,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
 
       // Decrements stock on successful validation
       product.stock -= item.quantity;
-      await product.save();
+      await product.save({ session });
 
       // Calculates total GST and total cost
       const price = product.price;
@@ -164,7 +168,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
     }
 
     // Creates order
-    const newOrder = await Order.create({
+    const newOrder = new Order({
       owner_id: owner_id,
       productList: orderProducts,
       buyer,
@@ -181,6 +185,11 @@ export const POST = apiHandler(async (req: NextRequest) => {
       paidDate: new Date(),
       note: "",
     });
+
+    await newOrder.save({ session });
+
+    await session.commitTransaction();
+    session.endSession();
 
     // Send order confirmation email to buyer and store owner (fire-and-forget)
     sendOrderConfirmationEmail({
@@ -202,6 +211,11 @@ export const POST = apiHandler(async (req: NextRequest) => {
 
     return NextResponse.json({ success: true, orderId: newOrder._id });
   } catch (fulfillmentError) {
+    if (session.inTransaction()) {
+      await session.abortTransaction();
+    }
+    session.endSession();
+
     // Order fulfillment failed, refund the payment
     console.error(
       "Order Fulfillment Failed. Initiating Refund...",
