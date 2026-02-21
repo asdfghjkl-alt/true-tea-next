@@ -27,7 +27,7 @@ export default async function Home() {
           <div className="flex-1 text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-emerald-900 mb-6 font-serif">
               True Tea
-              <span className="block text-2xl sm:text-3xl lg:text-4xl mt-2 font-sans font-light text-emerald-700">
+              <span className="block text-2xl sm:text-3xl lg:text-4xl mt-2 font-serif font-light text-emerald-700">
                 Back To The Foundation To Enjoy
               </span>
             </h1>
@@ -63,8 +63,8 @@ export default async function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {/* Feature 1 */}
-            <div className="p-4">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600">
+            <div className="group p-4 transition-transform duration-300 hover:-translate-y-2">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-emerald-50">
                 <svg
                   className="h-8 w-8"
                   fill="none"
@@ -82,14 +82,32 @@ export default async function Home() {
               <h3 className="text-lg font-semibold text-gray-900">
                 Authentic Sourcing
               </h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Sourced directly from the origin to ensure the truest flavor.
-              </p>
+              {/* Chevron Down Indicator */}
+              <div className="flex justify-center mt-1 group-hover:hidden">
+                <svg
+                  className="w-4 h-4 text-emerald-500 transition-opacity duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
+                <p className="mt-0 overflow-hidden text-sm text-gray-500 opacity-0 transition-opacity duration-300 group-hover:mt-2 group-hover:opacity-100">
+                  Sourced directly from the origin to ensure the truest flavor.
+                </p>
+              </div>
             </div>
 
             {/* Feature 2 */}
-            <div className="p-4">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600">
+            <div className="group p-4 transition-transform duration-300 hover:-translate-y-2">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-emerald-50">
                 <svg
                   className="h-8 w-8"
                   fill="none"
@@ -107,15 +125,33 @@ export default async function Home() {
               <h3 className="text-lg font-semibold text-gray-900">
                 Premium Quality
               </h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Hand-picked selections that meet the highest standards of
-                excellence.
-              </p>
+              {/* Chevron Down Indicator */}
+              <div className="flex justify-center mt-1 group-hover:hidden">
+                <svg
+                  className="w-4 h-4 text-emerald-500 transition-opacity duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
+                <p className="mt-0 overflow-hidden text-sm text-gray-500 opacity-0 transition-opacity duration-300 group-hover:mt-2 group-hover:opacity-100">
+                  Hand-picked selections that meet the highest standards of
+                  excellence.
+                </p>
+              </div>
             </div>
 
             {/* Feature 3 */}
-            <div className="p-4">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600">
+            <div className="group p-4 transition-transform duration-300 hover:-translate-y-2">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-emerald-50">
                 <svg
                   className="h-8 w-8"
                   fill="none"
@@ -133,9 +169,27 @@ export default async function Home() {
               <h3 className="text-lg font-semibold text-gray-900">
                 Free Shipping
               </h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Enjoy complimentary shipping on all orders across Australia.
-              </p>
+              {/* Chevron Down Indicator */}
+              <div className="flex justify-center mt-1 group-hover:hidden">
+                <svg
+                  className="w-4 h-4 text-emerald-500 transition-opacity duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
+                <p className="mt-0 overflow-hidden text-sm text-gray-500 opacity-0 transition-opacity duration-300 group-hover:mt-2 group-hover:opacity-100">
+                  Enjoy complimentary shipping on all orders across Australia.
+                </p>
+              </div>
             </div>
           </div>
         </div>

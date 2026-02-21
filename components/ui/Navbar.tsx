@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const baseLinks = [
   { href: "/", label: "Home" },
+  { href: "/heritage", label: "Heritage" },
   { href: "/about-us", label: "About Us" },
 ];
 const navLinks = [{ href: "/products", label: "Products" }];
@@ -104,7 +105,14 @@ export default function Navbar({ categories = [] }: NavbarProps) {
         className={`fixed top-0 z-50 w-full bg-primary font-normal text-teal-50 shadow-lg shadow-black/30 transition-all duration-300 ${isScrolled ? "py-0" : ""}`}
         role="banner"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 p-2">
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 p-2">
+          {/* Slogan */}
+          <div
+            className={`absolute left-1/2 top-7/24 hidden -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-center font-serif italic tracking-widest text-teal-100 transition-all duration-300 lg:block lg:text-[18px] xl:text-[26px] 2xl:text-3xl ${isScrolled ? "pointer-events-none opacity-0" : "opacity-100"}`}
+          >
+            Back To The Foundation To Enjoy
+          </div>
+
           {/* Logo and home link */}
 
           <div className="flex items-center gap-6">
@@ -154,112 +162,103 @@ export default function Navbar({ categories = [] }: NavbarProps) {
             </nav>
           </div>
 
-          <div className="flex flex-col items-end gap-1">
-            {/* Slogan */}
-            <div
-              className={`hidden italic tracking-widest text-teal-100 transition-all duration-300 lg:block ${isScrolled ? "text-xs" : "text-base"}`}
+          {/* Right Navigation */}
+          <div className="flex items-center gap-3">
+            <nav
+              className={`hidden items-center gap-3 lg:flex ${isScrolled ? "mt-5" : "mt-7"}`}
+              aria-label="Primary"
             >
-              Back To The Foundation To Enjoy
-            </div>
-
-            {/* Navigation */}
-            <div className="flex items-center gap-3">
-              <nav
-                className="hidden items-center gap-3 lg:flex"
-                aria-label="Primary"
-              >
-                {/* Navigation links (All Users) */}
-                {navLinks.map((link) => (
-                  <NavLink
-                    key={link.href}
-                    href={link.href}
-                    className={({ isActive }) =>
-                      `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
-                    }
-                  >
-                    {link.label}
-                  </NavLink>
-                ))}
-
-                {/* Categories dropdown */}
-                <Dropdown
-                  id="desktop-categories-menu"
-                  title="Categories"
-                  links={categoryLinks}
-                />
-
-                {/* User-specific links */}
-                {user ? (
-                  <>
-                    <Dropdown
-                      id="desktop-user-menu"
-                      elements={userElements}
-                      title={`Welcome ${user.fname}`}
-                      links={authLinks}
-                    />
-                    {user.admin && (
-                      <Dropdown
-                        id="desktop-admin-tools"
-                        title="Admin Tools"
-                        links={adminLinks}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {/* Unauthenticated user links */}
-                    {unauthLinks.map((link) => (
-                      <NavLink
-                        key={link.href}
-                        href={link.href}
-                        className={({ isActive }) =>
-                          `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
-                        }
-                      >
-                        {link.label}
-                      </NavLink>
-                    ))}
-                  </>
-                )}
-                <CartLink />
-              </nav>
-
-              <div className="flex items-center gap-2 lg:hidden">
-                {/* Mobile menu button */}
-                <button
-                  type="button"
-                  ref={menuToggleButtonRef}
-                  className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
-                  aria-label="Toggle navigation menu"
-                  aria-expanded={isMenuOpen}
-                  aria-controls="mobile-navigation"
-                  onClick={toggleMenu}
+              {/* Navigation links (All Users) */}
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.href}
+                  href={link.href}
+                  className={({ isActive }) =>
+                    `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                  }
                 >
-                  <span className="sr-only">Menu</span>
-                  <svg
-                    className="h-9 w-9"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    {isMenuOpen ? (
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    ) : (
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 6h16M4 12h16M4 18h16"
-                      />
-                    )}
-                  </svg>
-                </button>
-              </div>
+                  {link.label}
+                </NavLink>
+              ))}
+
+              {/* Categories dropdown */}
+              <Dropdown
+                id="desktop-categories-menu"
+                title="Categories"
+                links={categoryLinks}
+              />
+
+              {/* User-specific links */}
+              {user ? (
+                <>
+                  <Dropdown
+                    id="desktop-user-menu"
+                    elements={userElements}
+                    title={`Welcome ${user.fname}`}
+                    links={authLinks}
+                  />
+                  {user.admin && (
+                    <Dropdown
+                      id="desktop-admin-tools"
+                      title="Admin Tools"
+                      links={adminLinks}
+                    />
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* Unauthenticated user links */}
+                  {unauthLinks.map((link) => (
+                    <NavLink
+                      key={link.href}
+                      href={link.href}
+                      className={({ isActive }) =>
+                        `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                      }
+                    >
+                      {link.label}
+                    </NavLink>
+                  ))}
+                </>
+              )}
+              <CartLink />
+            </nav>
+
+            <div className="flex items-center gap-2 lg:hidden">
+              {/* Mobile menu button */}
+              <button
+                type="button"
+                ref={menuToggleButtonRef}
+                className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
+                aria-label="Toggle navigation menu"
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-navigation"
+                onClick={toggleMenu}
+              >
+                <span className="sr-only">Menu</span>
+                <svg
+                  className="h-9 w-9"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  {isMenuOpen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  )}
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -286,7 +285,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
         >
           {/* Mobile navigation header */}
           <div className="flex items-center justify-between border-b border-emerald-600 p-4">
-            <span className="text-xl italic text-teal-100">
+            <span className="font-serif text-xl italic text-teal-100">
               Back To The Foundation To Enjoy
             </span>
 
