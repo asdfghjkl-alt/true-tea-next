@@ -63,7 +63,7 @@ export default function ZoomableImage({ className, ...props }: ImageProps) {
       {/* Full Size Modal */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8 cursor-zoom-out animate-in fade-in duration-200"
+          className="fixed inset-0 z-100 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8 cursor-zoom-out animate-in fade-in duration-200"
           onClick={() => setIsOpen(false)}
         >
           <div className="relative w-full h-full max-w-7xl max-h-[90vh] pointer-events-none flex flex-col items-center justify-center">

@@ -191,7 +191,7 @@ export default function HeritagePage() {
                     China.
                   </p>
                 </div>
-                <div className="w-full md:w-1/3 flex-shrink-0">
+                <div className="w-full md:w-1/3 shrink-0">
                   <div className="relative rounded-xl overflow-hidden shadow-md aspect-square">
                     <Image
                       src="/Heritage/Picture1.jpg"
@@ -250,7 +250,7 @@ export default function HeritagePage() {
                 </blockquote>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
-                  <div className="relative rounded-xl overflow-hidden shadow-md aspect-[3/4]">
+                  <div className="relative rounded-xl overflow-hidden shadow-md aspect-3/4">
                     <Image
                       src="/Heritage/image003.jpg"
                       alt="Lu Yu statue"
@@ -258,7 +258,7 @@ export default function HeritagePage() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="relative rounded-xl overflow-hidden shadow-md aspect-[3/4]">
+                  <div className="relative rounded-xl overflow-hidden shadow-md aspect-3/4">
                     <Image
                       src="/Heritage/image004.jpg"
                       alt="Classic of Tea book excerpt"
@@ -348,7 +348,7 @@ export default function HeritagePage() {
                   deeply woven into Japanese culture.
                 </p>
                 <div className="flex flex-col md:flex-row gap-8 items-start my-8">
-                  <div className="w-full md:w-1/3 flex-shrink-0">
+                  <div className="w-full md:w-1/3 shrink-0">
                     <div className="relative rounded-xl overflow-hidden shadow-md aspect-square">
                       <Image
                         src="/Heritage/image010.jpg"
@@ -391,7 +391,7 @@ export default function HeritagePage() {
                       Japanese life.
                     </p>
                   </div>
-                  <div className="w-24 md:w-32 flex-shrink-0 drop-shadow-lg">
+                  <div className="w-24 md:w-32 shrink-0 drop-shadow-lg">
                     <Image
                       src="/Heritage/image011.jpg"
                       alt="The Book of Tea"
@@ -428,7 +428,7 @@ export default function HeritagePage() {
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-8 my-10 items-center">
-                  <div className="order-2 md:order-1 relative rounded-xl overflow-hidden shadow-md aspect-[4/3] bg-gray-50">
+                  <div className="order-2 md:order-1 relative rounded-xl overflow-hidden shadow-md aspect-4/3 bg-gray-50">
                     <Image
                       src="/Heritage/image013.jpg"
                       alt="Queen Catherine of Braganza"
@@ -492,7 +492,7 @@ export default function HeritagePage() {
                       tea industry in India in the 19th century.
                     </p>
                   </div>
-                  <div className="w-32 flex-shrink-0 relative rounded-full overflow-hidden shadow-2xl border-2 border-emerald-600 aspect-square">
+                  <div className="w-32 shrink-0 relative rounded-full overflow-hidden shadow-2xl border-2 border-emerald-600 aspect-square">
                     <Image
                       src="/Heritage/image018c.jpg"
                       alt="Robert Fortune portrait"
@@ -578,7 +578,7 @@ export default function HeritagePage() {
                 are produced:
               </p>
 
-              <div className="my-10 relative rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 p-2 text-center aspect-video md:aspect-[21/9]">
+              <div className="my-10 relative rounded-2xl overflow-hidden bg-white shadow-sm border border-gray-100 p-2 text-center aspect-video md:aspect-21/9">
                 <Image
                   src="/Heritage/image025.png"
                   alt="Tea processing flow diagram"
