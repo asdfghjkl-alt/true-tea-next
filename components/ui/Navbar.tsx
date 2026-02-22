@@ -274,7 +274,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
         <div
           id="mobile-navigation"
           ref={sidebarRef}
-          className={`fixed inset-y-0 right-0 z-50 w-96 transform bg-primary shadow-xl transition-transform duration-300 ease-in-out lg:hidden ${
+          className={`fixed inset-y-0 right-0 z-50 flex w-96 flex-col transform bg-primary shadow-xl transition-transform duration-300 ease-in-out lg:hidden ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
           role="dialog"
@@ -311,7 +311,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
 
           {/* Mobile navigation links */}
           <nav
-            className="flex flex-col gap-2 p-4 text-base font-semibold tracking-wide"
+            className="flex-1 overflow-y-auto flex flex-col gap-2 p-4 text-base font-semibold tracking-wide"
             aria-label="Mobile"
           >
             {/* Navigation links */}

@@ -24,30 +24,6 @@ export default function HeritagePage() {
         </div>
       </section>
 
-      {/* Breadcrumb Navigation */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <nav aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-2 text-sm text-gray-500">
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-emerald-700 transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <span className="text-gray-400">/</span>
-              </li>
-              <li className="text-emerald-800 font-medium" aria-current="page">
-                Heritage
-              </li>
-            </ol>
-          </nav>
-        </div>
-      </div>
-
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
         {/* Sidebar Navigation (Table of Contents) */}
         <aside className="lg:w-1/4">
