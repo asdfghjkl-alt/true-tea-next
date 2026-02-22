@@ -185,7 +185,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
               <Dropdown
                 id="desktop-categories-menu"
                 title="Categories"
-                links={categoryLinks}
+                linkGroups={[{ links: categoryLinks }]}
               />
 
               {/* User-specific links */}
@@ -195,15 +195,13 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                     id="desktop-user-menu"
                     elements={userElements}
                     title={`Welcome ${user.fname}`}
-                    links={authLinks}
+                    linkGroups={[
+                      { sectionLabel: "My Account", links: authLinks },
+                      ...(user.admin
+                        ? [{ sectionLabel: "Admin Tools", links: adminLinks }]
+                        : []),
+                    ]}
                   />
-                  {user.admin && (
-                    <Dropdown
-                      id="desktop-admin-tools"
-                      title="Admin Tools"
-                      links={adminLinks}
-                    />
-                  )}
                 </>
               ) : (
                 <>
@@ -334,7 +332,7 @@ export default function Navbar({ categories = [] }: NavbarProps) {
             <Dropdown
               id="mobile-categories-menu"
               title="Categories"
-              links={categoryLinks}
+              linkGroups={[{ links: categoryLinks }]}
               fullWidth
               onItemClick={closeMenu}
             />
@@ -346,19 +344,15 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                   id="mobile-user-menu"
                   elements={userElements}
                   title={`Welcome ${user.fname}`}
-                  links={authLinks}
+                  linkGroups={[
+                    { sectionLabel: "My Account", links: authLinks },
+                    ...(user.admin
+                      ? [{ sectionLabel: "Admin Tools", links: adminLinks }]
+                      : []),
+                  ]}
                   fullWidth
                   onItemClick={closeMenu}
                 />
-                {user.admin && (
-                  <Dropdown
-                    id="mobile-admin-tools"
-                    title="Admin Tools"
-                    links={adminLinks}
-                    onItemClick={closeMenu}
-                    fullWidth
-                  />
-                )}
               </>
             ) : (
               <>

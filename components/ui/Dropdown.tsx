@@ -5,18 +5,23 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { ReactNode, Fragment } from "react";
 import NavLink from "./NavLink";
 
+export type DropdownLinkGroup = {
+  sectionLabel?: string;
+  links: { href: string; label: string }[];
+};
+
 export default function Dropdown({
   id,
   title,
   elements = [],
-  links,
+  linkGroups = [],
   fullWidth = false,
   onItemClick,
 }: {
   id: string;
   title: string;
   elements?: ReactNode[];
-  links: { href: string; label: string }[];
+  linkGroups: DropdownLinkGroup[];
   fullWidth?: boolean;
   onItemClick?: () => void;
 }) {
@@ -48,16 +53,25 @@ export default function Dropdown({
         }
       >
         <div className="py-1" role="none">
-          {links.map((link) => (
-            <MenuItem key={link.href} as={Fragment}>
-              <NavLink
-                href={link.href}
-                onClick={onItemClick}
-                className="block px-4 py-2 text-sm text-teal-50 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
-              >
-                {link.label}
-              </NavLink>
-            </MenuItem>
+          {linkGroups.map((group, groupIndex) => (
+            <div key={groupIndex}>
+              {group.sectionLabel && (
+                <div className="px-4 py-2 text-xs font-bold text-teal-200 uppercase tracking-wider mt-1 opacity-80">
+                  {group.sectionLabel}
+                </div>
+              )}
+              {group.links.map((link) => (
+                <MenuItem key={link.href} as={Fragment}>
+                  <NavLink
+                    href={link.href}
+                    onClick={onItemClick}
+                    className="block px-4 py-2 text-sm text-teal-50 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+                  >
+                    {link.label}
+                  </NavLink>
+                </MenuItem>
+              ))}
+            </div>
           ))}
           {elements.map((element, index) => (
             <MenuItem key={index} as={Fragment}>
