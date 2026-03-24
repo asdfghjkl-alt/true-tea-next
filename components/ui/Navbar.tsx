@@ -36,18 +36,27 @@ interface NavbarProps {
 
 export default function Navbar({ categories = [] }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const menuToggleButtonRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
+  const lastScrollY = useRef(0);
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setIsScrolledDown(true);
+      } else if (currentScrollY < lastScrollY.current) {
+        setIsScrolledDown(false);
+      }
+      lastScrollY.current = currentScrollY;
     };
 
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -102,161 +111,200 @@ export default function Navbar({ categories = [] }: NavbarProps) {
     <>
       <div className="h-36 w-full" aria-hidden="true" />
       <header
-        className={`fixed top-0 z-50 w-full bg-primary font-normal text-teal-50 shadow-lg shadow-black/30 transition-all duration-300 ${isScrolled ? "py-0" : ""}`}
+        className="fixed top-0 z-50 w-full flex flex-col font-normal"
         role="banner"
       >
-        <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 p-2">
-          {/* Slogan */}
-          <div
-            className={`absolute left-1/2 top-7/24 hidden -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-center font-serif italic tracking-widest text-teal-100 transition-all duration-300 lg:block lg:text-[18px] xl:text-[26px] 2xl:text-3xl ${isScrolled ? "pointer-events-none opacity-0" : "opacity-100"}`}
-          >
-            Back To The Foundation To Enjoy
-          </div>
-
-          {/* Logo and home link */}
-
-          <div className="flex items-center gap-6">
-            <NavLink
-              href="/"
-              className="flex items-center no-underline"
-              onClick={closeMenu}
-            >
-              {/* Logo */}
-              <div
-                className={`relative transition-all duration-300 ease-in-out mr-2 ${isScrolled ? "h-12 w-12" : "h-32 w-32"}`}
-              >
-                <Image
-                  src="/logo-true-tea.jpg"
-                  alt="True Tea"
-                  fill
-                  loading="eager"
-                  sizes="(max-width: 768px) 48px, 128px"
-                  className="object-contain"
-                />
-              </div>
-
-              {/* Brand name and year created */}
-              <div className="ps-1 leading-snug">
-                <h2 className="font-serif">True Tea</h2>
-                <div className="text-xs font-light tracking-[0.3em] text-teal-100 uppercase">
-                  Since 2019
-                </div>
-              </div>
-            </NavLink>
-
-            {/* Base Links (Left) */}
-            <nav
-              className={`hidden items-center gap-3 lg:flex ${isScrolled ? "mt-5" : "mt-7"}`}
-            >
-              {baseLinks.map((link) => (
-                <NavLink
-                  key={link.href}
-                  href={link.href}
-                  className={({ isActive }) =>
-                    `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
-                  }
-                >
-                  {link.label}
-                </NavLink>
-              ))}
-            </nav>
-          </div>
-
-          {/* Right Navigation */}
-          <div className="flex items-center gap-3">
-            <nav
-              className={`hidden items-center gap-3 lg:flex ${isScrolled ? "mt-5" : "mt-7"}`}
-              aria-label="Primary"
-            >
-              {/* Navigation links (All Users) */}
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.href}
-                  href={link.href}
-                  className={({ isActive }) =>
-                    `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
-                  }
-                >
-                  {link.label}
-                </NavLink>
-              ))}
-
-              {/* Categories dropdown */}
-              <Dropdown
-                id="desktop-categories-menu"
-                title="Categories"
-                linkGroups={[{ links: categoryLinks }]}
-              />
-
-              {/* User-specific links */}
-              {user ? (
-                <>
-                  <Dropdown
-                    id="desktop-user-menu"
-                    elements={userElements}
-                    title={`Welcome ${user.fname}`}
-                    linkGroups={[
-                      { sectionLabel: "My Account", links: authLinks },
-                      ...(user.admin
-                        ? [{ sectionLabel: "Admin Tools", links: adminLinks }]
-                        : []),
-                    ]}
-                  />
-                </>
-              ) : (
-                <>
-                  {/* Unauthenticated user links */}
-                  {unauthLinks.map((link) => (
-                    <NavLink
-                      key={link.href}
-                      href={link.href}
-                      className={({ isActive }) =>
-                        `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
-                      }
-                    >
-                      {link.label}
-                    </NavLink>
-                  ))}
-                </>
-              )}
-              <CartLink />
-            </nav>
-
-            <div className="flex items-center gap-2 lg:hidden">
-              {/* Mobile menu button */}
-              <button
-                type="button"
-                ref={menuToggleButtonRef}
-                className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
-                aria-label="Toggle navigation menu"
-                aria-expanded={isMenuOpen}
-                aria-controls="mobile-navigation"
-                onClick={toggleMenu}
-              >
-                <span className="sr-only">Menu</span>
+        {/* Top Section - Always visible */}
+        <div className="bg-primary w-full relative z-50 border-b border-emerald-900/50">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-[11px] sm:text-xs text-teal-100">
+            <div className="font-serif text-lg italic tracking-wide">
+              True Tea — Back To The Foundation To Enjoy
+            </div>
+            <div className="flex sm:flex-row flex-col gap-4 font-medium tracking-wide opacity-90">
+              <span className="flex items-center gap-1.5">
                 <svg
-                  className="h-9 w-9"
+                  xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  stroke="currentColor"
                   viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5 shrink-0"
                 >
-                  {isMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+                  />
                 </svg>
-              </button>
+                <span>0417 440 452</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5 shrink-0"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                  />
+                </svg>
+                <span>{process.env.NEXT_PUBLIC_EMAIL_TO}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Navigation Section - Hides on scroll down */}
+        <div
+          className={`bg-primary text-teal-50 shadow-lg shadow-black/30 transition-transform duration-300 ease-in-out w-full relative z-40 ${isScrolledDown ? "-translate-y-full" : "translate-y-0"}`}
+        >
+          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 p-2">
+            {/* Logo and home link */}
+
+            <div className="flex items-center gap-6">
+              <NavLink
+                href="/"
+                className="flex items-center no-underline"
+                onClick={closeMenu}
+              >
+                {/* Logo */}
+                <div className="relative transition-all duration-300 ease-in-out mr-2 h-20 w-20">
+                  <Image
+                    src="/logo-true-tea.jpg"
+                    alt="True Tea"
+                    fill
+                    loading="eager"
+                    sizes="(max-width: 768px) 48px, 128px"
+                    className="object-contain"
+                  />
+                </div>
+
+                {/* Brand name and year created */}
+                <div className="ps-1 leading-snug">
+                  <h2 className="font-serif">True Tea</h2>
+                  <div className="text-xs font-light tracking-[0.3em] text-teal-100 uppercase">
+                    Since 2019
+                  </div>
+                </div>
+              </NavLink>
+
+              {/* Base Links (Left) */}
+              <nav className="hidden items-center gap-3 lg:flex mt-3">
+                {baseLinks.map((link) => (
+                  <NavLink
+                    key={link.href}
+                    href={link.href}
+                    className={({ isActive }) =>
+                      `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+              </nav>
+            </div>
+
+            {/* Right Navigation */}
+            <div className="flex items-center gap-3">
+              <nav
+                className="hidden items-center gap-3 lg:flex mt-3"
+                aria-label="Primary"
+              >
+                {/* Navigation links (All Users) */}
+                {navLinks.map((link) => (
+                  <NavLink
+                    key={link.href}
+                    href={link.href}
+                    className={({ isActive }) =>
+                      `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+
+                {/* Categories dropdown */}
+                <Dropdown
+                  id="desktop-categories-menu"
+                  title="Categories"
+                  linkGroups={[{ links: categoryLinks }]}
+                />
+
+                {/* User-specific links */}
+                {user ? (
+                  <>
+                    <Dropdown
+                      id="desktop-user-menu"
+                      elements={userElements}
+                      title={`Welcome ${user.fname}`}
+                      linkGroups={[
+                        { sectionLabel: "My Account", links: authLinks },
+                        ...(user.admin
+                          ? [{ sectionLabel: "Admin Tools", links: adminLinks }]
+                          : []),
+                      ]}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* Unauthenticated user links */}
+                    {unauthLinks.map((link) => (
+                      <NavLink
+                        key={link.href}
+                        href={link.href}
+                        className={({ isActive }) =>
+                          `${linkBaseClass} ${isActive ? "bg-emerald-500" : "bg-primary"}`
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    ))}
+                  </>
+                )}
+                <CartLink />
+              </nav>
+
+              <div className="flex items-center gap-2 lg:hidden">
+                {/* Mobile menu button */}
+                <button
+                  type="button"
+                  ref={menuToggleButtonRef}
+                  className="flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-md border border-teal-50/50 text-teal-50 transition hover:bg-emerald-500"
+                  aria-label="Toggle navigation menu"
+                  aria-expanded={isMenuOpen}
+                  aria-controls="mobile-navigation"
+                  onClick={toggleMenu}
+                >
+                  <span className="sr-only">Menu</span>
+                  <svg
+                    className="h-9 w-9"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    {isMenuOpen ? (
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    ) : (
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16M4 18h16"
+                      />
+                    )}
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

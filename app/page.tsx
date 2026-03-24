@@ -18,20 +18,28 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen">
-      {/* 1. Hero Section */}
-      <section className="relative overflow-hidden bg-[url('/pattern.png')] bg-cover bg-center py-20 px-4 sm:px-6 lg:px-8">
-        {/* Light gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-linear-to-br from-emerald-50/70 to-teal-100/70"></div>
-        <div className="relative z-10 mx-auto max-w-7xl flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
-          {/* Text Content */}
-          <div className="flex-1 text-center lg:text-left">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-emerald-900 mb-6 font-serif">
+      {/* 1. Hero Section - Overlapping Grid Break Concept */}
+      <section className="relative w-full overflow-visible pt-24 pb-16 lg:pt-32 lg:pb-24 z-20">
+        {/* We use an isolated full-size wrapper for the background gradient with overflow-hidden so the glowing orbs don't spill down */}
+        <div className="absolute inset-0 z-0 bg-linear-to-br from-emerald-50 via-[#f8faf7] to-orange-50 overflow-hidden">
+          {/* Decorative soft gradient blobs for depth */}
+          <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-emerald-200/40 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/4"></div>
+          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-orange-200/40 rounded-full blur-3xl pointer-events-none translate-y-1/4"></div>
+        </div>
+
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 flex flex-col md:flex-row items-center justify-between pointer-events-none">
+          {/* Text Content (Left Side) */}
+          <div className="w-full md:w-1/2 max-w-xl text-left animate-fade-in z-30 pointer-events-auto">
+            <div className="text-sm tracking-widest text-[#5c5448] mb-6 font-semibold uppercase">
+              Home — Premium Selection
+            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-emerald-950 mb-4 font-serif">
               True Tea
-              <span className="block text-2xl sm:text-3xl lg:text-4xl mt-2 font-serif font-light text-emerald-700">
-                Back To The Foundation To Enjoy
-              </span>
             </h1>
-            <p className="mt-4 text-lg text-emerald-800 max-w-2xl mx-auto lg:mx-0">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl mt-2 font-serif font-light text-emerald-900/90 mb-10">
+              Back To The Foundation To Enjoy
+            </h2>
+            <p className="text-lg text-[#5c5448] mb-10 max-w-md hidden sm:block">
               Experience the authentic taste of premium teas, sourced directly
               from the origin with a passion for quality and tradition.
             </p>
@@ -46,10 +54,10 @@ export default async function Home() {
           </div>
 
           {/* Hero Image / Logo */}
-          <div className="relative w-80 h-80 sm:w-96 sm:h-96 rounded-3xl border-4 border-white overflow-hidden shadow-2xl animate-fade-in">
+          <div className="relative w-96 h-96 sm:w-150 sm:h-150 rounded-3xl overflow-hidden animate-fade-in">
             {/* Image component using fill and object-cover */}
             <Image
-              src="/logo-true-tea-origin.jpeg"
+              src="/tea-head.png"
               alt="Logo"
               fill
               className="object-cover"
