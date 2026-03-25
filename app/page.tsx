@@ -27,7 +27,7 @@ export default async function Home() {
           <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-orange-200/40 rounded-full blur-3xl pointer-events-none translate-y-1/4"></div>
         </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 flex flex-col lg:flex-row items-center justify-between pointer-events-none">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 pointer-events-none">
           {/* Text Content (Left Side) */}
           <div className="w-full lg:w-1/2 max-w-xl text-left animate-fade-in z-30 pointer-events-auto">
             <div className="text-sm tracking-widest text-[#5c5448] mb-6 font-semibold uppercase">
@@ -46,7 +46,7 @@ export default async function Home() {
             <div className="mt-8">
               <Link
                 href="/products"
-                className="inline-block bg-emerald-700 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-emerald-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                className="inline-block bg-emerald-700 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-emerald-800 transition-colors transform hover:-translate-y-1"
               >
                 Shop All Teas
               </Link>
@@ -54,14 +54,9 @@ export default async function Home() {
           </div>
 
           {/* Hero Image / Logo */}
-          <div className="relative w-96 h-96 sm:w-150 sm:h-150 rounded-3xl overflow-hidden animate-fade-in">
+          <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-md xl:max-w-lg aspect-square rounded-3xl overflow-hidden animate-fade-in pointer-events-auto shrink-0">
             {/* Image component using fill and object-cover */}
-            <Image
-              src="/tea-head.png"
-              alt="Logo"
-              fill
-              className="object-cover"
-            />
+            <Image src="/banner.png" alt="Logo" fill className="object-cover" />
           </div>
         </div>
       </section>
