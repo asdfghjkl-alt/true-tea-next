@@ -19,7 +19,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen">
       {/* 1. Hero Section - Overlapping Grid Break Concept */}
-      <section className="relative w-full overflow-visible pt-2 pb-2 lg:pt-4 lg:pb-4 z-20">
+      <section className="relative w-full overflow-visible pt-10 pb-2 lg:pt-4 lg:pb-4 z-20">
         {/* We use an isolated full-size wrapper for the background gradient with overflow-hidden so the glowing orbs don't spill down */}
         <div className="absolute inset-0 z-0 bg-linear-to-br from-emerald-50 via-[#f8faf7] to-orange-50 overflow-hidden">
           {/* Decorative soft gradient blobs for depth */}
@@ -27,9 +27,9 @@ export default async function Home() {
           <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-orange-200/40 rounded-full blur-3xl pointer-events-none translate-y-1/4"></div>
         </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 flex flex-col md:flex-row items-center justify-between pointer-events-none">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 flex flex-col lg:flex-row items-center justify-between pointer-events-none">
           {/* Text Content (Left Side) */}
-          <div className="w-full md:w-1/2 max-w-xl text-left animate-fade-in z-30 pointer-events-auto">
+          <div className="w-full lg:w-1/2 max-w-xl text-left animate-fade-in z-30 pointer-events-auto">
             <div className="text-sm tracking-widest text-[#5c5448] mb-6 font-semibold uppercase">
               Home — Premium Selection
             </div>

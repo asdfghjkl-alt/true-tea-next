@@ -118,7 +118,10 @@ export default function Navbar({ categories = [] }: NavbarProps) {
         <div className="bg-primary w-full relative z-50 border-b border-emerald-900/50">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-[11px] sm:text-xs text-teal-100">
             <div className="font-serif text-lg italic tracking-wide">
-              True Tea — Back To The Foundation To Enjoy
+              True Tea{" "}
+              <span className="hidden md:inline-block">
+                — Back To The Foundation To Enjoy
+              </span>
             </div>
             <div className="flex sm:flex-row flex-col gap-4 font-medium tracking-wide opacity-90">
               <span className="flex items-center gap-1.5">
@@ -138,23 +141,25 @@ export default function Navbar({ categories = [] }: NavbarProps) {
                 </svg>
                 <span>0417 440 452</span>
               </span>
-              <span className="flex items-center gap-1.5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 shrink-0"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                  />
-                </svg>
-                <span>{process.env.NEXT_PUBLIC_EMAIL_TO}</span>
-              </span>
+              <div className="hidden md:inline-block">
+                <span className="flex items-center gap-1.5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5 shrink-0"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                    />
+                  </svg>
+                  <span>{process.env.NEXT_PUBLIC_EMAIL_TO}</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
