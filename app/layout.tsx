@@ -49,6 +49,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (process.env.MAINTENANCE_MODE === "true") {
+    return (
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-teal-50 min-h-screen flex flex-col justify-center items-center text-center p-8`}
+        >
+          <div className="max-w-md space-y-4 bg-white p-8 rounded-2xl shadow-sm border border-emerald-100">
+            <h1 className="text-3xl font-serif text-emerald-900">
+              We'll be right back
+            </h1>
+            <p className="text-emerald-700 text-lg">
+              True Tea is currently undergoing a brief scheduled maintenance. We are making some improvements and will be back online shortly!
+            </p>
+          </div>
+        </body>
+      </html>
+    );
+  }
+
   await connectToDatabase();
   const categories = (await Category.find({ active: true })
     .sort({
