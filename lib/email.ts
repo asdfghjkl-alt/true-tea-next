@@ -284,6 +284,7 @@ export const sendRefundSuccessEmail = async (
         success: true,
       }),
     });
+    console.log("Refund success email sent to:", email);
     return true;
   } catch (error) {
     console.error("Error sending refund success email:", error);

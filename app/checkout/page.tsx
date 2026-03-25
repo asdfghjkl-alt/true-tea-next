@@ -29,7 +29,7 @@ export default function CheckoutPage() {
   const router = useRouter();
 
   // Gets cart from order context
-  const { cart } = useOrder();
+  const { cart, resetCart } = useOrder();
 
   // Stores the current step the user is at in the order
   const [currentStep, setCurrentStep] = useState<CheckoutStep>("review");
@@ -54,6 +54,19 @@ export default function CheckoutPage() {
       router.push("/cart");
     }
   }, [cart, currentStep, router]);
+
+  // Check for Stripe redirect
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectStatus = urlParams.get("redirect_status");
+
+      if (redirectStatus === "succeeded" && currentStep !== "success") {
+        resetCart();
+        setCurrentStep("success");
+      }
+    }
+  }, [resetCart, currentStep]);
 
   // Handler when user has reviewed the changes to their order
   const handleReviewComplete = (items: ValidatedCartItem[]) => {
@@ -92,11 +105,6 @@ export default function CheckoutPage() {
 
   const handlePaymentSuccess = () => {
     setCurrentStep("success");
-  };
-
-  const handlePaymentError = (message: string, paymentId?: string) => {
-    setErrorData({ message, paymentId });
-    setCurrentStep("error");
   };
 
   // Renders nothing while useEffect processes redirect
@@ -166,9 +174,7 @@ export default function CheckoutPage() {
           {/* This is a context wrapper for Stripe */}
           <CheckoutPayment
             userDetails={userDetails}
-            validatedCart={validatedCart}
             onSuccess={handlePaymentSuccess}
-            onError={handlePaymentError}
             onBack={() => setCurrentStep("details")}
           />
         </Elements>

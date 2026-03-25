@@ -8,28 +8,22 @@ import {
 import { useState } from "react";
 import { useOrder } from "@/contexts/OrderContext";
 import { IUserDetails } from "@/database";
-import api from "@/lib/axios";
-import { AxiosError, isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import toast from "react-hot-toast";
-import { ValidatedCartItem } from "@/app/checkout/page";
 
 interface CheckoutPaymentProps {
   userDetails: {
     billing: IUserDetails;
     delivery: IUserDetails;
   } | null;
-  validatedCart: ValidatedCartItem[];
   onSuccess: () => void;
-  onError: (message: string, paymentId?: string) => void;
   onBack: () => void;
 }
 
 export default function CheckoutPayment({
   userDetails,
-  validatedCart,
   onSuccess,
-  onError,
   onBack,
 }: CheckoutPaymentProps) {
   const stripe = useStripe();
@@ -54,6 +48,7 @@ export default function CheckoutPayment({
           elements,
           redirect: "if_required", // Important: handling redirect manually if needed, or staying on page
           confirmParams: {
+            return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout`,
             payment_method_data: {
               billing_details: {
                 name: `${userDetails.billing.fname} ${userDetails.billing.lname}`,
@@ -80,30 +75,6 @@ export default function CheckoutPayment({
       }
 
       if (paymentIntent && paymentIntent.status === "succeeded") {
-        // Create Order in Backend
-        try {
-          await api.post("/orders", {
-            cart: validatedCart,
-            buyer: userDetails.billing,
-            delivery: userDetails.delivery,
-            paymentId: paymentIntent.id,
-            amount: paymentIntent.amount,
-            owner_id: user?._id || "guest",
-          });
-        } catch (e) {
-          if (e instanceof AxiosError) {
-            onError(
-              e.response?.data.message || "An unexpected error occurred.",
-              paymentIntent.id,
-            );
-          } else if (e instanceof Error) {
-            onError(e.message, paymentIntent.id);
-          } else {
-            onError("An unexpected error occurred.", paymentIntent.id);
-          }
-          return;
-        }
-
         // On Success
         resetCart();
         onSuccess();

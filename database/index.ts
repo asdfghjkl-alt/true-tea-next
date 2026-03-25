@@ -3,6 +3,7 @@ export { default as User } from "./user.model";
 export { default as Product } from "./product.model";
 export { default as Order } from "./order.model";
 export { default as Category } from "./category.model";
+export { default as CheckoutSession } from "./checkoutSession.model";
 
 // User types
 export type { IUser } from "./user.model";
@@ -20,6 +21,9 @@ export type {
 
 // Category types
 export type { ICategory } from "./category.model";
+
+// Checkout Session types
+export type { ICheckoutSession } from "./checkoutSession.model";
 
 // Image types
 export { imageSchema } from "./image.model";

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { Product } from "@/database";
+import { Product, CheckoutSession } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
 import { POSTAGE_FEE } from "@/lib/constants";
@@ -51,6 +51,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
   }
 
   let totalAmount = POSTAGE_FEE;
+  const orderProducts = [];
 
   // Calculate total amount on server side
   for (const item of cart) {
@@ -90,6 +91,19 @@ export const POST = apiHandler(async (req: NextRequest) => {
     // Calculating price with discount
     const discountedPrice = product.price * (1 - (product.discount || 0) / 100);
     totalAmount += discountedPrice * item.quantity;
+
+    // Adds product to order products list for the session
+    orderProducts.push({
+      product_id: product._id,
+      name: product.name,
+      imageUrl: product.images[0]?.url || "",
+      nameCN: product.nameCN,
+      price: product.price,
+      discount: product.discount,
+      GST: product.includeGST ? discountedPrice / 11 : 0,
+      unit: product.unit,
+      quantity: item.quantity,
+    });
   }
 
   // Stripe expects amount in cents
@@ -102,26 +116,17 @@ export const POST = apiHandler(async (req: NextRequest) => {
     automatic_payment_methods: {
       enabled: true,
     },
-    metadata: {
-      cart_summary: cart
-        .map(
-          (item: { name: string; quantity: number }) =>
-            `${item.name} (${item.quantity})`,
-        )
-        .join(", ")
-        .slice(0, 500),
-      buyer_info: `${buyer.fname} ${buyer.lname} <${buyer.email}>`.slice(
-        0,
-        500,
-      ),
-      delivery_address:
-        `${delivery.fname} ${delivery.lname}, ${delivery.address.suburb}, ${delivery.address.state} ${delivery.address.postcode}`.slice(
-          0,
-          500,
-        ),
-      ownerId: owner_id || "guest",
-    },
   });
+
+  // Save the checkout session in the database
+  const checkoutSession = new CheckoutSession({
+    paymentIntentId: paymentIntent.id,
+    cart: orderProducts,
+    buyer,
+    delivery,
+    owner_id: owner_id || "guest",
+  });
+  await checkoutSession.save();
 
   // Returns clientSecret for user to complete the transaction
   return NextResponse.json({
