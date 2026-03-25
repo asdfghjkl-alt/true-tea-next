@@ -19,7 +19,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen">
       {/* 1. Hero Section - Overlapping Grid Break Concept */}
-      <section className="relative w-full overflow-visible pt-4 pb-4 lg:pt-8 lg:pb-8 z-20">
+      <section className="relative w-full overflow-visible pt-2 pb-2 lg:pt-4 lg:pb-4 z-20">
         {/* We use an isolated full-size wrapper for the background gradient with overflow-hidden so the glowing orbs don't spill down */}
         <div className="absolute inset-0 z-0 bg-linear-to-br from-emerald-50 via-[#f8faf7] to-orange-50 overflow-hidden">
           {/* Decorative soft gradient blobs for depth */}
