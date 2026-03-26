@@ -96,12 +96,12 @@ export const PUT = apiHandler(async (req: NextRequest) => {
         );
       } catch (error) {
         console.error("Refund failed:", error);
-        // Send refund failed email
+        // Alert Admin that the manual cancellation refund got stuck, so they can resolve it themselves
         await sendRefundFailedEmail(
-          updatedOrder.buyer.email,
+          process.env.NEXT_PUBLIC_EMAIL_TO || "admin@true-tea.com.au",
           updatedOrder._id.toString(),
           updatedOrder.orderTotal,
-          error instanceof Error ? error.message : "Unknown error", // Pass the error message to the email
+          error instanceof Error ? error.message : "Unknown error",
         );
       }
     }
