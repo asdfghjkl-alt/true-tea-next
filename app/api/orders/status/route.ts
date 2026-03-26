@@ -43,55 +43,65 @@ export const PUT = apiHandler(async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
-  const updatedOrder = await Order.findByIdAndUpdate(
-    orderId,
-    { status },
-    { new: true },
-  );
+  // Read the order FIRST to check its current status before mutating
+  const order = await Order.findById(orderId);
 
-  if (!updatedOrder) {
+  if (!order) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
 
+  const previousStatus = order.status;
+
+  // Prevent no-op transitions (e.g. cancelling an already-cancelled order)
+  if (previousStatus === status) {
+    return NextResponse.json(
+      { error: "Order already has this status" },
+      { status: 400 },
+    );
+  }
+
+  // Now update the status
+  order.status = status;
+
   if (status === OrderStatus.delivered) {
-    updatedOrder.deliveredDate = new Date();
-    await updatedOrder.save();
+    order.deliveredDate = new Date();
+    await order.save();
 
     await sendDeliveryEmail({
-      orderId: updatedOrder._id.toString(),
-      buyer: updatedOrder.buyer,
-      delivery: updatedOrder.delivery,
-      productList: updatedOrder.productList,
-      postage: updatedOrder.postage,
-      GSTTotal: updatedOrder.GSTTotal,
-      orderTotal: updatedOrder.orderTotal,
-      discountTotal: updatedOrder.discountTotal,
-      paidDate: updatedOrder.paidDate.toISOString(),
-      paymentId: updatedOrder.paymentId,
-      receiptUrl: updatedOrder.receiptUrl,
-      receipt: updatedOrder.receipt,
+      orderId: order._id.toString(),
+      buyer: order.buyer,
+      delivery: order.delivery,
+      productList: order.productList,
+      postage: order.postage,
+      GSTTotal: order.GSTTotal,
+      orderTotal: order.orderTotal,
+      discountTotal: order.discountTotal,
+      paidDate: order.paidDate.toISOString(),
+      paymentId: order.paymentId,
+      receiptUrl: order.receiptUrl,
+      receipt: order.receipt,
     });
   } else if (
     status === OrderStatus.cancelled &&
-    updatedOrder.status !== OrderStatus.cancelled
+    previousStatus !== OrderStatus.cancelled
   ) {
     // Only refund if payment id exists and is paid through stripe
-    if (updatedOrder.paymentId && updatedOrder.paymentMethod === "stripe") {
+    if (order.paymentId && order.paymentMethod === "stripe") {
       console.log(
-        `Attempting to refund order ${updatedOrder._id} (PaymentIntent: ${updatedOrder.paymentId})`,
+        `Attempting to refund order ${order._id} (PaymentIntent: ${order.paymentId})`,
       );
       try {
         const refund = await stripe.refunds.create({
-          payment_intent: updatedOrder.paymentId,
+          payment_intent: order.paymentId,
         });
 
         console.log(`Refund successful: ${refund.id}`);
 
         // Send refund success email
         await sendRefundSuccessEmail(
-          updatedOrder.buyer.email,
-          updatedOrder._id.toString(),
-          updatedOrder.orderTotal, // Assuming full refund for cancellation
+          order.buyer.email,
+          order._id.toString(),
+          order.orderTotal,
           "Order cancelled by admin",
         );
       } catch (error) {
@@ -99,29 +109,29 @@ export const PUT = apiHandler(async (req: NextRequest) => {
         // Alert Admin that the manual cancellation refund got stuck, so they can resolve it themselves
         await sendRefundFailedEmail(
           process.env.NEXT_PUBLIC_EMAIL_TO || "admin@true-tea.com.au",
-          updatedOrder._id.toString(),
-          updatedOrder.orderTotal,
+          order._id.toString(),
+          order.orderTotal,
           error instanceof Error ? error.message : "Unknown error",
         );
       }
     }
 
-    await updatedOrder.save();
+    await order.save();
     await sendOrderCancelledEmail({
-      orderId: updatedOrder._id.toString(),
-      buyer: updatedOrder.buyer,
-      delivery: updatedOrder.delivery,
-      productList: updatedOrder.productList,
-      postage: updatedOrder.postage,
-      GSTTotal: updatedOrder.GSTTotal,
-      orderTotal: updatedOrder.orderTotal,
-      discountTotal: updatedOrder.discountTotal,
-      paidDate: updatedOrder.paidDate.toISOString(),
-      paymentId: updatedOrder.paymentId,
-      receiptUrl: updatedOrder.receiptUrl,
-      receipt: updatedOrder.receipt,
+      orderId: order._id.toString(),
+      buyer: order.buyer,
+      delivery: order.delivery,
+      productList: order.productList,
+      postage: order.postage,
+      GSTTotal: order.GSTTotal,
+      orderTotal: order.orderTotal,
+      discountTotal: order.discountTotal,
+      paidDate: order.paidDate.toISOString(),
+      paymentId: order.paymentId,
+      receiptUrl: order.receiptUrl,
+      receipt: order.receipt,
     });
   }
 
-  return NextResponse.json({ success: true, order: updatedOrder });
+  return NextResponse.json({ success: true, order });
 });
