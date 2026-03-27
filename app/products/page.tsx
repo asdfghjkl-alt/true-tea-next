@@ -88,7 +88,7 @@ export default async function ProductsPage({
             <div className="mt-6 flex flex-col gap-8">
               <div className="grid gap-8 md:grid-cols-2">
                 {/* Category Banner Image */}
-                <div className="relative h-full w-full overflow-hidden rounded-xl shadow-lg">
+                <div className="relative min-h-12 aspect-video md:aspect-auto md:h-full w-full overflow-hidden rounded-xl shadow-lg">
                   <Image
                     src={category.image.url}
                     alt={category.name}
