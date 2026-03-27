@@ -49,21 +49,21 @@ export default function QuantityControl({
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 w-full border border-gray-400 rounded-full p-1">
+    <div className="flex items-center justify-between gap-2 w-full border border-gray-400 rounded-full p-1 overflow-hidden">
       <button
         onClick={handleRemove}
-        className="btn btn-delete flex items-center justify-center rounded-full"
+        className="btn btn-delete flex items-center justify-center rounded-full shrink-0"
         aria-label="Decrease quantity"
       >
         <MinusIcon className="h-5 w-5" />
       </button>
 
-      <span className="text-xl font-bold min-w-8 text-center">{quantity}</span>
+      <span className="text-xl font-bold min-w-6 text-center">{quantity}</span>
 
       <button
         onClick={handleAdd}
         disabled={atStockLimit}
-        className={`btn btn-submit flex items-center justify-center rounded-full ${atStockLimit ? "opacity-40 cursor-not-allowed" : ""}`}
+        className={`btn btn-submit flex items-center justify-center rounded-full shrink-0 ${atStockLimit ? "opacity-40 cursor-not-allowed" : ""}`}
         aria-label="Increase quantity"
       >
         <PlusIcon className="h-5 w-5" />
