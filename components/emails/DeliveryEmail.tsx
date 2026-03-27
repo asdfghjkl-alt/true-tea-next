@@ -138,8 +138,8 @@ export const DeliveryEmail = ({
   discountTotal = previewProps.discountTotal,
   paidDate = previewProps.paidDate,
   paymentId = previewProps.paymentId,
-  receiptUrl = previewProps.receiptUrl,
-  receipt = previewProps.receipt,
+  receiptUrl,
+  receipt,
   status = previewProps.status,
   deliveredDate = previewProps.deliveredDate,
 }: Partial<OrderEmailProps>) => {

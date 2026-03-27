@@ -125,8 +125,8 @@ export const OrderCancelledEmail = ({
   discountTotal = previewProps.discountTotal,
   paidDate = previewProps.paidDate,
   paymentId = previewProps.paymentId,
-  receiptUrl = previewProps.receiptUrl,
-  receipt = previewProps.receipt,
+  receiptUrl,
+  receipt,
   status = "cancelled",
 }: Partial<OrderEmailProps>) => {
   const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
