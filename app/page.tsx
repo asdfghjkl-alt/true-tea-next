@@ -2,6 +2,7 @@ import connectToDatabase from "@/lib/mongodb";
 import { Product, Category, IProduct, ICategory } from "@/database";
 import Image from "next/image";
 import Link from "next/link";
+import FeatureCard from "@/components/FeatureCard";
 
 export default async function Home() {
   await connectToDatabase();
@@ -65,9 +66,8 @@ export default async function Home() {
       <section className="py-12 bg-white border-b border-gray-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            {/* Feature 1 */}
-            <div className="group p-4 transition-transform duration-300 hover:-translate-y-2">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-emerald-50">
+            <FeatureCard
+              icon={
                 <svg
                   className="h-8 w-8"
                   fill="none"
@@ -81,36 +81,12 @@ export default async function Home() {
                     d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Authentic Sourcing
-              </h3>
-              {/* Chevron Down Indicator */}
-              <div className="flex justify-center mt-1 group-hover:hidden">
-                <svg
-                  className="w-4 h-4 text-emerald-500 transition-opacity duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-              <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
-                <p className="mt-0 overflow-hidden text-sm text-gray-500 opacity-0 transition-opacity duration-300 group-hover:mt-2 group-hover:opacity-100">
-                  Sourced directly from the origin to ensure the truest flavor.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="group p-4 transition-transform duration-300 hover:-translate-y-2">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-emerald-50">
+              }
+              title="Authentic Sourcing"
+              description="Sourced directly from the origin to ensure the truest flavor."
+            />
+            <FeatureCard
+              icon={
                 <svg
                   className="h-8 w-8"
                   fill="none"
@@ -124,37 +100,12 @@ export default async function Home() {
                     d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
                   />
                 </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Premium Quality
-              </h3>
-              {/* Chevron Down Indicator */}
-              <div className="flex justify-center mt-1 group-hover:hidden">
-                <svg
-                  className="w-4 h-4 text-emerald-500 transition-opacity duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-              <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
-                <p className="mt-0 overflow-hidden text-sm text-gray-500 opacity-0 transition-opacity duration-300 group-hover:mt-2 group-hover:opacity-100">
-                  Hand-picked selections that meet the highest standards of
-                  excellence.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="group p-4 transition-transform duration-300 hover:-translate-y-2">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-600 group-hover:text-emerald-50">
+              }
+              title="Premium Quality"
+              description="Hand-picked selections that meet the highest standards of excellence."
+            />
+            <FeatureCard
+              icon={
                 <svg
                   className="h-8 w-8"
                   fill="none"
@@ -168,32 +119,10 @@ export default async function Home() {
                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                   />
                 </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Free Shipping
-              </h3>
-              {/* Chevron Down Indicator */}
-              <div className="flex justify-center mt-1 group-hover:hidden">
-                <svg
-                  className="w-4 h-4 text-emerald-500 transition-opacity duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-              <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
-                <p className="mt-0 overflow-hidden text-sm text-gray-500 opacity-0 transition-opacity duration-300 group-hover:mt-2 group-hover:opacity-100">
-                  Enjoy complimentary shipping on all orders across Australia.
-                </p>
-              </div>
-            </div>
+              }
+              title="Free Shipping"
+              description="Enjoy complimentary shipping on all orders across Australia."
+            />
           </div>
         </div>
       </section>
