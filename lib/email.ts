@@ -11,7 +11,8 @@ import OrderCancelledEmail from "@/components/emails/OrderCancelledEmail";
 import { IOrderProduct, IUserDetails } from "@/database";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const APP_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || "https://www.true-tea.com.au";
 
 export const sendVerificationEmail = async (
   email: string,

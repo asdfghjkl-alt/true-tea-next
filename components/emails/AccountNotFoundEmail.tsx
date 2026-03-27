@@ -21,7 +21,7 @@ export const AccountNotFoundEmail = ({ email }: AccountNotFoundEmailProps) => {
   const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
   const webDomain = process.env.WEBDOMAIN || "www.true-tea.com.au";
   const webLogo = process.env.WEBLOGO || "/logo-true-tea-origin.jpeg";
-  const registerLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/register`;
+  const registerLink = `${process.env.NEXT_PUBLIC_BASE_URL || "https://www.true-tea.com.au"}/auth/register`;
   const abn = process.env.ABN_NUMBER || "49168458580";
 
   return (

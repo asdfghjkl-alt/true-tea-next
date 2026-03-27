@@ -23,7 +23,7 @@ export const AlreadyActivatedEmail = ({
   const webLink = process.env.WEBLINK || "https://www.true-tea.com.au";
   const webDomain = process.env.WEBDOMAIN || "www.true-tea.com.au";
   const webLogo = process.env.WEBLOGO || "/logo-true-tea-origin.jpeg";
-  const loginLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/login`;
+  const loginLink = `${process.env.NEXT_PUBLIC_BASE_URL || "https://www.true-tea.com.au"}/auth/login`;
   const abn = process.env.ABN_NUMBER || "49168458580";
 
   return (
