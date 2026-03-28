@@ -6,7 +6,6 @@ import { generateVerificationToken } from "@/lib/tokens";
 import {
   sendVerificationEmail,
   sendAlreadyActivatedEmail,
-  sendAccountNotFoundEmail,
 } from "@/lib/email";
 import { apiHandler } from "@/lib/api-handler";
 
@@ -34,9 +33,6 @@ export const POST = apiHandler(async (req: Request) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    // If user not found, send "account not found" email
-    await sendAccountNotFoundEmail(email);
-
     // Returns generic success message to avoid user enumeration
     return NextResponse.json(
       {
