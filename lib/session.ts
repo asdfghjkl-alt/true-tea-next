@@ -59,7 +59,29 @@ export async function getSession(): Promise<SessionPayload | null> {
     const token = cookieStore.get(JWT_NAME)?.value;
     if (!token) return null;
     const { payload } = await jwtVerify(token, secret);
-    return payload as SessionPayload;
+    const session = payload as SessionPayload;
+
+    // Check if the password was changed after this token was issued
+    if (session.userData?._id && payload.iat) {
+      const { default: connectToDatabase } = await import("@/lib/mongodb");
+      const { default: UserModel } = await import(
+        "@/database/user.model"
+      );
+      await connectToDatabase();
+      const user = await UserModel.findById(session.userData._id).select(
+        "passwordChangedAt",
+      );
+      if (user?.passwordChangedAt) {
+        const changedAtSeconds = Math.floor(
+          user.passwordChangedAt.getTime() / 1000,
+        );
+        if (payload.iat < changedAtSeconds) {
+          return null;
+        }
+      }
+    }
+
+    return session;
   } catch (error) {
     console.error(error);
     return null;

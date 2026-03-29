@@ -26,6 +26,7 @@ export interface IUser {
   emailTokenExpires: Date; // Time when token expires
   resetToken: string; // Token for password reset
   resetTokenExpires: Date; // Time when reset token expires
+  passwordChangedAt: Date; // Timestamp of last password change
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -63,6 +64,7 @@ const userSchema = new mongoose.Schema<IUser>({
   emailTokenExpires: { type: Date },
   resetToken: { type: String, unique: true, sparse: true },
   resetTokenExpires: { type: Date },
+  passwordChangedAt: { type: Date },
 });
 
 const User = models.User || mongoose.model<IUser>("User", userSchema);

@@ -60,31 +60,26 @@ export const PUT = apiHandler(async (req: NextRequest) => {
     );
   }
 
+  // Enforce valid status transitions — delivered and cancelled are final states
+  const VALID_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+    [OrderStatus.paid]: [OrderStatus.delivered, OrderStatus.cancelled],
+    [OrderStatus.delivered]: [],
+    [OrderStatus.cancelled]: [],
+  };
+
+  if (!VALID_TRANSITIONS[previousStatus as OrderStatus]?.includes(status)) {
+    return NextResponse.json(
+      { error: `Cannot transition from "${previousStatus}" to "${status}"` },
+      { status: 400 },
+    );
+  }
+
   // Now update the status
   order.status = status;
 
   if (status === OrderStatus.delivered) {
     order.deliveredDate = new Date();
-    await order.save();
-
-    await sendDeliveryEmail({
-      orderId: order._id.toString(),
-      buyer: order.buyer,
-      delivery: order.delivery,
-      productList: order.productList,
-      postage: order.postage,
-      GSTTotal: order.GSTTotal,
-      orderTotal: order.orderTotal,
-      discountTotal: order.discountTotal,
-      paidDate: order.paidDate.toISOString(),
-      paymentId: order.paymentId,
-      receiptUrl: order.receiptUrl,
-      receipt: order.receipt,
-    });
-  } else if (
-    status === OrderStatus.cancelled &&
-    previousStatus !== OrderStatus.cancelled
-  ) {
+  } else if (status === OrderStatus.cancelled) {
     // Only refund if payment id exists and is paid through stripe
     if (order.paymentId && order.paymentMethod === "stripe") {
       console.log(
@@ -115,8 +110,27 @@ export const PUT = apiHandler(async (req: NextRequest) => {
         );
       }
     }
+  }
 
-    await order.save();
+  await order.save();
+
+  // Send notification emails after successful save
+  if (status === OrderStatus.delivered) {
+    await sendDeliveryEmail({
+      orderId: order._id.toString(),
+      buyer: order.buyer,
+      delivery: order.delivery,
+      productList: order.productList,
+      postage: order.postage,
+      GSTTotal: order.GSTTotal,
+      orderTotal: order.orderTotal,
+      discountTotal: order.discountTotal,
+      paidDate: order.paidDate.toISOString(),
+      paymentId: order.paymentId,
+      receiptUrl: order.receiptUrl,
+      receipt: order.receipt,
+    });
+  } else if (status === OrderStatus.cancelled) {
     await sendOrderCancelledEmail({
       orderId: order._id.toString(),
       buyer: order.buyer,

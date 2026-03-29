@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
@@ -12,7 +12,7 @@ const resetPasswordSchema = Joi.object({
   password: Joi.string().min(8).required(),
 });
 
-export const POST = apiHandler(async (req) => {
+export const POST = apiHandler(async (req: NextRequest) => {
   const body = await req.json();
   const { error, value } = resetPasswordSchema.validate(body);
 
@@ -48,8 +48,9 @@ export const POST = apiHandler(async (req) => {
 
   // Update user password and clear reset tokens
   user.password = hashedPassword;
-  user.resetToken = undefined;
-  user.resetTokenExpires = undefined;
+  user.resetToken = null;
+  user.resetTokenExpires = null;
+  user.passwordChangedAt = new Date();
 
   await user.save();
 

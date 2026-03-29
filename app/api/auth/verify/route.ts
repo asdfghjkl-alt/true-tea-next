@@ -39,8 +39,8 @@ export const GET = apiHandler(async (req: NextRequest) => {
 
   // Activates user and clears token
   user.activated = true;
-  user.emailToken = undefined;
-  user.emailTokenExpires = undefined;
+  user.emailToken = null;
+  user.emailTokenExpires = null;
 
   await user.save();
 

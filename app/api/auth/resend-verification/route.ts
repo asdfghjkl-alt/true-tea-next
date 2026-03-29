@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Joi from "joi";
 import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
@@ -13,7 +13,7 @@ const resendSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
-export const POST = apiHandler(async (req: Request) => {
+export const POST = apiHandler(async (req: NextRequest) => {
   const body = await req.json();
   // Validates the user's resend information with the schema
   const { error, value } = resendSchema.validate(body);

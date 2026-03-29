@@ -15,8 +15,8 @@ export const PUT = apiHandler(
       // Checks if user is an admin
       if (!session || !session.userData?._id) {
         return NextResponse.json(
-          { message: "Unauthorized access" },
-          { status: 401 },
+          { error: "Not found" },
+          { status: 404 },
         );
       }
 
@@ -27,8 +27,8 @@ export const PUT = apiHandler(
       // Verify admin status from database
       if (!user || user.admin !== true) {
         return NextResponse.json(
-          { message: "Unauthorized access" },
-          { status: 403 },
+          { error: "Not found" },
+          { status: 404 },
         );
       }
 

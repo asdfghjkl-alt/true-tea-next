@@ -3,11 +3,23 @@ import { apiHandler } from "@/lib/api-handler";
 import connectToDatabase from "@/lib/mongodb";
 import { User } from "@/database";
 import bcrypt from "bcrypt";
+import { loginSchema } from "@/lib/schemas";
 import { createSession } from "@/lib/session";
 
 export const POST = apiHandler(async (req: NextRequest) => {
+  const body = await req.json();
+  const { error, value } = loginSchema.validate(body);
+
+  if (error) {
+    return NextResponse.json(
+      { message: "Either email or password is incorrect" },
+      { status: 404 },
+    );
+  }
+
+  const { email, password } = value;
+
   await connectToDatabase();
-  const { email, password } = await req.json();
 
   const foundUser = await User.findOne({ email });
 

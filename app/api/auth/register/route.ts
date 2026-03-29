@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { registerSchema } from "@/lib/schemas";
 import { User } from "@/database";
@@ -7,7 +7,7 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail, sendAlreadyRegisteredEmail } from "@/lib/email";
 import { apiHandler } from "@/lib/api-handler";
 
-export const POST = apiHandler(async (req: Request) => {
+export const POST = apiHandler(async (req: NextRequest) => {
   const body = await req.json();
   // Validates the user's registration information with the schema
   const { error, value } = registerSchema.validate(body);

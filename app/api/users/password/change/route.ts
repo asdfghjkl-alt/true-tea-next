@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { getSession } from "@/lib/session";
+import { createSession, getSession } from "@/lib/session";
 import { apiHandler } from "@/lib/api-handler";
 import connectToDatabase from "@/lib/mongodb";
 import { User } from "@/database";
@@ -46,7 +46,11 @@ export const PUT = apiHandler(async (req: NextRequest) => {
 
   // Update user password
   user.password = hashedPassword;
+  user.passwordChangedAt = new Date();
   await user.save();
+
+  // Re-issue session so the current user stays logged in
+  await createSession({ userData: session.userData });
 
   return NextResponse.json({ message: "Password changed successfully" });
 });

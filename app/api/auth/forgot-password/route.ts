@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { User } from "@/database";
 import connectToDatabase from "@/lib/mongodb";
 import { apiHandler } from "@/lib/api-handler";
@@ -11,7 +11,7 @@ const forgotPasswordSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
-export const POST = apiHandler(async (req) => {
+export const POST = apiHandler(async (req: NextRequest) => {
   const body = await req.json();
   const { error, value } = forgotPasswordSchema.validate(body);
 

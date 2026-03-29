@@ -1,4 +1,4 @@
-export { registerSchema, changePasswordSchema } from "./auth";
+export { registerSchema, loginSchema, changePasswordSchema } from "./auth";
 export { profileSchema } from "./profile";
 export { productSchema, productEditSchema } from "./product";
 export { categorySchema } from "./category";
