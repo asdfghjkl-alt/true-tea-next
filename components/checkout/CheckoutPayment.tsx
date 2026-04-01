@@ -76,7 +76,6 @@ export default function CheckoutPayment({
 
       if (paymentIntent && paymentIntent.status === "succeeded") {
         // On Success
-        resetCart();
         onSuccess();
       }
     } catch (error) {

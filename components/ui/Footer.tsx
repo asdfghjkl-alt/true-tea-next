@@ -20,6 +20,7 @@ export default function Footer({ email }: { email?: string }) {
                   src="/logo-true-tea-origin.jpeg"
                   alt="True Tea Logo"
                   fill
+                  sizes="40px"
                   className="object-cover"
                 />
               </div>

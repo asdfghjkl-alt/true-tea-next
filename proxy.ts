@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://js.stripe.com https://checkout.stripe.com;
+    script-src 'self' 'nonce-${nonce}' ${process.env.NODE_ENV === "production" ? "'strict-dynamic'" : "'unsafe-eval'"} https://js.stripe.com https://checkout.stripe.com;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://res.cloudinary.com https://true-tea.com.au;
     font-src 'self' data:;

@@ -57,7 +57,14 @@ export default async function Home() {
           {/* Hero Image / Logo */}
           <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-md xl:max-w-lg aspect-square rounded-3xl overflow-hidden animate-fade-in pointer-events-auto shrink-0">
             {/* Image component using fill and object-cover */}
-            <Image src="/banner.png" alt="Logo" fill className="object-cover" />
+            <Image
+              src="/banner.png"
+              alt="Logo"
+              fill
+              priority
+              sizes="(max-width: 640px) 320px, (max-width: 1024px) 448px, 512px"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>

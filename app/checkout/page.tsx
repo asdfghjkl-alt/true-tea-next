@@ -50,8 +50,13 @@ export default function CheckoutPage() {
 
   // At any step, redirect if cart is empty and not in success state
   useEffect(() => {
-    if (cart.length === 0 && currentStep !== "success") {
-      router.push("/cart");
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isSuccessRedirect = urlParams.get("redirect_status") === "succeeded";
+      
+      if (!isSuccessRedirect && cart.length === 0 && currentStep !== "success") {
+        router.push("/cart");
+      }
     }
   }, [cart, currentStep, router]);
 
@@ -62,8 +67,10 @@ export default function CheckoutPage() {
       const redirectStatus = urlParams.get("redirect_status");
 
       if (redirectStatus === "succeeded" && currentStep !== "success") {
-        resetCart();
         setCurrentStep("success");
+        setTimeout(() => {
+          resetCart();
+        }, 100);
       }
     }
   }, [resetCart, currentStep]);
@@ -105,6 +112,11 @@ export default function CheckoutPage() {
 
   const handlePaymentSuccess = () => {
     setCurrentStep("success");
+    // Delay clearing the cart slightly to give React time to flush the "success" step state 
+    // and avoid triggering the empty cart redirect unexpectedly
+    setTimeout(() => {
+      resetCart();
+    }, 100);
   };
 
   // Renders nothing while useEffect processes redirect

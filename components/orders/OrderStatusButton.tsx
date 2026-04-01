@@ -40,7 +40,7 @@ export default function OrderStatusButton({
       {currentStatus !== OrderStatus.delivered && (
         <button
           onClick={() => handleStatusUpdate(OrderStatus.delivered)}
-          disabled={isLoading}
+          disabled={isLoading || currentStatus === OrderStatus.cancelled}
           className="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors disabled:opacity-50"
         >
           {isLoading ? "Updating..." : "Mark Delivered"}
